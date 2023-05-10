@@ -4,4 +4,5 @@ public interface ClassroomRepository {
 
     Iterable<Classroom> findAllClassrooms();
 
+    void saveClassroom(Classroom classroom);
 }
