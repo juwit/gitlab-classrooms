@@ -34,15 +34,23 @@
         </dependency>
 
         <dependency>
+            <groupId>org.gitlab4j</groupId>
+            <artifactId>gitlab4j-api</artifactId>
+            <version>${gitlab4j-api.version}</version>
+        </dependency>
+
+        <!-- test dependencies -->
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
 
+        <!-- tooling -->
         <dependency>
-            <groupId>org.gitlab4j</groupId>
-            <artifactId>gitlab4j-api</artifactId>
-            <version>${gitlab4j-api.version}</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
         </dependency>
     </dependencies>
 
