@@ -1,4 +1,4 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-public record Classroom(String name) {
+public record Classroom(String id, String name) {
 }
