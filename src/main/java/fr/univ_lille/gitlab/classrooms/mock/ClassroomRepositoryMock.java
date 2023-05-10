@@ -1,5 +1,7 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.mock;
 
+import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.Map;
 import java.util.UUID;
 
 @Repository
-class ClassroomRepositoryMock implements ClassroomRepository{
+class ClassroomRepositoryMock implements ClassroomRepository {
 
     Map<String, Classroom> classrooms = new HashMap<>();
 
