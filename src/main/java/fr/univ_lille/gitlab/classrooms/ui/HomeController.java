@@ -11,8 +11,6 @@ import java.util.List;
 @RequestMapping("/")
 public class HomeController {
 
-    record Classroom(String name){}
-
     @GetMapping
     public String getHomePage(Model model) {
         model.addAttribute("classrooms", List.of());
