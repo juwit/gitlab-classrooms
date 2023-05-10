@@ -119,6 +119,11 @@
                             th:insert="~{classrooms/empty :: fragment}"
                     >
                     </div>
+                    <div
+                            th:unless="${#lists.isEmpty(classrooms)}"
+                            th:insert="~{classrooms/list :: fragment}"
+                    >
+                    </div>
 
                 </div>
             </div>
