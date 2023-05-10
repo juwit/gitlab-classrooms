@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
+import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
