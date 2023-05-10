@@ -25,7 +25,7 @@ class ClassroomRepositoryGitlabImpl implements ClassroomRepository {
     public Iterable<Classroom> findAllClassrooms() {
         try {
             return gitLabApi.getGroupApi().getGroupsStream()
-                    .map(it -> new Classroom(it.getName(), it.getName()))
+                    .map(it -> new Classroom(it.getName(), it.getName(), it.getWebUrl()))
                     .toList();
         } catch (GitLabApiException e) {
             throw new RuntimeException(e);

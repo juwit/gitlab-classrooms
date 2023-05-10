@@ -27,7 +27,7 @@ public class ClassroomController {
 
     @PostMapping("/new")
     String newClassroom(@RequestParam String classroomName){
-        var classroom = new Classroom(UUID.randomUUID().toString(), classroomName);
+        var classroom = new Classroom(UUID.randomUUID().toString(), classroomName, "");
 
         classroomRepository.saveClassroom(classroom);
 
