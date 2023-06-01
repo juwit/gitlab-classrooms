@@ -1,0 +1,11 @@
+{
+  "apps": [
+    {
+      "app_id": "app_8e221eea-cd74-401f-a42b-26d7ebb641cb",
+      "org_id": "orga_d02d9099-9664-47fd-8029-d90e36628e1d",
+      "deploy_url": "https://push-n2-par-clevercloud-customers.services.clever-cloud.com/app_8e221eea-cd74-401f-a42b-26d7ebb641cb.git",
+      "name": "gitlab-classrooms",
+      "alias": "gitlab-classrooms"
+    }
+  ]
+}
