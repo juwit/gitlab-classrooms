@@ -2,16 +2,25 @@ package fr.univ_lille.gitlab.classrooms.ui;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
+import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.HashSet;
+import java.util.logging.Logger;
 
 @EnableWebSecurity
 @Configuration
 public class WebSecurityConfiguration implements WebMvcConfigurer {
+
+    private static final Logger LOGGER = Logger.getLogger(WebSecurityConfiguration.class.getName());
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -31,6 +40,22 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                     it.loginPage("/login");
                 })
                 .build();
+    }
+
+    @Bean
+    GrantedAuthoritiesMapper grantedAuthoritiesMapper(){
+        return authorities -> {
+            var mappedAuthorities = new HashSet<GrantedAuthority>();
+
+            authorities.forEach(authority -> {
+                if (authority instanceof OAuth2UserAuthority) {
+                    // TODO request the database to load authorities for the user
+                    mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+                }
+            });
+
+            return mappedAuthorities;
+        };
     }
 
 }
