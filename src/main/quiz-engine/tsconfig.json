@@ -1,0 +1,8 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "lib": ["dom", "ES2021"],
+    "module": "es6",
+  },
+  "include": ["src/**/*"]
+}
