@@ -3,7 +3,6 @@ package fr.univ_lille.gitlab.classrooms.ui;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +29,7 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         // serve the login page as-is
         registry.addViewController("login").setViewName("login");
+        registry.addViewController("quiz").setViewName("quiz");
     }
 
     @Bean
