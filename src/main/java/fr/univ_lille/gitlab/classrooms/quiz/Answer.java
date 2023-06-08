@@ -1,5 +1,8 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.*;
 
 public class Answer {
@@ -45,5 +48,13 @@ public class Answer {
 
     public boolean isCorrect() {
         return this.selected && this.correct;
+    }
+
+
+    public String getId(){
+        return this.text;
+    }
+    public String getText() {
+        return text;
     }
 }

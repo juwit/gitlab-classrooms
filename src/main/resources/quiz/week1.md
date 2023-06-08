@@ -40,13 +40,13 @@
 [ ] PHP
 [x] Java
 
-# Dans une JSP, les balises &lt;% et %&gt; permettent de :
+# Dans une JSP, les balises &lt; et &gt; permettent de :
 [ ] Faire des opérations de comparaison de valeurs
 [ ] Mettre en forme du texte
 [x] Déclarer des blocs de code
 [ ] Déclarer des commentaires
 
-# Dans une JSP, la balise &lt;%? :
+# Dans une JSP, la balise &lt; ? :
 [ ] Permet de demander à l’utilisateur de saisir un texte
 [ ] Permet d’effectuer un test
 [ ] Permet d’afficher la valeur d’une expression

@@ -4,10 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Quiz {
+
+    private String name;
     private final List<Question> questions;
 
     private Quiz(List<Question> questions) {
         this.questions = questions;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public List<Question> getQuestions() {
+        return questions;
     }
 
     public void reset() {

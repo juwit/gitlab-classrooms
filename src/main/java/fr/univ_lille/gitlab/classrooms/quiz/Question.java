@@ -46,4 +46,12 @@ public class Question {
             answer.reset();
         }
     }
+
+    public String getText() {
+        return text;
+    }
+
+    public List<Answer> getAnswers() {
+        return answers;
+    }
 }
