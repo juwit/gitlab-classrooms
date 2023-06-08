@@ -1,5 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -52,9 +54,9 @@ public class Answer {
 
 
     public String getId(){
-        return this.text;
+        return DigestUtils.sha256Hex(this.text);
     }
     public String getText() {
-        return text;
+        return this.text;
     }
 }
