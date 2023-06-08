@@ -29,7 +29,6 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     public void addViewControllers(ViewControllerRegistry registry) {
         // serve the login page as-is
         registry.addViewController("login").setViewName("login");
-        registry.addViewController("quiz").setViewName("quiz");
     }
 
     @Bean
