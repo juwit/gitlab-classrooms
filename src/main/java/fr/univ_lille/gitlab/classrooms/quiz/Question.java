@@ -8,6 +8,10 @@ public class Question {
     private final List<Answer> answers;
     private boolean answered = false;
 
+    enum QuestionType {
+        FULL_TEXT, MULTIPLE_CHOICE
+    }
+
     private Question(String text, List<Answer> answers) {
         this.text = text;
         this.answers = answers;
@@ -53,5 +57,12 @@ public class Question {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public QuestionType getQuestionType(){
+        return switch (this.answers.get(0).getType()){
+            case FULL_TEXT -> QuestionType.FULL_TEXT;
+            case MULTIPLE_CHOICE -> QuestionType.MULTIPLE_CHOICE;
+        };
     }
 }
