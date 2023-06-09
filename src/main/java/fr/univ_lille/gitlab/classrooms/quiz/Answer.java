@@ -1,7 +1,5 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import org.apache.commons.codec.digest.DigestUtils;
-
 import java.util.regex.*;
 
 public class Answer {
@@ -18,29 +16,32 @@ public class Answer {
     private boolean selected = false;
     private AnswerType type;
 
-    private Answer(String text, boolean correct, AnswerType type) {
+    private String id;
+
+    private Answer(String text, boolean correct, AnswerType type, String id) {
         this.text = text;
         this.correct = correct;
         this.type = type;
+        this.id = id;
     }
 
-    public static Answer fromMarkdown(String markdown) {
+    public static Answer fromMarkdown(String markdown, String id) {
         Matcher correctMatcher = correctRegex.matcher(markdown);
         if (correctMatcher.find()) {
             String text = correctMatcher.group(1);
-            return new Answer(text, true, AnswerType.MULTIPLE_CHOICE);
+            return new Answer(text, true, AnswerType.MULTIPLE_CHOICE, id);
         }
 
         Matcher incorrectMatcher = incorrectRegex.matcher(markdown);
         if (incorrectMatcher.find()) {
             String text = incorrectMatcher.group(1);
-            return new Answer(text, false, AnswerType.MULTIPLE_CHOICE);
+            return new Answer(text, false, AnswerType.MULTIPLE_CHOICE, id);
         }
 
         Matcher fullTextMatcher = fullTextRegex.matcher(markdown);
         if (fullTextMatcher.find()) {
             String text = fullTextMatcher.group(1);
-            return new Answer(text, true, AnswerType.FULL_TEXT);
+            return new Answer(text, true, AnswerType.FULL_TEXT, id);
         }
 
         return null; // Ajoutez un comportement par défaut approprié si nécessaire
@@ -60,7 +61,7 @@ public class Answer {
 
 
     public String getId(){
-        return DigestUtils.sha256Hex(this.text);
+        return this.id;
     }
     public String getText() {
         return this.text;

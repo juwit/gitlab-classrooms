@@ -1,5 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import org.apache.commons.codec.digest.DigestUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +26,7 @@ public class Question {
 
         var answers = Arrays.stream(lines)
                 .skip(1)
-                .map(Answer::fromMarkdown)
+                .map(it -> Answer.fromMarkdown(it, DigestUtils.sha256Hex(questionText+it)))
                 .toList();
 
         return new Question(questionText, answers);
