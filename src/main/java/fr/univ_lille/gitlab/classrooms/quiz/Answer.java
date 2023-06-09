@@ -50,6 +50,10 @@ public class Answer {
         this.selected = false;
     }
 
+    public void select() {
+        this.selected = true;
+    }
+
     public boolean isCorrect() {
         return this.selected && this.correct;
     }

@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.quiz;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class Quiz {
 
@@ -37,5 +38,21 @@ public class Quiz {
         }
 
         return new Quiz(questions, name);
+    }
+
+    /**
+     * Ugly method to answer questions from a form submission
+     * @param quizAnswers
+     */
+    public void answerQuestions(Map<String, String> quizAnswers) {
+        this.questions.forEach(question -> {
+            question.getAnswers().forEach(answer -> {
+                if(quizAnswers.containsKey(answer.getId())){
+                    answer.select();
+                    // mark the question as answered
+                    question.answer();
+                }
+            });
+        });
     }
 }
