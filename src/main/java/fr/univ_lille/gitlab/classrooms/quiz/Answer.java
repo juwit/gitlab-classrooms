@@ -14,6 +14,7 @@ public class Answer {
     private final String text;
     private final boolean correct;
     private boolean selected = false;
+    private String inputText;
     private AnswerType type;
 
     private String id;
@@ -51,8 +52,9 @@ public class Answer {
         this.selected = false;
     }
 
-    public void select() {
+    public void select(String selection) {
         this.selected = true;
+        this.inputText = selection;
     }
 
     public boolean isCorrect() {
