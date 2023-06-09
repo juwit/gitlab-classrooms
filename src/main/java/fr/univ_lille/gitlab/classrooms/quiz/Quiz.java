@@ -47,7 +47,7 @@ public class Quiz {
     public void answerQuestions(Map<String, String> quizAnswers) {
         this.questions.forEach(question -> {
             question.getAnswers().forEach(answer -> {
-                if(quizAnswers.containsKey(answer.getId())){
+                if(quizAnswers.containsKey(answer.getId()) && ! quizAnswers.get(answer.getId()).isBlank()){
                     answer.select();
                     // mark the question as answered
                     question.answer();
