@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.ui;
 
 import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,12 +18,11 @@ import java.nio.charset.Charset;
 @RequestMapping("/quiz")
 public class QuizController {
 
-    @Value("classpath:/quiz/week1.md")
-    private Resource week1;
-
     @GetMapping("/{quizId}")
     public String showQuiz(Model model, @PathVariable String quizId) throws IOException {
-        var quiz = Quiz.fromMarkdown(week1.getContentAsString(Charset.defaultCharset()));
+        var quizContent = new ClassPathResource("/quiz/" + quizId + ".md");
+
+        var quiz = Quiz.fromMarkdown(quizContent.getContentAsString(Charset.defaultCharset()), quizId);
         model.addAttribute("quiz", quiz);
         return "quiz";
     }

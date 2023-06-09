@@ -8,8 +8,9 @@ public class Quiz {
     private String name;
     private final List<Question> questions;
 
-    private Quiz(List<Question> questions) {
+    private Quiz(List<Question> questions, String name) {
         this.questions = questions;
+        this.name = name;
     }
 
     public String getName() {
@@ -26,7 +27,7 @@ public class Quiz {
         }
     }
 
-    public static Quiz fromMarkdown(String markdown) {
+    public static Quiz fromMarkdown(String markdown, String name) {
         String[] markdownQuestions = markdown.split("\n\n");
 
         List<Question> questions = new ArrayList<>();
@@ -35,6 +36,6 @@ public class Quiz {
             questions.add(question);
         }
 
-        return new Quiz(questions);
+        return new Quiz(questions, name);
     }
 }
