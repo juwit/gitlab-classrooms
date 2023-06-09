@@ -55,4 +55,8 @@ public class Quiz {
             });
         });
     }
+
+    public boolean isFullyAnswered(){
+        return this.questions.stream().allMatch(question -> question.isAnswered());
+    }
 }

@@ -30,14 +30,20 @@ public class QuizController {
 
     @PostMapping(path = "/{quizId}/submit",
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE)
-    public String submitQuizAnswers(@PathVariable String quizId, @RequestParam Map<String, String> quizAnswers) throws IOException {
+    public String submitQuizAnswers(Model model, @PathVariable String quizId, @RequestParam Map<String, String> quizAnswers) throws IOException {
         var quizContent = new ClassPathResource("/quiz/" + quizId + ".md");
 
         var quiz = Quiz.fromMarkdown(quizContent.getContentAsString(Charset.defaultCharset()), quizId);
 
         quiz.answerQuestions(quizAnswers);
 
-        return "home";
+        if(!quiz.isFullyAnswered()){
+            model.addAttribute("quiz", quiz);
+            model.addAttribute("message", "Il manque des réponses à certaines questions.");
+            return "quiz";
+        }
+
+        return "quizAnswered";
     }
 
 }
