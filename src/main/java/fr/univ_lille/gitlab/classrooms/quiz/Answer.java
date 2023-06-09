@@ -59,6 +59,9 @@ public class Answer {
         return this.selected && this.correct;
     }
 
+    public boolean isSelected() {
+        return selected;
+    }
 
     public String getId(){
         return this.id;
