@@ -64,7 +64,8 @@ public class QuizController {
         score.setScore(quiz.score());
         quizScoreRepository.save(score);
 
-        return "home";
+        model.addAttribute("quiz", quiz);
+        return "quiz-submitted";
     }
 
 }
