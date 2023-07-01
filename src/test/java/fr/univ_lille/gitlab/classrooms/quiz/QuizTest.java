@@ -26,7 +26,7 @@ class QuizTest {
 
         assertNotNull(quiz);
         assertEquals("sample", quiz.getName());
-        assertEquals(17, quiz.getQuestions().size());
+        assertEquals(2, quiz.getQuestions().size());
     }
 
     @Test
@@ -43,5 +43,32 @@ class QuizTest {
         quiz.getQuestions().forEach(it -> it.answer());
 
         assertTrue(quiz.isFullyAnswered());
+    }
+
+    @Test
+    void shouldHaveAScoreOfZero_whenAllAnswersAreIncorrect(){
+        var quiz = Quiz.fromMarkdown(sampleQuizContent, "sample");
+
+        // answer no questions
+        assertEquals(0, quiz.score());
+    }
+
+    @Test
+    void shouldHaveAScoreOfOne_whenOneAnswerIsIncorrect(){
+        var quiz = Quiz.fromMarkdown(sampleQuizContent, "sample");
+
+        quiz.getQuestions().get(0).getAnswers().get(1).select(null);
+
+        assertEquals(1, quiz.score());
+    }
+
+    @Test
+    void shouldHaveAScoreOfTwo_whenTwoAnswerAreIncorrect(){
+        var quiz = Quiz.fromMarkdown(sampleQuizContent, "sample");
+
+        quiz.getQuestions().get(0).getAnswers().get(1).select(null);
+        quiz.getQuestions().get(1).getAnswers().get(3).select(null);
+
+        assertEquals(2, quiz.score());
     }
 }

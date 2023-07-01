@@ -57,6 +57,13 @@ public class Quiz {
     }
 
     public boolean isFullyAnswered(){
-        return this.questions.stream().allMatch(question -> question.isAnswered());
+        return this.questions.stream().allMatch(Question::isAnswered);
+    }
+
+    /**
+     * Computes scoring for the quiz.
+     */
+    public long score() {
+        return this.questions.stream().filter(Question::isCorrect).count();
     }
 }
