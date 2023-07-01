@@ -58,7 +58,7 @@ public class Answer {
     }
 
     public boolean isCorrect() {
-        return this.selected && this.correct;
+        return this.selected == this.correct;
     }
 
     public boolean isSelected() {
