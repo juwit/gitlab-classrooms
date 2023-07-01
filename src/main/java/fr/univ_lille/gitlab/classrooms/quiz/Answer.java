@@ -75,4 +75,8 @@ public class Answer {
     AnswerType getType() {
         return type;
     }
+
+    public String getInputText() {
+        return inputText;
+    }
 }
