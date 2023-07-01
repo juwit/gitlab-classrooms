@@ -67,4 +67,8 @@ public class Question {
             case MULTIPLE_CHOICE -> QuestionType.MULTIPLE_CHOICE;
         };
     }
+
+    public boolean isCorrect(){
+        return this.answers.stream().allMatch(Answer::isCorrect);
+    }
 }
