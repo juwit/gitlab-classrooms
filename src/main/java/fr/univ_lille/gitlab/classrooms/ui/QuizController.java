@@ -3,16 +3,12 @@ package fr.univ_lille.gitlab.classrooms.ui;
 import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizScore;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreRepository;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
