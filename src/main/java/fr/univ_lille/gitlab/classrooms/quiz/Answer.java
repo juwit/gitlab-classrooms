@@ -59,7 +59,10 @@ public class Answer {
     }
 
     public boolean isCorrect() {
-        return this.selected == this.correct;
+        return switch (this.type){
+            case MULTIPLE_CHOICE -> this.selected == this.correct;
+            case FULL_TEXT -> this.inputText.trim().equalsIgnoreCase(this.text);
+        };
     }
 
     public boolean isSelected() {
