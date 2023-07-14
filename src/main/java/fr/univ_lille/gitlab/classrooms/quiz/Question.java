@@ -4,19 +4,22 @@ import org.apache.commons.codec.digest.DigestUtils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Question {
     private final String text;
     private final List<Answer> answers;
+    private final String explanation;
     private boolean answered = false;
 
     enum QuestionType {
         FULL_TEXT, MULTIPLE_CHOICE
     }
 
-    private Question(String text, List<Answer> answers) {
+    private Question(String text, List<Answer> answers, String explanation) {
         this.text = text;
         this.answers = answers;
+        this.explanation = explanation;
     }
 
     public static Question fromMarkdown(String markdown) {
@@ -25,11 +28,17 @@ public class Question {
         String questionText = lines[0].trim().substring(2);
 
         var answers = Arrays.stream(lines)
-                .skip(1)
+                .skip(1) // skip question line
+                .filter(it -> ! it.startsWith(">")) // filter explanation lines
                 .map(it -> Answer.fromMarkdown(it, DigestUtils.sha256Hex(questionText+it)))
                 .toList();
 
-        return new Question(questionText, answers);
+        var explanation = Arrays.stream(lines)
+                .filter(it -> it.startsWith(">"))
+                .map(it -> it.substring(1).trim())
+                .collect(Collectors.joining(" \n"));
+
+        return new Question(questionText, answers, explanation);
     }
 
     public void answer() {
@@ -59,6 +68,10 @@ public class Question {
 
     public List<Answer> getAnswers() {
         return answers;
+    }
+
+    public String getExplanation() {
+        return explanation;
     }
 
     public QuestionType getQuestionType(){

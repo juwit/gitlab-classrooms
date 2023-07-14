@@ -14,6 +14,13 @@ class QuestionTest {
             [x] A une durée de vie maximale
             """;
 
+    String sampleQuestionWithExplanation = """
+            # Par défaut, sur quel port Tomcat délivre-t-il son contenu ?
+            = 8080
+            > Lien vers le support de cours :
+            > <a href="https://gitlab.univ-lille.fr/SRA1-2023/sra1/-/blob/main/week1/http.md">HTTP</a>
+            """;
+
     @Test
     void shouldParseMarkdown(){
         var question = Question.fromMarkdown(sampleQuestion);
@@ -21,6 +28,14 @@ class QuestionTest {
         assertNotNull(question);
         assertEquals("La notion de session :", question.getText());
         assertEquals(4, question.getAnswers().size());
+    }
+
+    @Test
+    void shouldParseMarkdown_forAQuestionWithExplanation(){
+        var question = Question.fromMarkdown(sampleQuestionWithExplanation);
+
+        assertNotNull(question);
+        assertEquals("Lien vers le support de cours : \n<a href=\"https://gitlab.univ-lille.fr/SRA1-2023/sra1/-/blob/main/week1/http.md\">HTTP</a>", question.getExplanation());
     }
 
     @Test
