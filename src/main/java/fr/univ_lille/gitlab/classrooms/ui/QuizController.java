@@ -61,7 +61,7 @@ public class QuizController {
         quizScoreRepository.save(score);
 
         model.addAttribute("quiz", quiz);
-        return "quiz-submitted";
+        return "quiz-submitted-with-answers-correction";
     }
 
 }
