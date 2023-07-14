@@ -4,7 +4,16 @@
 </head>
 <body>
 
-<section class="ml-6">
+<section class="quiz ml-6">
+
+  <style>
+    .quiz a {
+      border-bottom: 1px solid #7dd3fc;
+    }
+    .quiz a:hover {
+      border-bottom: 2px solid #7dd3fc;
+    }
+  </style>
 
   <h1
     th:text="${quiz.name}"
@@ -50,7 +59,6 @@
         Question text
       </legend>
       
-      <!-- réponses possibles multi-choice -->
       <div class="mt-6 space-y-6" th:if="${question.questionType.name() == 'MULTIPLE_CHOICE'}">
         <div th:each="answer : ${question.answers}" class="flex items-center gap-x-3">
           <input th:id="${answer.id}" th:name="${answer.id}" type="checkbox" disabled th:checked="${answer.selected}" class="h-4 w-4 rounded border-gray-300 text-indigo-300 focus:ring-indigo-300">
@@ -58,12 +66,16 @@
         </div>
       </div>
 
-      <!-- réponse full-text -->
       <div class="mt-6 space-y-6" th:if="${question.questionType.name() == 'FULL_TEXT'}">
         <div th:each="answer : ${question.answers}" class="flex items-center gap-x-3">
           <input th:id="${answer.id}" th:name="${answer.id}" disabled th:value="${answer.inputText}" type="text" class="block rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
         </div>
       </div>
+
+      <div class="mt-6 space-y-6 rounded-md bg-gray-100 p-4 text-sm font-medium text-gray-800 border-l-4 border-gray-800" th:if="${! question.explanation.empty}" th:utext="${question.explanation}">
+        Question explanation
+      </div>
+
     </fieldset>
 
   </section>
