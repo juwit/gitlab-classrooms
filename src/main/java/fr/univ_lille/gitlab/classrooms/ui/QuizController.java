@@ -1,9 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScore;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreRepository;
+import fr.univ_lille.gitlab.classrooms.quiz.*;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
@@ -34,6 +31,23 @@ public class QuizController {
     public String listQuiz(Model model){
         model.addAttribute("quizzes", this.quizRepository.findAll());
         return "quiz/list";
+    }
+
+    @GetMapping("/{quizId}/edit")
+    @RolesAllowed("TEACHER")
+    public String editQuiz(Model model, @PathVariable String quizId){
+        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("quiz", quizEntity);
+        return "quiz/edit";
+    }
+
+    @PostMapping("/{quizId}/edit")
+    @RolesAllowed("TEACHER")
+    public String saveQuiz(@ModelAttribute QuizEntity quiz, Model model, @PathVariable String quizId){
+        this.quizRepository.save(quiz);
+        model.addAttribute("quiz", quiz);
+        model.addAttribute("successMessage", "Quiz successfully saved");
+        return "quiz/edit";
     }
 
     @GetMapping("/{quizId}")
