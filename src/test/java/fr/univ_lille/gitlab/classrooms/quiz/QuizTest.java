@@ -30,6 +30,17 @@ class QuizTest {
     }
 
     @Test
+    void shouldParseMarkdownWithWindowsLineBreaks() throws IOException {
+        var resource = new ClassPathResource("/quiz/sampleWindows.md");
+        var windowsSampleQuizContent = resource.getContentAsString(StandardCharsets.UTF_8);
+        var quiz = Quiz.fromMarkdown(windowsSampleQuizContent, "sample");
+
+        assertNotNull(quiz);
+        assertEquals("sample", quiz.getName());
+        assertEquals(2, quiz.getQuestions().size());
+    }
+
+    @Test
     void shouldNotBeFullyAnswered_whenNotAllQuestionsAreAnswered(){
         var quiz = Quiz.fromMarkdown(sampleQuizContent, "sample");
         // answer no questions

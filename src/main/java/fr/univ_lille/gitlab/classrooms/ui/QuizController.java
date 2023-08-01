@@ -1,17 +1,16 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScore;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreRepository;
-import org.springframework.core.io.ClassPathResource;
+import fr.univ_lille.gitlab.classrooms.quiz.*;
+import jakarta.annotation.security.RolesAllowed;
+import org.springframework.context.annotation.Role;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import java.util.Map;
 
 @Controller
@@ -20,15 +19,42 @@ public class QuizController {
 
     QuizScoreRepository quizScoreRepository;
 
-    public QuizController(QuizScoreRepository quizScoreRepository) {
+    QuizRepository quizRepository;
+
+    public QuizController(QuizScoreRepository quizScoreRepository, QuizRepository quizRepository) {
         this.quizScoreRepository = quizScoreRepository;
+        this.quizRepository = quizRepository;
+    }
+
+    @GetMapping("/")
+    @RolesAllowed("TEACHER")
+    public String listQuiz(Model model){
+        model.addAttribute("quizzes", this.quizRepository.findAll());
+        return "quiz/list";
+    }
+
+    @GetMapping("/{quizId}/edit")
+    @RolesAllowed("TEACHER")
+    public String editQuiz(Model model, @PathVariable String quizId){
+        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute("quiz", quizEntity);
+        return "quiz/edit";
+    }
+
+    @PostMapping("/{quizId}/edit")
+    @RolesAllowed("TEACHER")
+    public String saveQuiz(@ModelAttribute QuizEntity quiz, Model model, @PathVariable String quizId){
+        this.quizRepository.save(quiz);
+        model.addAttribute("quiz", quiz);
+        model.addAttribute("successMessage", "Quiz successfully saved");
+        return "quiz/edit";
     }
 
     @GetMapping("/{quizId}")
-    public String showQuiz(Model model, @PathVariable String quizId) throws IOException {
-        var quizContent = new ClassPathResource("/quiz/" + quizId + ".md");
+    public String showQuiz(Model model, @PathVariable String quizId) {
+        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizId);
 
-        var quiz = Quiz.fromMarkdown(quizContent.getContentAsString(Charset.defaultCharset()), quizId);
         model.addAttribute("quiz", quiz);
         return "quiz";
     }
@@ -40,14 +66,13 @@ public class QuizController {
             @PathVariable String quizId,
             @RequestParam Map<String, String> quizAnswers,
             Authentication authentication
-    ) throws IOException {
-        var quizContent = new ClassPathResource("/quiz/" + quizId + ".md");
-
-        var quiz = Quiz.fromMarkdown(quizContent.getContentAsString(Charset.defaultCharset()), quizId);
+    ) {
+        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizId);
 
         quiz.answerQuestions(quizAnswers);
 
-        if(!quiz.isFullyAnswered()){
+        if (!quiz.isFullyAnswered()) {
             model.addAttribute("quiz", quiz);
             model.addAttribute("message", "Il manque des réponses à certaines questions.");
             return "quiz";
