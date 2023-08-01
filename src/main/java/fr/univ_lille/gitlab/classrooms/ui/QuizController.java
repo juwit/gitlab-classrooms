@@ -4,6 +4,8 @@ import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizScore;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreRepository;
+import jakarta.annotation.security.RolesAllowed;
+import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -25,6 +27,13 @@ public class QuizController {
     public QuizController(QuizScoreRepository quizScoreRepository, QuizRepository quizRepository) {
         this.quizScoreRepository = quizScoreRepository;
         this.quizRepository = quizRepository;
+    }
+
+    @GetMapping("/")
+    @RolesAllowed("TEACHER")
+    public String listQuiz(Model model){
+        model.addAttribute("quizzes", this.quizRepository.findAll());
+        return "quiz/list";
     }
 
     @GetMapping("/{quizId}")
