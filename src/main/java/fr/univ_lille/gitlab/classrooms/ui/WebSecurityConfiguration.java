@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -11,6 +12,11 @@ import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMap
 import org.springframework.security.oauth2.client.JdbcOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
+import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
+import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2UserAuthority;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -24,6 +30,12 @@ import java.util.logging.Logger;
 public class WebSecurityConfiguration implements WebMvcConfigurer {
 
     private static final Logger LOGGER = Logger.getLogger(WebSecurityConfiguration.class.getName());
+
+    private ClassroomUserService classroomUserService;
+
+    public WebSecurityConfiguration(ClassroomUserService classroomUserService) {
+        this.classroomUserService = classroomUserService;
+    }
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
@@ -39,14 +51,17 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                     it.requestMatchers("images/**").permitAll();
                     it.anyRequest().authenticated();
                 })
-                .oauth2Login(it -> {
-                    it.loginPage("/login");
+                .oauth2Login(oauth2 -> {
+                    oauth2.loginPage("/login");
+                    oauth2.userInfoEndpoint(userInfo -> {
+                        userInfo.userService(this.userService());
+                    });
                 })
                 .build();
     }
 
     @Bean
-    GrantedAuthoritiesMapper grantedAuthoritiesMapper(){
+    GrantedAuthoritiesMapper grantedAuthoritiesMapper() {
         return authorities -> {
             var mappedAuthorities = new HashSet<GrantedAuthority>();
 
@@ -62,8 +77,25 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    OAuth2AuthorizedClientService oAuth2AuthorizedClientService(JdbcOperations jdbcOperations, ClientRegistrationRepository clientRegistrationRepository){
+    OAuth2AuthorizedClientService oAuth2AuthorizedClientService(JdbcOperations jdbcOperations, ClientRegistrationRepository clientRegistrationRepository) {
         return new JdbcOAuth2AuthorizedClientService(jdbcOperations, clientRegistrationRepository);
     }
 
+    private OAuth2UserService<OAuth2UserRequest, OAuth2User> userService() {
+        var delegate = new DefaultOAuth2UserService();
+
+        return (userRequest) -> {
+            var oauth2User = delegate.loadUser(userRequest);
+
+            // load additional authorities
+            var classroomUser = this.classroomUserService.loadOrCreateClassroomUser(oauth2User.getName());
+            var authorities = classroomUser.getRoles().stream()
+                    .map(it -> new SimpleGrantedAuthority("ROLE_" + it.name()))
+                    .toList();
+
+            String userNameAttributeName = userRequest.getClientRegistration().getProviderDetails().getUserInfoEndpoint()
+                    .getUserNameAttributeName();
+            return new DefaultOAuth2User(authorities, oauth2User.getAttributes(), userNameAttributeName);
+        };
+    }
 }
