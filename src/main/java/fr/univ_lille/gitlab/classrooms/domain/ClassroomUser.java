@@ -16,6 +16,14 @@ public class ClassroomUser {
     @Enumerated(EnumType.STRING)
     private Collection<ClassroomRole> roles;
 
+    public ClassroomUser() {
+    }
+
+    public ClassroomUser(String name, Collection<ClassroomRole> roles) {
+        this.name = name;
+        this.roles = roles;
+    }
+
     public String getName() {
         return name;
     }
