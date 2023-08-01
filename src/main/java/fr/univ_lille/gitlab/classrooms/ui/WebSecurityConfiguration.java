@@ -6,9 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.authority.mapping.GrantedAuthoritiesMapper;
 import org.springframework.security.oauth2.client.JdbcOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
@@ -58,22 +56,6 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                     });
                 })
                 .build();
-    }
-
-    @Bean
-    GrantedAuthoritiesMapper grantedAuthoritiesMapper() {
-        return authorities -> {
-            var mappedAuthorities = new HashSet<GrantedAuthority>();
-
-            authorities.forEach(authority -> {
-                if (authority instanceof OAuth2UserAuthority) {
-                    // TODO request the database to load authorities for the user
-                    mappedAuthorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-                }
-            });
-
-            return mappedAuthorities;
-        };
     }
 
     @Bean
