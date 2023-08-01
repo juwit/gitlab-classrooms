@@ -29,7 +29,7 @@ public class Quiz {
     }
 
     public static Quiz fromMarkdown(String markdown, String name) {
-        String[] markdownQuestions = markdown.split("\n\n");
+        String[] markdownQuestions = markdown.split("(\\r\\n|\\n){2}");
 
         List<Question> questions = new ArrayList<>();
         for (String markdownQuestion : markdownQuestions) {
