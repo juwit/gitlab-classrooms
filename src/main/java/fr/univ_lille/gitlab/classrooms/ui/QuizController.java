@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.ui;
 
 import fr.univ_lille.gitlab.classrooms.quiz.*;
 import jakarta.annotation.security.RolesAllowed;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -28,7 +29,7 @@ public class QuizController {
     @GetMapping("")
     @RolesAllowed("TEACHER")
     public String listQuiz(Model model){
-        model.addAttribute("quizzes", this.quizRepository.findAll());
+        model.addAttribute("quizzes", this.quizRepository.findAll(Sort.by("name")));
         return "quiz/list";
     }
 
