@@ -19,6 +19,12 @@ class QuestionTest {
             = 8080
             """;
 
+    String sampleSingleChoiceQuestion = """
+            # JDBC fonctionne en mode
+            ( ) Non connecté
+            (x) Requête/réponse
+            """;
+
     String sampleQuestionWithExplanation = """
             # Par défaut, sur quel port Tomcat délivre-t-il son contenu ?
             = 8080
@@ -44,6 +50,15 @@ class QuestionTest {
         assertNotNull(question);
         assertEquals("Par défaut, sur quel port Tomcat délivre-t-il son contenu ?", question.getText());
         assertEquals(Question.QuestionType.FULL_TEXT, question.getQuestionType());
+    }
+
+    @Test
+    void shouldParseSingleChoiceQuestion(){
+        var question = Question.fromMarkdown(sampleSingleChoiceQuestion);
+
+        assertNotNull(question);
+        assertEquals("JDBC fonctionne en mode", question.getText());
+        assertEquals(Question.QuestionType.SINGLE_CHOICE, question.getQuestionType());
     }
 
     @Test
@@ -87,4 +102,41 @@ class QuestionTest {
         assertFalse(question.isCorrect());
     }
 
+    @Test
+    void singleChoiceQuestions_shouldBeCorrect_whenACorrectAnswerIsSelected(){
+        var question = Question.fromMarkdown(sampleSingleChoiceQuestion);
+
+        var answers = question.getAnswers();
+
+        question.answer(answers.get(1), "");
+
+        assertTrue(question.isAnswered());
+        assertTrue(question.isCorrect());
+    }
+
+    @Test
+    void singleChoiceQuestions_shouldBeInCorrect_whenAnInCorrectAnswerIsSelected(){
+        var question = Question.fromMarkdown(sampleSingleChoiceQuestion);
+
+        var answers = question.getAnswers();
+
+        question.answer(answers.get(0), "");
+
+        assertTrue(question.isAnswered());
+        assertFalse(question.isCorrect());
+    }
+
+    @Test
+    void singleChoiceQuestions_shouldAlwaysOnlyHaveOneChoiceSelectted(){
+        var question = Question.fromMarkdown(sampleSingleChoiceQuestion);
+
+        var answers = question.getAnswers();
+
+        question.answer(answers.get(0), "");
+        question.answer(answers.get(1), "");
+
+        // selecting the second answer should unselect the first
+        assertFalse(answers.get(0).isSelected());
+        assertTrue(answers.get(1).isSelected());
+    }
 }

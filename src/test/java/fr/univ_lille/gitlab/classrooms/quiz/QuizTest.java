@@ -51,7 +51,7 @@ class QuizTest {
     void shouldBeFullyAnswered_whenAllQuestionsAreAnswered(){
         var quiz = Quiz.fromMarkdown(sampleQuizContent, "sample");
 
-        quiz.getQuestions().forEach(it -> it.answer());
+        quiz.getQuestions().forEach(it -> it.answer(it.getAnswers().get(0), ""));
 
         assertTrue(quiz.isFullyAnswered());
     }

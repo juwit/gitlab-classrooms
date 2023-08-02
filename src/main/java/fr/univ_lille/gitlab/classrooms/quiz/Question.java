@@ -13,7 +13,7 @@ public class Question {
     private boolean answered = false;
 
     enum QuestionType {
-        FULL_TEXT, MULTIPLE_CHOICE
+        FULL_TEXT, SINGLE_CHOICE, MULTIPLE_CHOICE
     }
 
     private Question(String text, List<Answer> answers, String explanation) {
@@ -41,7 +41,11 @@ public class Question {
         return new Question(questionText, answers, explanation);
     }
 
-    public void answer() {
+    public void answer(Answer answer, String value) {
+        if(this.getQuestionType().equals(QuestionType.SINGLE_CHOICE)){
+            this.reset();
+        }
+        answer.select(value);
         answered = true;
     }
 
@@ -77,6 +81,7 @@ public class Question {
     public QuestionType getQuestionType(){
         return switch (this.answers.get(0).getType()){
             case FULL_TEXT -> QuestionType.FULL_TEXT;
+            case SINGLE_CHOICE -> QuestionType.SINGLE_CHOICE;
             case MULTIPLE_CHOICE -> QuestionType.MULTIPLE_CHOICE;
         };
     }

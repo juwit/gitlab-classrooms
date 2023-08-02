@@ -48,9 +48,8 @@ public class Quiz {
         this.questions.forEach(question -> {
             question.getAnswers().forEach(answer -> {
                 if(quizAnswers.containsKey(answer.getId()) && ! quizAnswers.get(answer.getId()).isBlank()){
-                    answer.select(quizAnswers.get(answer.getId()));
                     // mark the question as answered
-                    question.answer();
+                    question.answer(answer, quizAnswers.get(answer.getId()));
                 }
             });
         });
