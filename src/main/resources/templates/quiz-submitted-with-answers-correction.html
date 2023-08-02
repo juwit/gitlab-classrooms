@@ -58,7 +58,14 @@
       <legend class="rounded-md bg-red-50 p-4 text-sm font-medium text-red-800" th:if="${!question.correct}" th:text="${question.text}">
         Question text
       </legend>
-      
+
+      <div class="mt-6 space-y-6" th:if="${question.questionType.name() == 'SINGLE_CHOICE'}">
+        <div th:each="answer : ${question.answers}" class="flex items-center gap-x-3">
+          <input th:id="${answer.id}" type="radio" disabled th:checked="${answer.selected}" class="h-4 w-4 border-gray-300 text-indigo-300 focus:ring-indigo-300">
+          <label th:for="${answer.id}" class="block text-sm font-medium leading-6 text-gray-900" th:text="${answer.text}">Answer text</label>
+        </div>
+      </div>
+
       <div class="mt-6 space-y-6" th:if="${question.questionType.name() == 'MULTIPLE_CHOICE'}">
         <div th:each="answer : ${question.answers}" class="flex items-center gap-x-3">
           <input th:id="${answer.id}" th:name="${answer.id}" type="checkbox" disabled th:checked="${answer.selected}" class="h-4 w-4 rounded border-gray-300 text-indigo-300 focus:ring-indigo-300">

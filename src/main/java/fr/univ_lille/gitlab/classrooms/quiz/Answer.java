@@ -6,10 +6,14 @@ import java.util.regex.Pattern;
 public class Answer {
 
     enum AnswerType {
-        FULL_TEXT, MULTIPLE_CHOICE
+        FULL_TEXT, SINGLE_CHOICE, MULTIPLE_CHOICE
     }
-    private static final Pattern correctRegex = Pattern.compile("\\[x\\] (.*)");
-    private static final Pattern incorrectRegex = Pattern.compile("\\[ \\] (.*)");
+    private static final Pattern multipleChoiceCorrectRegex = Pattern.compile("\\[x\\] (.*)");
+    private static final Pattern multipleChoiceIncorrectRegex = Pattern.compile("\\[ \\] (.*)");
+
+    private static final Pattern singleChoiceCorrectRegex = Pattern.compile("\\(x\\) (.*)");
+
+    private static final Pattern singleChoiceIncorrectRegex = Pattern.compile("\\( \\) (.*)");
     private static final Pattern fullTextRegex = Pattern.compile("= (.*)");
 
     private final String text;
@@ -28,16 +32,28 @@ public class Answer {
     }
 
     public static Answer fromMarkdown(String markdown, String id) {
-        Matcher correctMatcher = correctRegex.matcher(markdown);
-        if (correctMatcher.find()) {
-            String text = correctMatcher.group(1);
+        Matcher multipleChoiceCorrectMatcher = multipleChoiceCorrectRegex.matcher(markdown);
+        if (multipleChoiceCorrectMatcher.find()) {
+            String text = multipleChoiceCorrectMatcher.group(1);
             return new Answer(text, true, AnswerType.MULTIPLE_CHOICE, id);
         }
 
-        Matcher incorrectMatcher = incorrectRegex.matcher(markdown);
-        if (incorrectMatcher.find()) {
-            String text = incorrectMatcher.group(1);
+        Matcher multipleChoiceIncorrectMatcher = multipleChoiceIncorrectRegex.matcher(markdown);
+        if (multipleChoiceIncorrectMatcher.find()) {
+            String text = multipleChoiceIncorrectMatcher.group(1);
             return new Answer(text, false, AnswerType.MULTIPLE_CHOICE, id);
+        }
+
+        Matcher singleChoiceCorrectMatcher = singleChoiceCorrectRegex.matcher(markdown);
+        if (singleChoiceCorrectMatcher.find()) {
+            String text = singleChoiceCorrectMatcher.group(1);
+            return new Answer(text, true, AnswerType.SINGLE_CHOICE, id);
+        }
+
+        Matcher singleChoiceInCorrectMatcher = singleChoiceIncorrectRegex.matcher(markdown);
+        if (singleChoiceInCorrectMatcher.find()) {
+            String text = singleChoiceInCorrectMatcher.group(1);
+            return new Answer(text, false, AnswerType.SINGLE_CHOICE, id);
         }
 
         Matcher fullTextMatcher = fullTextRegex.matcher(markdown);
@@ -60,7 +76,7 @@ public class Answer {
 
     public boolean isCorrect() {
         return switch (this.type){
-            case MULTIPLE_CHOICE -> this.selected == this.correct;
+            case SINGLE_CHOICE, MULTIPLE_CHOICE -> this.selected == this.correct;
             case FULL_TEXT -> this.inputText.trim().equalsIgnoreCase(this.text);
         };
     }

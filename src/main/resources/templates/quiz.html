@@ -37,6 +37,12 @@
             th:each="question : ${quiz.questions}">
       <fieldset >
         <legend class="text-sm font-semibold leading-6 text-gray-900" th:text="${question.text}">Question text</legend>
+        <div class="mt-6 space-y-6" th:if="${question.questionType.name() == 'SINGLE_CHOICE'}">
+          <div th:each="answer : ${question.answers}" class="flex items-center gap-x-3">
+            <input th:id="${answer.id}" th:name="${question.id}" th:value="${answer.id}" type="radio" th:checked="${answer.selected}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
+            <label th:for="${answer.id}" class="block text-sm font-medium leading-6 text-gray-900" th:text="${answer.text}">Answer text</label>
+          </div>
+        </div>
         <div class="mt-6 space-y-6" th:if="${question.questionType.name() == 'MULTIPLE_CHOICE'}">
           <div th:each="answer : ${question.answers}" class="flex items-center gap-x-3">
             <input th:id="${answer.id}" th:name="${answer.id}" type="checkbox" th:checked="${answer.selected}" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">

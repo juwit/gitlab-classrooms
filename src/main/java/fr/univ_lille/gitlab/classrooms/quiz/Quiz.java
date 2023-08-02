@@ -48,11 +48,21 @@ public class Quiz {
         this.questions.forEach(question -> {
             question.getAnswers().forEach(answer -> {
                 if(quizAnswers.containsKey(answer.getId()) && ! quizAnswers.get(answer.getId()).isBlank()){
-                    answer.select(quizAnswers.get(answer.getId()));
                     // mark the question as answered
-                    question.answer();
+                    question.answer(answer, quizAnswers.get(answer.getId()));
                 }
             });
+
+            // single choice answers, receiving a key = question id && value = selected answer id
+            if(quizAnswers.containsKey(question.getId())){
+                var selectedAnswerId = quizAnswers.get(question.getId());
+                question.getAnswers().stream()
+                        // find the answer
+                        .filter(it -> it.getId().equals(selectedAnswerId))
+                        .findFirst()
+                        // and select it
+                        .ifPresent( it -> question.answer(it, ""));
+            }
         });
     }
 
