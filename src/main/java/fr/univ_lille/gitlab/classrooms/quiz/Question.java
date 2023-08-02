@@ -66,6 +66,10 @@ public class Question {
         }
     }
 
+    public String getId(){
+        return DigestUtils.sha256Hex(this.text);
+    }
+
     public String getText() {
         return text;
     }
