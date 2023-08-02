@@ -2,7 +2,6 @@ package fr.univ_lille.gitlab.classrooms.ui;
 
 import fr.univ_lille.gitlab.classrooms.quiz.*;
 import jakarta.annotation.security.RolesAllowed;
-import org.springframework.context.annotation.Role;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -26,11 +25,18 @@ public class QuizController {
         this.quizRepository = quizRepository;
     }
 
-    @GetMapping("/")
+    @GetMapping("")
     @RolesAllowed("TEACHER")
     public String listQuiz(Model model){
         model.addAttribute("quizzes", this.quizRepository.findAll());
         return "quiz/list";
+    }
+
+    @GetMapping("/new/edit")
+    @RolesAllowed("TEACHER")
+    public String newQuiz(Model model){
+        model.addAttribute("quiz", new QuizEntity());
+        return "quiz/edit";
     }
 
     @GetMapping("/{quizId}/edit")
