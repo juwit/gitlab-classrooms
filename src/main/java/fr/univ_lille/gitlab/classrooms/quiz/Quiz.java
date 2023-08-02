@@ -61,7 +61,7 @@ public class Quiz {
                         .filter(it -> it.getId().equals(selectedAnswerId))
                         .findFirst()
                         // and select it
-                        .ifPresent( it -> it.select(""));
+                        .ifPresent( it -> question.answer(it, ""));
             }
         });
     }
