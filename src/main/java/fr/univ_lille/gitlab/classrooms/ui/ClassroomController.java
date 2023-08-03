@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.ui;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
+import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/classrooms")
+@RolesAllowed("TEACHER")
 public class ClassroomController {
 
     private ClassroomRepository classroomRepository;

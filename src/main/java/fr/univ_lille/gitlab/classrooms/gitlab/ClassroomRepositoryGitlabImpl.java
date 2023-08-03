@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.mock;
+package fr.univ_lille.gitlab.classrooms.gitlab;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
  * Implementation of the Classroom repository that uses the Gitlab API
  */
 @Repository
-@Primary
 class ClassroomRepositoryGitlabImpl implements ClassroomRepository {
 
     GitLabApi gitLabApi;
