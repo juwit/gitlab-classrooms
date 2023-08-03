@@ -29,3 +29,16 @@ verify:
   stage: test
   script:
     - 'mvn $MAVEN_CLI_OPTS verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar $SONAR_CLI_OPTS'
+
+deploy:
+  image: clevercloud/clever-tools
+  stage: deploy
+  rules:
+    - if: $CI_COMMIT_REF_NAME == 'main'
+  script:
+    - clever deploy
+  environment:
+    name: production
+    deployment_tier: production
+    url: https://gitlab-classrooms.cleverapps.io/
+    action: start
