@@ -55,7 +55,7 @@ public class Question {
 
     public int score() {
         return (int) answers.stream()
-                .filter(answer -> answer.isCorrect())
+                .filter(Answer::isCorrect)
                 .count();
     }
 
