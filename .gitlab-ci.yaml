@@ -1,0 +1,31 @@
+variables:
+  MAVEN_OPTS: >-
+    -Dhttps.protocols=TLSv1.2
+    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
+    -Dorg.slf4j.simpleLogger.showDateTime=true
+    -Djava.awt.headless=true
+
+  MAVEN_CLI_OPTS: >-
+    --batch-mode
+    --errors
+    --fail-at-end
+    --show-version
+    --no-transfer-progress
+    -DinstallAtEnd=true
+    -DdeployAtEnd=true
+
+  SONAR_CLI_OPTS: >-
+    -Dsonar.projectKey=gitlab-classrooms_gitlab-classrooms
+    -Dsonar.organization=gitlab-classrooms
+    -Dsonar.host.url=https://sonarcloud.io
+
+image: maven:3-eclipse-temurin-17
+
+cache:
+  paths:
+    - .m2/repository
+
+verify:
+  stage: test
+  script:
+    - 'mvn $MAVEN_CLI_OPTS verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar $SONAR_CLI_OPTS'
