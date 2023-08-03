@@ -31,7 +31,9 @@ verify:
     - 'mvn $MAVEN_CLI_OPTS verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar $SONAR_CLI_OPTS'
 
 deploy:
-  image: clevercloud/clever-tools
+  image:
+    name: clevercloud/clever-tools
+    entrypoint: ["/bin/sh", "-c"]
   stage: deploy
   rules:
     - if: $CI_COMMIT_REF_NAME == 'main'
