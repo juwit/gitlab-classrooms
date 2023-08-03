@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
  * Implementation of the Classroom repository that uses the Gitlab API
  */
 @Repository
-@Primary
 class ClassroomRepositoryGitlabImpl implements ClassroomRepository {
 
     GitLabApi gitLabApi;
