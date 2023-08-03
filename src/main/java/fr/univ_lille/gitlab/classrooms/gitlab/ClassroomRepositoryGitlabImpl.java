@@ -5,7 +5,6 @@ import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.GroupParams;
-import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 
 /**
