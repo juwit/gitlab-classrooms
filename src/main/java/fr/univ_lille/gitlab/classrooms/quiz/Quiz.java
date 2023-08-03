@@ -34,12 +34,6 @@ public class Quiz {
         return questions;
     }
 
-    public void reset() {
-        for (Question question : questions) {
-            question.reset();
-        }
-    }
-
     /**
      * Ugly method to answer questions from a form submission
      *
