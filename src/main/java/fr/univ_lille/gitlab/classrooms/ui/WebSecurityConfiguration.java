@@ -20,14 +20,10 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.logging.Logger;
-
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true)
 @Configuration
 public class WebSecurityConfiguration implements WebMvcConfigurer {
-
-    private static final Logger LOGGER = Logger.getLogger(WebSecurityConfiguration.class.getName());
 
     private ClassroomUserService classroomUserService;
 
