@@ -1,64 +1,80 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
-import org.junit.jupiter.api.Nested;
+import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreRepository;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.core.Authentication;
+import org.springframework.ui.ConcurrentModel;
+import org.springframework.ui.Model;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import java.util.Collection;
+import java.util.Map;
+import java.util.Optional;
 
-@SpringBootTest
-@AutoConfigureMockMvc
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
 class QuizControllerTest {
 
-    @Autowired
-    private MockMvc mockMvc;
+    @InjectMocks
+    private QuizController quizController;
 
-    @Nested
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
-    class TeacherRole {
+    @Mock
+    private QuizRepository quizRepository;
 
-        @Test
-        void shouldAccessQuizListPage() throws Exception {
-            mockMvc.perform(get("/quiz"))
-                    .andDo(print())
-                    .andExpect(status().isOk());
-        }
+    @Mock
+    private QuizScoreRepository quizScoreRepository;
 
-        @Test
-        void shouldAccessNewQuizPage() throws Exception {
-            mockMvc.perform(get("/quiz/new/edit"))
-                    .andDo(print())
-                    .andExpect(status().isOk());
-        }
+    @Mock
+    private Authentication authentication;
 
+    @Mock
+    private Model model;
+
+    @Test
+    void submitQuizAnswers_shouldOutputAnError_whenQuizIsNotFullyAnswered(){
+        var quiz = new QuizEntity();
+        quiz.setMarkdownContent("""
+                # a question
+                [ ] wrong answer
+                [x] good answer
+                """);
+        when(quizRepository.findById("testQuiz")).thenReturn(Optional.of(quiz));
+
+        quizController.submitQuizAnswers(model, "testQuiz", Map.of(), authentication);
+
+        verify(model).addAttribute("message", "Il manque des réponses à certaines questions.");
     }
 
-    @Nested
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
-    class StudentRole {
+    @Test
+    void submitQuizAnswers_shouldSaveTheScore_whenQuizIsAnswered(){
+        var quizId = "testQuiz";
+        var quiz = new QuizEntity();
+        quiz.setName(quizId);
+        quiz.setMarkdownContent("""
+                # a question
+                [ ] wrong answer
+                [x] good answer
+                """);
+        when(quizRepository.findById(quizId)).thenReturn(Optional.of(quiz));
 
-        @Test
-        void shouldNotAccessQuizListPage() throws Exception {
-            mockMvc.perform(get("/quiz"))
-                    .andDo(print())
-                    .andExpect(status().isForbidden());
-        }
+        // get the answer id from the first answer of the quiz
+        var answerKey = Quiz.fromMarkdown(quiz.getMarkdownContent(), quizId).getQuestions().get(0).getAnswers().get(0).getId();
 
-        @Test
-        void shouldNotAccessNewQuizPage() throws Exception {
-            mockMvc.perform(get("/quiz/new/edit"))
-                    .andDo(print())
-                    .andExpect(status().isForbidden());
-        }
+        var result = quizController.submitQuizAnswers(model, quizId, Map.of(answerKey, "wrong answer"), authentication);
 
+        assertThat(result).isEqualTo("quiz-submitted-with-answers-correction");
+
+        verify(quizScoreRepository).save(any());
     }
 
 }
