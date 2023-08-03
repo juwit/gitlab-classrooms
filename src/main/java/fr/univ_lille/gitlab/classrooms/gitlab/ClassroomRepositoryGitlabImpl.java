@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.mock;
+package fr.univ_lille.gitlab.classrooms.gitlab;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
