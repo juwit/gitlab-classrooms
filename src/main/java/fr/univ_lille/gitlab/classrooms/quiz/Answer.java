@@ -5,23 +5,16 @@ import java.util.regex.Pattern;
 
 public class Answer {
 
-    enum AnswerType {
-        FULL_TEXT, SINGLE_CHOICE, MULTIPLE_CHOICE
-    }
     private static final Pattern multipleChoiceCorrectRegex = Pattern.compile("\\[x\\] (.*)");
     private static final Pattern multipleChoiceIncorrectRegex = Pattern.compile("\\[ \\] (.*)");
-
     private static final Pattern singleChoiceCorrectRegex = Pattern.compile("\\(x\\) (.*)");
-
     private static final Pattern singleChoiceIncorrectRegex = Pattern.compile("\\( \\) (.*)");
     private static final Pattern fullTextRegex = Pattern.compile("= (.*)");
-
     private final String text;
     private final boolean correct;
     private boolean selected = false;
     private String inputText;
     private AnswerType type;
-
     private String id;
 
     private Answer(String text, boolean correct, AnswerType type, String id) {
@@ -65,7 +58,7 @@ public class Answer {
         return null; // Ajoutez un comportement par défaut approprié si nécessaire
     }
 
-    public void reset(){
+    public void reset() {
         this.selected = false;
     }
 
@@ -75,7 +68,7 @@ public class Answer {
     }
 
     public boolean isCorrect() {
-        return switch (this.type){
+        return switch (this.type) {
             case SINGLE_CHOICE, MULTIPLE_CHOICE -> this.selected == this.correct;
             case FULL_TEXT -> this.inputText.trim().equalsIgnoreCase(this.text);
         };
@@ -85,9 +78,10 @@ public class Answer {
         return selected;
     }
 
-    public String getId(){
+    public String getId() {
         return this.id;
     }
+
     public String getText() {
         return this.text;
     }
@@ -98,5 +92,9 @@ public class Answer {
 
     public String getInputText() {
         return inputText;
+    }
+
+    enum AnswerType {
+        FULL_TEXT, SINGLE_CHOICE, MULTIPLE_CHOICE
     }
 }

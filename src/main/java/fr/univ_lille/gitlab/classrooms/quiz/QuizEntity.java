@@ -1,9 +1,12 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
-@Table(name="quiz")
+@Table(name = "quiz")
 public class QuizEntity {
 
     @Id

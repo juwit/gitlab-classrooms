@@ -12,10 +12,6 @@ public class Question {
     private final String explanation;
     private boolean answered = false;
 
-    enum QuestionType {
-        FULL_TEXT, SINGLE_CHOICE, MULTIPLE_CHOICE
-    }
-
     private Question(String text, List<Answer> answers, String explanation) {
         this.text = text;
         this.answers = answers;
@@ -29,8 +25,8 @@ public class Question {
 
         var answers = Arrays.stream(lines)
                 .skip(1) // skip question line
-                .filter(it -> ! it.startsWith(">")) // filter explanation lines
-                .map(it -> Answer.fromMarkdown(it, DigestUtils.sha256Hex(questionText+it)))
+                .filter(it -> !it.startsWith(">")) // filter explanation lines
+                .map(it -> Answer.fromMarkdown(it, DigestUtils.sha256Hex(questionText + it)))
                 .toList();
 
         var explanation = Arrays.stream(lines)
@@ -42,7 +38,7 @@ public class Question {
     }
 
     public void answer(Answer answer, String value) {
-        if(this.getQuestionType().equals(QuestionType.SINGLE_CHOICE)){
+        if (this.getQuestionType().equals(QuestionType.SINGLE_CHOICE)) {
             this.reset();
         }
         answer.select(value);
@@ -55,7 +51,7 @@ public class Question {
 
     public int score() {
         return (int) answers.stream()
-                .filter(answer -> answer.isCorrect())
+                .filter(Answer::isCorrect)
                 .count();
     }
 
@@ -66,7 +62,7 @@ public class Question {
         }
     }
 
-    public String getId(){
+    public String getId() {
         return DigestUtils.sha256Hex(this.text);
     }
 
@@ -82,15 +78,19 @@ public class Question {
         return explanation;
     }
 
-    public QuestionType getQuestionType(){
-        return switch (this.answers.get(0).getType()){
+    public QuestionType getQuestionType() {
+        return switch (this.answers.get(0).getType()) {
             case FULL_TEXT -> QuestionType.FULL_TEXT;
             case SINGLE_CHOICE -> QuestionType.SINGLE_CHOICE;
             case MULTIPLE_CHOICE -> QuestionType.MULTIPLE_CHOICE;
         };
     }
 
-    public boolean isCorrect(){
+    public boolean isCorrect() {
         return this.answers.stream().allMatch(Answer::isCorrect);
+    }
+
+    enum QuestionType {
+        FULL_TEXT, SINGLE_CHOICE, MULTIPLE_CHOICE
     }
 }

@@ -22,26 +22,18 @@ class ClassroomRepositoryGitlabImpl implements ClassroomRepository {
     }
 
     @Override
-    public Iterable<Classroom> findAllClassrooms() {
-        try {
-            return gitLabApi.getGroupApi().getGroupsStream()
-                    .map(it -> new Classroom(it.getName(), it.getName(), it.getWebUrl()))
-                    .toList();
-        } catch (GitLabApiException e) {
-            throw new RuntimeException(e);
-        }
+    public Iterable<Classroom> findAllClassrooms() throws GitLabApiException {
+        return gitLabApi.getGroupApi().getGroupsStream()
+                .map(it -> new Classroom(it.getName(), it.getName(), it.getWebUrl()))
+                .toList();
     }
 
     @Override
-    public void saveClassroom(Classroom classroom) {
-        try {
-            var groupParams = new GroupParams()
-                    .withName(classroom.name())
-                    .withPath(classroom.name())
-                    .withDescription("Gitlab Classroom group");
-            this.gitLabApi.getGroupApi().createGroup(groupParams);
-        } catch (GitLabApiException e) {
-            throw new RuntimeException(e);
-        }
+    public void saveClassroom(Classroom classroom) throws GitLabApiException {
+        var groupParams = new GroupParams()
+                .withName(classroom.name())
+                .withPath(classroom.name())
+                .withDescription("Gitlab Classroom group");
+        this.gitLabApi.getGroupApi().createGroup(groupParams);
     }
 }

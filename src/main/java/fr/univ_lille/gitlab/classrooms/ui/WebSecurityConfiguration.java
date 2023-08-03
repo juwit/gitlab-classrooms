@@ -20,14 +20,12 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import java.util.logging.Logger;
-
 @EnableWebSecurity
 @EnableMethodSecurity(jsr250Enabled = true)
 @Configuration
 public class WebSecurityConfiguration implements WebMvcConfigurer {
 
-    private static final Logger LOGGER = Logger.getLogger(WebSecurityConfiguration.class.getName());
+    private static final String LOGIN_PAGE = "login";
 
     private ClassroomUserService classroomUserService;
 
@@ -38,22 +36,20 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         // serve the login page as-is
-        registry.addViewController("login").setViewName("login");
+        registry.addViewController(LOGIN_PAGE).setViewName(LOGIN_PAGE);
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(it -> {
-                    it.requestMatchers("login").permitAll();
+                    it.requestMatchers(LOGIN_PAGE).permitAll();
                     it.requestMatchers("images/**").permitAll();
                     it.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
-                    oauth2.loginPage("/login");
-                    oauth2.userInfoEndpoint(userInfo -> {
-                        userInfo.userService(this.userService());
-                    });
+                    oauth2.loginPage("/" + LOGIN_PAGE);
+                    oauth2.userInfoEndpoint(userInfo -> userInfo.userService(this.userService()));
                 })
                 .build();
     }
@@ -66,7 +62,7 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     private OAuth2UserService<OAuth2UserRequest, OAuth2User> userService() {
         var delegate = new DefaultOAuth2UserService();
 
-        return (userRequest) -> {
+        return userRequest -> {
             var oauth2User = delegate.loadUser(userRequest);
 
             // load additional authorities
