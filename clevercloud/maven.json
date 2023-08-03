@@ -1,0 +1,9 @@
+{
+  "build": {
+    "type": "maven",
+    "goal": "--batch-mode --no-transfer-progress compile"
+  },
+  "deploy": {
+    "goal": "--batch-mode --no-transfer-progress  spring-boot:run"
+  }
+}
