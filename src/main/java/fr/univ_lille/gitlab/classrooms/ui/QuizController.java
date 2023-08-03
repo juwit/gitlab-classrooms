@@ -20,12 +20,12 @@ public class QuizController {
     private static final String QUIZ_LIST_PAGE = "quiz/list";
     private static final String QUIZ_EDIT_PAGE = "quiz/edit";
 
-    QuizScoreRepository quizScoreRepository;
-
     QuizRepository quizRepository;
 
-    public QuizController(QuizScoreRepository quizScoreRepository, QuizRepository quizRepository) {
-        this.quizScoreRepository = quizScoreRepository;
+    QuizScoreService quizScoreService;
+
+    public QuizController(QuizScoreService quizScoreService, QuizRepository quizRepository) {
+        this.quizScoreService = quizScoreService;
         this.quizRepository = quizRepository;
     }
 
@@ -88,12 +88,8 @@ public class QuizController {
             return "quiz";
         }
 
-        // saves the score of the student
-        var score = new QuizScore();
-        score.setQuizId(quizId);
-        score.setStudentId(authentication.getName());
-        score.setScore(quiz.score());
-        quizScoreRepository.save(score);
+        var studentId = authentication.getName();
+        quizScoreService.registerScoreForStudent(quiz, studentId);
 
         model.addAttribute("quiz", quiz);
         return "quiz-submitted-with-answers-correction";

@@ -1,19 +1,14 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreRepository;
+import fr.univ_lille.gitlab.classrooms.quiz.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.Authentication;
-import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.Model;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 
@@ -32,7 +27,7 @@ class QuizControllerTest {
     private QuizRepository quizRepository;
 
     @Mock
-    private QuizScoreRepository quizScoreRepository;
+    private QuizScoreService quizScoreService;
 
     @Mock
     private Authentication authentication;
@@ -74,7 +69,7 @@ class QuizControllerTest {
 
         assertThat(result).isEqualTo("quiz-submitted-with-answers-correction");
 
-        verify(quizScoreRepository).save(any());
+        verify(quizScoreService).registerScoreForStudent(any(), any());
     }
 
 }

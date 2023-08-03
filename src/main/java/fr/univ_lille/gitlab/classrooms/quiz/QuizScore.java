@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 
 import java.io.Serializable;
+import java.time.ZonedDateTime;
 
 class QuizScoreId implements Serializable {
     String quizId;
@@ -37,7 +38,13 @@ public class QuizScore {
     @Id
     String studentId;
 
+    long submissionCount = 1;
+
+    ZonedDateTime submissionDate = ZonedDateTime.now();
+
     long score;
+
+    long maxScore;
 
     public String getQuizId() {
         return quizId;
@@ -61,5 +68,29 @@ public class QuizScore {
 
     public void setScore(long score) {
         this.score = score;
+    }
+
+    public long getSubmissionCount() {
+        return submissionCount;
+    }
+
+    public void setSubmissionCount(long submissionCount) {
+        this.submissionCount = submissionCount;
+    }
+
+    public ZonedDateTime getSubmissionDate() {
+        return submissionDate;
+    }
+
+    public void setSubmissionDate(ZonedDateTime submissionDate) {
+        this.submissionDate = submissionDate;
+    }
+
+    public long getMaxScore() {
+        return maxScore;
+    }
+
+    public void setMaxScore(long maxScore) {
+        this.maxScore = maxScore;
     }
 }
