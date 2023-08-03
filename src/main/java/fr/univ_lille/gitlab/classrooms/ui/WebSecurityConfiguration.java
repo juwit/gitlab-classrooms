@@ -25,6 +25,8 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebSecurityConfiguration implements WebMvcConfigurer {
 
+    private static final String LOGIN_PAGE = "login";
+
     private ClassroomUserService classroomUserService;
 
     public WebSecurityConfiguration(ClassroomUserService classroomUserService) {
@@ -34,19 +36,19 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         // serve the login page as-is
-        registry.addViewController("login").setViewName("login");
+        registry.addViewController(LOGIN_PAGE).setViewName(LOGIN_PAGE);
     }
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .authorizeHttpRequests(it -> {
-                    it.requestMatchers("login").permitAll();
+                    it.requestMatchers(LOGIN_PAGE).permitAll();
                     it.requestMatchers("images/**").permitAll();
                     it.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
-                    oauth2.loginPage("/login");
+                    oauth2.loginPage("/"+LOGIN_PAGE);
                     oauth2.userInfoEndpoint(userInfo -> {
                         userInfo.userService(this.userService());
                     });
