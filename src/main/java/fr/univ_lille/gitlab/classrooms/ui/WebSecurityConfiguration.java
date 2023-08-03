@@ -49,9 +49,7 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                 })
                 .oauth2Login(oauth2 -> {
                     oauth2.loginPage("/"+LOGIN_PAGE);
-                    oauth2.userInfoEndpoint(userInfo -> {
-                        userInfo.userService(this.userService());
-                    });
+                    oauth2.userInfoEndpoint(userInfo -> userInfo.userService(this.userService()));
                 })
                 .build();
     }
@@ -64,7 +62,7 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
     private OAuth2UserService<OAuth2UserRequest, OAuth2User> userService() {
         var delegate = new DefaultOAuth2UserService();
 
-        return (userRequest) -> {
+        return userRequest -> {
             var oauth2User = delegate.loadUser(userRequest);
 
             // load additional authorities
