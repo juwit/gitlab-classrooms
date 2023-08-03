@@ -24,12 +24,12 @@ public class ClassroomController {
     }
 
     @GetMapping("/new")
-    String newClassroom(){
+    String newClassroom() {
         return "classrooms/new";
     }
 
     @PostMapping("/new")
-    String newClassroom(@RequestParam String classroomName){
+    String newClassroom(@RequestParam String classroomName) {
         var classroom = new Classroom(UUID.randomUUID().toString(), classroomName, "");
 
         try {

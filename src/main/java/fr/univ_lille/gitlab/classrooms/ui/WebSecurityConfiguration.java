@@ -48,7 +48,7 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                     it.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
-                    oauth2.loginPage("/"+LOGIN_PAGE);
+                    oauth2.loginPage("/" + LOGIN_PAGE);
                     oauth2.userInfoEndpoint(userInfo -> userInfo.userService(this.userService()));
                 })
                 .build();

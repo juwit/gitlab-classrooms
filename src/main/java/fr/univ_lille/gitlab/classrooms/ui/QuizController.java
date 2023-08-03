@@ -31,21 +31,21 @@ public class QuizController {
 
     @GetMapping("")
     @RolesAllowed("TEACHER")
-    public String listQuiz(Model model){
+    public String listQuiz(Model model) {
         model.addAttribute("quizzes", this.quizRepository.findAll(Sort.by("name")));
         return QUIZ_LIST_PAGE;
     }
 
     @GetMapping("/new/edit")
     @RolesAllowed("TEACHER")
-    public String newQuiz(Model model){
+    public String newQuiz(Model model) {
         model.addAttribute("quiz", new QuizEntity());
         return QUIZ_EDIT_PAGE;
     }
 
     @GetMapping("/{quizId}/edit")
     @RolesAllowed("TEACHER")
-    public String editQuiz(Model model, @PathVariable String quizId){
+    public String editQuiz(Model model, @PathVariable String quizId) {
         var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         model.addAttribute("quiz", quizEntity);
         return QUIZ_EDIT_PAGE;
@@ -53,7 +53,7 @@ public class QuizController {
 
     @PostMapping("/{quizId}/edit")
     @RolesAllowed("TEACHER")
-    public String saveQuiz(@ModelAttribute QuizEntity quiz, Model model, @PathVariable String quizId){
+    public String saveQuiz(@ModelAttribute QuizEntity quiz, Model model, @PathVariable String quizId) {
         this.quizRepository.save(quiz);
         model.addAttribute("quiz", quiz);
         model.addAttribute("successMessage", "Quiz successfully saved");

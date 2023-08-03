@@ -5,7 +5,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-class ClassroomUserServiceImpl implements ClassroomUserService{
+class ClassroomUserServiceImpl implements ClassroomUserService {
 
     private final ClassroomUserRepository classroomUserRepository;
 
@@ -14,12 +14,12 @@ class ClassroomUserServiceImpl implements ClassroomUserService{
     }
 
     @Override
-    public ClassroomUser loadOrCreateClassroomUser(String name){
+    public ClassroomUser loadOrCreateClassroomUser(String name) {
         return classroomUserRepository.findById(name)
                 .orElseGet(() -> this.createClassroomUser(name));
     }
 
-    ClassroomUser createClassroomUser(String name){
+    ClassroomUser createClassroomUser(String name) {
         var classroomUser = new ClassroomUser();
         classroomUser.setName(name);
         classroomUser.setRoles(List.of(ClassroomRole.STUDENT));

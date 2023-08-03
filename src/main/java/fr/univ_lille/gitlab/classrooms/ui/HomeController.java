@@ -4,7 +4,6 @@ import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
 import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,12 +23,11 @@ public class HomeController {
     @GetMapping
     @RolesAllowed("TEACHER")
     public String getHomePage(Model model) {
-        try{
+        try {
             var classrooms = classroomRepository.findAllClassrooms();
             model.addAttribute("classrooms", classrooms);
             return "home";
-        }
-        catch (GitLabApiException e){
+        } catch (GitLabApiException e) {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to load Groups from the Gitlab API");
         }
     }

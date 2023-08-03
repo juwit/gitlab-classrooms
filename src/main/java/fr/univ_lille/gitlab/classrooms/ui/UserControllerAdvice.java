@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class UserControllerAdvice {
 
     @ModelAttribute
-    void addUser(Model model, Authentication authentication){
-        if(authentication.isAuthenticated() ){
+    void addUser(Model model, Authentication authentication) {
+        if (authentication.isAuthenticated()) {
             model.addAttribute("user", authentication.getPrincipal());
         }
     }
