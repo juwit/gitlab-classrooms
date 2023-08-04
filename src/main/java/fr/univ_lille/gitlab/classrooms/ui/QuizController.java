@@ -61,11 +61,16 @@ public class QuizController {
     }
 
     @GetMapping("/{quizId}")
-    public String showQuiz(Model model, @PathVariable String quizId) {
+    public String showQuiz(Model model, @PathVariable String quizId, Authentication authentication) {
         var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizId);
 
         model.addAttribute("quiz", quiz);
+
+        var studentId = authentication.getName();
+        var previousSubmission = this.quizScoreService.getPreviousQuizSubmission(quizId, studentId);
+        previousSubmission.ifPresent(submission -> model.addAttribute("previousSubmission", submission));
+
         return "quiz";
     }
 
@@ -89,7 +94,7 @@ public class QuizController {
         }
 
         var studentId = authentication.getName();
-        quizScoreService.registerScoreForStudent(quiz, studentId);
+        this.quizScoreService.registerScoreForStudent(quiz, studentId);
 
         model.addAttribute("quiz", quiz);
         return "quiz-submitted-with-answers-correction";

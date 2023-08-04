@@ -5,11 +5,20 @@ import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 
 import java.io.Serializable;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 class QuizScoreId implements Serializable {
     String quizId;
     String studentId;
+
+    public QuizScoreId() {
+    }
+
+    public QuizScoreId(String quizId, String studentId) {
+        this.quizId = quizId;
+        this.studentId = studentId;
+    }
 
     public String getQuizId() {
         return quizId;
@@ -79,7 +88,7 @@ public class QuizScore {
     }
 
     public ZonedDateTime getSubmissionDate() {
-        return submissionDate;
+        return submissionDate.withZoneSameInstant(ZoneId.of("CET"));
     }
 
     public void setSubmissionDate(ZonedDateTime submissionDate) {

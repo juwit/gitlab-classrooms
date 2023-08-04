@@ -2,6 +2,8 @@ package fr.univ_lille.gitlab.classrooms.quiz;
 
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 class QuizScoreServiceImpl implements QuizScoreService {
 
@@ -20,5 +22,10 @@ class QuizScoreServiceImpl implements QuizScoreService {
         score.setScore(quiz.score());
         score.setMaxScore(quiz.getQuestions().size());
         quizScoreRepository.save(score);
+    }
+
+    @Override
+    public Optional<QuizScore> getPreviousQuizSubmission(String quizId, String studentId) {
+        return quizScoreRepository.findById(new QuizScoreId(quizId, studentId));
     }
 }
