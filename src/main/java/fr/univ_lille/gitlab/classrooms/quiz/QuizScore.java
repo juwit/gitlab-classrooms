@@ -38,7 +38,7 @@ public class QuizScore {
     @Id
     String studentId;
 
-    long submissionCount = 1;
+    int submissionCount = 1;
 
     ZonedDateTime submissionDate = ZonedDateTime.now();
 
@@ -70,11 +70,11 @@ public class QuizScore {
         this.score = score;
     }
 
-    public long getSubmissionCount() {
+    public int getSubmissionCount() {
         return submissionCount;
     }
 
-    public void setSubmissionCount(long submissionCount) {
+    public void setSubmissionCount(int submissionCount) {
         this.submissionCount = submissionCount;
     }
 
