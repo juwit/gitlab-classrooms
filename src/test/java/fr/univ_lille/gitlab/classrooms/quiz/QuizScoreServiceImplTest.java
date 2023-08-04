@@ -46,10 +46,10 @@ class QuizScoreServiceImplTest {
         var quizScore = captor.getValue();
 
         assertThat(quizScore.quizId).isEqualTo("dummy");
-        assertThat(quizScore.score).isEqualTo(0);
+        assertThat(quizScore.score).isZero();
         assertThat(quizScore.studentId).isEqualTo("darth-vader");
-        assertThat(quizScore.submissionCount).isEqualTo(1);
-        assertThat(quizScore.maxScore).isEqualTo(1);
+        assertThat(quizScore.submissionCount).isOne();
+        assertThat(quizScore.maxScore).isOne();
         assertThat(quizScore.submissionDate).isEqualToIgnoringSeconds(ZonedDateTime.now());
     }
 }

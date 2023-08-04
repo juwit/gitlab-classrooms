@@ -1,8 +1,5 @@
-package fr.univ_lille.gitlab.classrooms.ui;
+package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.quiz.*;
-import jakarta.annotation.security.RolesAllowed;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.Authentication;
@@ -15,49 +12,15 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/quiz")
-public class QuizController {
-
-    private static final String QUIZ_LIST_PAGE = "quiz/list";
-    private static final String QUIZ_EDIT_PAGE = "quiz/edit";
+public class QuizAnswerController {
 
     QuizRepository quizRepository;
 
     QuizScoreService quizScoreService;
 
-    public QuizController(QuizScoreService quizScoreService, QuizRepository quizRepository) {
+    public QuizAnswerController(QuizScoreService quizScoreService, QuizRepository quizRepository) {
         this.quizScoreService = quizScoreService;
         this.quizRepository = quizRepository;
-    }
-
-    @GetMapping("")
-    @RolesAllowed("TEACHER")
-    public String listQuiz(Model model) {
-        model.addAttribute("quizzes", this.quizRepository.findAll(Sort.by("name")));
-        return QUIZ_LIST_PAGE;
-    }
-
-    @GetMapping("/new/edit")
-    @RolesAllowed("TEACHER")
-    public String newQuiz(Model model) {
-        model.addAttribute("quiz", new QuizEntity());
-        return QUIZ_EDIT_PAGE;
-    }
-
-    @GetMapping("/{quizId}/edit")
-    @RolesAllowed("TEACHER")
-    public String editQuiz(Model model, @PathVariable String quizId) {
-        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        model.addAttribute("quiz", quizEntity);
-        return QUIZ_EDIT_PAGE;
-    }
-
-    @PostMapping("/{quizId}/edit")
-    @RolesAllowed("TEACHER")
-    public String saveQuiz(@ModelAttribute QuizEntity quiz, Model model, @PathVariable String quizId) {
-        this.quizRepository.save(quiz);
-        model.addAttribute("quiz", quiz);
-        model.addAttribute("successMessage", "Quiz successfully saved");
-        return QUIZ_EDIT_PAGE;
     }
 
     @GetMapping("/{quizId}")
@@ -99,5 +62,4 @@ public class QuizController {
         model.addAttribute("quiz", quiz);
         return "quiz-submitted-with-answers-correction";
     }
-
 }

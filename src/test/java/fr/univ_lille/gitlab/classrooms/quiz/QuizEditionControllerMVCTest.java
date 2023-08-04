@@ -1,8 +1,9 @@
-package fr.univ_lille.gitlab.classrooms.ui;
+package fr.univ_lille.gitlab.classrooms.quiz;
 
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
+import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Nested;
@@ -26,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class QuizControllerMVCTest {
+class QuizEditionControllerMVCTest {
 
     @Autowired
     private MockMvc mockMvc;
@@ -121,33 +122,6 @@ class QuizControllerMVCTest {
                     .andExpect(status().isForbidden());
         }
 
-    }
-
-    @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
-    void shouldReturn404_whenQuizDoesNotExists() throws Exception {
-        mockMvc.perform(get("/quiz/unknown"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
-    void shouldReturnQuizPage_whenQuizExists() throws Exception {
-        var quiz = new QuizEntity();
-        quiz.setName("death-star-quiz");
-        quiz.setMarkdownContent("""
-                # who build the Death Star ?
-                (x) the Galactic Empire
-                ( ) Sauron
-                """);
-        when(quizRepository.findById("death-star-quiz")).thenReturn(Optional.of(quiz));
-
-        mockMvc.perform(get("/quiz/death-star-quiz"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(view().name("quiz"))
-                .andExpect(model().attribute("quiz", notNullValue()));
     }
 
 }

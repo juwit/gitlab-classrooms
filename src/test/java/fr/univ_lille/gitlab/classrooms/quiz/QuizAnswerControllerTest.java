@@ -1,6 +1,10 @@
-package fr.univ_lille.gitlab.classrooms.ui;
+package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.quiz.*;
+import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizAnswerController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,10 +22,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class QuizControllerTest {
+class QuizAnswerControllerTest {
 
     @InjectMocks
-    private QuizController quizController;
+    private QuizAnswerController quizAnswerController;
 
     @Mock
     private QuizRepository quizRepository;
@@ -45,7 +49,7 @@ class QuizControllerTest {
                 """);
         when(quizRepository.findById("testQuiz")).thenReturn(Optional.of(quiz));
 
-        quizController.submitQuizAnswers(model, "testQuiz", Map.of(), authentication);
+        quizAnswerController.submitQuizAnswers(model, "testQuiz", Map.of(), authentication);
 
         verify(model).addAttribute("message", "Il manque des réponses à certaines questions.");
     }
@@ -65,7 +69,7 @@ class QuizControllerTest {
         // get the answer id from the first answer of the quiz
         var answerKey = Quiz.fromMarkdown(quiz.getMarkdownContent(), quizId).getQuestions().get(0).getAnswers().get(0).getId();
 
-        var result = quizController.submitQuizAnswers(model, quizId, Map.of(answerKey, "wrong answer"), authentication);
+        var result = quizAnswerController.submitQuizAnswers(model, quizId, Map.of(answerKey, "wrong answer"), authentication);
 
         assertThat(result).isEqualTo("quiz-submitted-with-answers-correction");
 
