@@ -37,14 +37,27 @@
                 </a>
             </div>
             <dl class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
-                <!-- assignment list -->
-                <a th:href="@{/quiz/{quizName}(quizName=${quiz.name})}" target="_blank" class="inline-flex items-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1.5">
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                    </svg>
-                    View as a student
-                </a>
+                <div class="flex justify-between gap-x-4 py-3">
+                    <dt class="text-gray-800">
+                        <a th:href="@{/quiz/{quizName}(quizName=${quiz.name})}" target="_blank" class="inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                            View as a student
+                        </a>
+                    </dt>
+                </div>
+                <div class="flex justify-between gap-x-4 py-3">
+                    <dt class="text-gray-800">
+                        <a th:href="@{/quiz/{quizName}/results(quizName=${quiz.name})}" class="inline-flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+                            </svg>
+                            View results
+                        </a>
+                    </dt>
+                </div>
             </dl>
         </li>
     </ul>

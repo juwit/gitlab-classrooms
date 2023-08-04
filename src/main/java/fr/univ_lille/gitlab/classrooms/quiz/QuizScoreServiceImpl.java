@@ -28,4 +28,10 @@ class QuizScoreServiceImpl implements QuizScoreService {
     public Optional<QuizScore> getPreviousQuizSubmission(String quizId, String studentId) {
         return quizScoreRepository.findById(new QuizScoreId(quizId, studentId));
     }
+
+    @Override
+    public QuizResult getQuizResult(String quizId) {
+        var quizScores = quizScoreRepository.findByQuizId(quizId);
+        return new QuizResult(quizScores);
+    }
 }

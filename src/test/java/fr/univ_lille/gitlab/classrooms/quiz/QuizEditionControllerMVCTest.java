@@ -88,6 +88,27 @@ class QuizEditionControllerMVCTest {
                     .andExpect(status().isOk());
         }
 
+        @Test
+        void shouldSeeQuizResults() throws Exception {
+            var quiz = new QuizEntity();
+            quiz.setName("death-star-quiz");
+            quiz.setMarkdownContent("""
+                # who build the Death Star ?
+                (x) the Galactic Empire
+                ( ) Sauron
+                """);
+            when(quizRepository.findById("death-star-quiz")).thenReturn(Optional.of(quiz));
+
+
+            mockMvc.perform(get("/quiz/death-star-quiz/results"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("quiz/results"))
+                    .andExpect(model().attributeExists("quiz"))
+                    .andExpect(model().attributeExists("quizResult"))
+                    .andExpect(model().attribute("quiz", hasProperty("name", equalTo("death-star-quiz"))));
+        }
+
     }
 
     @Nested
@@ -118,6 +139,13 @@ class QuizEditionControllerMVCTest {
         @Test
         void shouldNotSaveQuiz() throws Exception {
             mockMvc.perform(post("/quiz/death-star-quiz/edit"))
+                    .andDo(print())
+                    .andExpect(status().isForbidden());
+        }
+
+        @Test
+        void shouldNotSeeQuizResult() throws Exception {
+            mockMvc.perform(post("/quiz/death-star-quiz/results"))
                     .andDo(print())
                     .andExpect(status().isForbidden());
         }

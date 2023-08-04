@@ -6,4 +6,6 @@ public interface QuizScoreService {
     void registerScoreForStudent(Quiz quiz, String studentId);
 
     Optional<QuizScore> getPreviousQuizSubmission(String quizId, String studentId);
+
+    QuizResult getQuizResult(String quizId);
 }
