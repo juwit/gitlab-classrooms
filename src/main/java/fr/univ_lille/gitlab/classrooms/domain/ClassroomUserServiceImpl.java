@@ -18,6 +18,11 @@ class ClassroomUserServiceImpl implements ClassroomUserService {
     }
 
     @Override
+    public ClassroomUser getClassroomUser(String userId) {
+        return this.classroomUserRepository.findById(userId).get();
+    }
+
+    @Override
     @Transactional
     public ClassroomUser loadOrCreateClassroomUser(OAuth2User oauth2User) {
         var name = oauth2User.getName();

@@ -1,5 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -25,6 +27,9 @@ class QuizScoreServiceImplTest {
     @Mock
     private QuizScoreRepository quizScoreRepository;
 
+    @Mock
+    private ClassroomUserService classroomUserService;
+
     @Captor
     private ArgumentCaptor<QuizScore> captor;
 
@@ -39,6 +44,9 @@ class QuizScoreServiceImplTest {
         var firstAnswer = question.getAnswers().get(0);
         question.answer(firstAnswer, "");
 
+        var vader = new ClassroomUser();
+        when(classroomUserService.getClassroomUser("darth-vader")).thenReturn(vader);
+
         quizScoreService.registerScoreForStudent(quiz, "darth-vader");
 
         verify(quizScoreRepository).save(captor.capture());
@@ -47,7 +55,7 @@ class QuizScoreServiceImplTest {
 
         assertThat(quizScore.quizId).isEqualTo("dummy");
         assertThat(quizScore.score).isZero();
-        assertThat(quizScore.studentId).isEqualTo("darth-vader");
+        assertThat(quizScore.classroomUser).isEqualTo(vader);
         assertThat(quizScore.submissionCount).isOne();
         assertThat(quizScore.maxScore).isOne();
         assertThat(quizScore.submissionDate).isEqualToIgnoringSeconds(ZonedDateTime.now());

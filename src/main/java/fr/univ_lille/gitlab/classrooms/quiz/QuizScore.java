@@ -1,23 +1,30 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
+import jakarta.persistence.ManyToOne;
 
 import java.io.Serializable;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 
 class QuizScoreId implements Serializable {
+
+    @Id
     String quizId;
-    String studentId;
+
+    @Id
+    @ManyToOne
+    ClassroomUser classroomUser;
 
     public QuizScoreId() {
     }
 
-    public QuizScoreId(String quizId, String studentId) {
+    public QuizScoreId(String quizId, ClassroomUser classroomUser) {
         this.quizId = quizId;
-        this.studentId = studentId;
+        this.classroomUser = classroomUser;
     }
 
     public String getQuizId() {
@@ -28,24 +35,25 @@ class QuizScoreId implements Serializable {
         this.quizId = quizId;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public ClassroomUser getClassroomUser() {
+        return classroomUser;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setClassroomUser(ClassroomUser classroomUser) {
+        this.classroomUser = classroomUser;
     }
 }
 
 @Entity
 @IdClass(QuizScoreId.class)
-public class QuizScore {
+public class QuizScore extends QuizScoreId{
 
     @Id
     String quizId;
 
     @Id
-    String studentId;
+    @ManyToOne
+    ClassroomUser classroomUser;
 
     int submissionCount = 1;
 
@@ -63,12 +71,12 @@ public class QuizScore {
         this.quizId = quizId;
     }
 
-    public String getStudentId() {
-        return studentId;
+    public ClassroomUser getClassroomUser() {
+        return classroomUser;
     }
 
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+    public void setClassroomUser(ClassroomUser classroomUser) {
+        this.classroomUser = classroomUser;
     }
 
     public long getScore() {
@@ -102,4 +110,5 @@ public class QuizScore {
     public void setMaxScore(long maxScore) {
         this.maxScore = maxScore;
     }
+
 }
