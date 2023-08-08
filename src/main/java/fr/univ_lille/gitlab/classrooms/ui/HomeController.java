@@ -23,13 +23,9 @@ public class HomeController {
     @GetMapping
     @RolesAllowed("TEACHER")
     public String getHomePage(Model model) {
-        try {
-            var classrooms = classroomRepository.findAllClassrooms();
-            model.addAttribute("classrooms", classrooms);
-            return "home";
-        } catch (GitLabApiException e) {
-            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Unable to load Groups from the Gitlab API");
-        }
+        var classrooms = classroomRepository.findAll();
+        model.addAttribute("classrooms", classrooms);
+        return "home";
     }
 
 }

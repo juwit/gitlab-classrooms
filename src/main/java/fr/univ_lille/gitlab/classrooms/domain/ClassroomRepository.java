@@ -1,10 +1,10 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import org.gitlab4j.api.GitLabApiException;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
-public interface ClassroomRepository {
+import java.util.UUID;
 
-    Iterable<Classroom> findAllClassrooms() throws GitLabApiException;
-
-    void saveClassroom(Classroom classroom) throws GitLabApiException;
+@Repository
+public interface ClassroomRepository extends JpaRepository<Classroom, UUID> {
 }
