@@ -6,7 +6,7 @@
     Created from template : https://tailwindui.com/components/application-ui/lists/grid-lists#component-2beafc928684743ff886c0b164edb126
 -->
 
-<div th:fragment="fragment">
+<div>
     <div class="border-b border-gray-900/10 pb-6">
         <a th:href="@{/quiz/new/edit}" class="">
             <button type="button" class="inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
@@ -17,7 +17,7 @@
             </button>
         </a>
     </div>
-    <ul role="list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
+    <ul role="list" class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8">
         <li
                 th:each="quiz : ${quizzes}"
                 class="overflow-hidden rounded-xl border border-gray-200"
@@ -33,7 +33,7 @@
                         th:text="${quiz.name}"
                         class="text-sm font-medium leading-6 text-gray-900"
                 >
-                    Classroom Name
+                    Quiz Name
                 </a>
             </div>
             <dl class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
