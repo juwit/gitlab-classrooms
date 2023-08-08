@@ -1,22 +1,28 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 
 import java.util.Set;
 import java.util.UUID;
 
+enum AssignmentType {
+    QUIZ, EXERCICE
+}
+
 @Entity
+@Inheritance(strategy = InheritanceType.JOINED)
 class Assignment {
 
     @Id
-    private UUID id;
+    private UUID id = UUID.randomUUID();
 
     private String name;
 
     @ManyToMany
     private Set<ClassroomUser> students;
+
+    @Enumerated(EnumType.STRING)
+    private AssignmentType type;
 
     public UUID getId() {
         return id;
@@ -44,5 +50,13 @@ class Assignment {
 
     public void accept(ClassroomUser student){
         this.students.add(student);
+    }
+
+    public AssignmentType getType() {
+        return type;
+    }
+
+    public void setType(AssignmentType type) {
+        this.type = type;
     }
 }

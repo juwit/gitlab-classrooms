@@ -1,8 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
@@ -22,9 +20,15 @@ public class ClassroomController {
 
     private final ClassroomUserService classroomUserService;
 
-    public ClassroomController(ClassroomRepository classroomRepository, ClassroomUserService classroomUserService) {
+    private final QuizRepository quizRepository;
+
+    private final AssignmentRepository assignmentRepository;
+
+    public ClassroomController(ClassroomRepository classroomRepository, ClassroomUserService classroomUserService, QuizRepository quizRepository, AssignmentRepository assignmentRepository) {
         this.classroomRepository = classroomRepository;
         this.classroomUserService = classroomUserService;
+        this.quizRepository = quizRepository;
+        this.assignmentRepository = assignmentRepository;
     }
 
     @GetMapping("/new")
@@ -71,4 +75,32 @@ public class ClassroomController {
         return "classrooms/joined";
     }
 
+    @GetMapping("/{classroomId}/assignments/new")
+    String newAssignment(@PathVariable UUID classroomId, Model model){
+        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        model.addAttribute("classroom", classroom);
+
+        model.addAttribute("quizzes", quizRepository.findAll());
+        return "assignments/new";
+    }
+
+    @PostMapping("/{classroomId}/assignments/new")
+    String createAssignment(@PathVariable UUID classroomId, Model model, @RequestParam String assignmentName, @RequestParam String quizName){
+        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        var quiz = this.quizRepository.findById(quizName).get();
+
+        var quizAssignment = new QuizAssignment();
+        quizAssignment.setName(assignmentName);
+        quizAssignment.setQuiz(quiz);
+
+        classroom.assignments.add(quizAssignment);
+
+        this.assignmentRepository.save(quizAssignment);
+        this.classroomRepository.save(classroom);
+
+        model.addAttribute("classroom", classroom);
+        return "classrooms/view";
+    }
 }

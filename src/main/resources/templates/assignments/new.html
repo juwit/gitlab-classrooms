@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout('New Assignment', ~{::section} , 'Dashboard')}">
+<head>
+</head>
+<body>
+<section>
+<!--
+    Created from template https://tailwindui.com/components/application-ui/forms/form-layouts#component-d45bd4ec6e473269c55d3ba084e1988d
+-->
+    <form method="post">
+
+        <input type="hidden" th:value="${classroom.id}" />
+
+        <div class="space-y-12">
+            <div class="grid grid-cols-1 gap-x-8 gap-y-10 border-b border-gray-900/10 pb-12 md:grid-cols-3">
+                <div>
+                    <h2 class="text-base font-semibold leading-7 text-gray-900">Assignment</h2>
+                    <p class="mt-1 text-sm leading-6 text-gray-600">Please enter the details about the assignment to create in the classroom <span th:text="${classroom.name}">Classroom Name</span>.</p>
+                </div>
+
+                <div class="grid max-w-2xl grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6 md:col-span-2">
+                    <div class="col-span-full">
+                        <label for="assignmentName" class="block text-sm font-medium leading-6 text-gray-900">Assignment name</label>
+                        <div class="mt-2">
+                            <input type="text" name="assignmentName" id="assignmentName" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="col-span-full">
+                        <div class="flex items-center justify-between">
+                            <h2 class="text-sm font-medium leading-6 text-gray-900">Assignment type</h2>
+                        </div>
+
+                        <fieldset class="mt-2">
+                            <legend class="sr-only">Choose a memory option</legend>
+                            <div class="grid grid-cols-3 gap-3 sm:grid-cols-6">
+                                <!--
+                                  available: "cursor-pointer", unavailable: "opacity-25 cursor-not-allowed"
+                                  Active: "ring-2 ring-indigo-600 ring-offset-2"
+                                  Checked: "bg-indigo-600 text-white hover:bg-indigo-500", Not Checked: "ring-1 ring-inset ring-gray-300 bg-white text-gray-900 hover:bg-gray-50"
+                                -->
+                                <label class="flex items-center justify-center rounded-md py-3 px-3 text-sm font-semibold uppercase sm:flex-1 cursor-pointer focus:outline-none bg-indigo-600 text-white hover:bg-indigo-500">
+                                    <input type="radio" checked name="assignment-type" value="QUIZ" class="sr-only">
+                                    <span>Quiz</span>
+                                </label>
+                                <label class="flex items-center justify-center rounded-md py-3 px-3 text-sm font-semibold uppercase sm:flex-1 opacity-25 cursor-not-allowed focus:outline-none">
+                                    <input type="radio" disabled name="assignment-type" value="TP" class="sr-only">
+                                    <span>TP</span>
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                    <div class="col-span-full">
+                        <label for="quizName" class="block text-sm font-medium leading-6 text-gray-900">Quiz</label>
+                        <select id="quizName" name="quizName" class="mt-2 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
+                            <option th:each="quiz : ${quizzes}" th:text="${quiz.name}">Quiz Name</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-6 flex items-center justify-end gap-x-6">
+            <a th:href="@{/classrooms/{classroomId}(classroomId=${classroom.id})}">
+                <button type="button" class="text-sm font-semibold leading-6 text-gray-900">Cancel</button>
+            </a>
+            <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Create</button>
+        </div>
+
+        <input
+                type="hidden"
+                th:name="${_csrf.parameterName}"
+                th:value="${_csrf.token}" />
+    </form>
+
+</section>
+</body>
+</html>
