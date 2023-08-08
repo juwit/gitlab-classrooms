@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.ui;
+package fr.univ_lille.gitlab.classrooms.domain;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;

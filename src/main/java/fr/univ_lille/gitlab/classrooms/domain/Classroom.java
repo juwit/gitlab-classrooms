@@ -3,8 +3,10 @@ package fr.univ_lille.gitlab.classrooms.domain;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
 
 import java.net.URL;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
@@ -20,6 +22,9 @@ public class Classroom {
 
     @ManyToMany
     Set<ClassroomUser> students;
+
+    @OneToMany
+    List<Assignment> assignments;
 
     public UUID getId() {
         return id;
@@ -55,5 +60,13 @@ public class Classroom {
 
     public void join(ClassroomUser classroomUser){
         this.students.add(classroomUser);
+    }
+
+    public List<Assignment> getAssignments() {
+        return assignments;
+    }
+
+    public void setAssignments(List<Assignment> assignments) {
+        this.assignments = assignments;
     }
 }
