@@ -41,6 +41,14 @@ public class ClassroomController {
         return "redirect:/";
     }
 
+    @GetMapping("/{classroomId}")
+    String showClassroom(@PathVariable UUID classroomId, Model model){
+        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        model.addAttribute("classroom", classroom);
+        return "classrooms/view";
+    }
+
     @GetMapping("/{classroomId}/join")
     String showJoinClassroom(@PathVariable UUID classroomId, Model model){
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
