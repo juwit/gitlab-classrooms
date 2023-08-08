@@ -1,10 +1,8 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 
+import java.net.URL;
 import java.util.Collection;
 
 @Entity
@@ -15,6 +13,10 @@ public class ClassroomUser {
 
     @Enumerated(EnumType.STRING)
     private Collection<ClassroomRole> roles;
+
+    private URL avatarUrl;
+
+    private String email;
 
     public ClassroomUser() {
     }
@@ -38,5 +40,21 @@ public class ClassroomUser {
 
     public void setRoles(Collection<ClassroomRole> roles) {
         this.roles = roles;
+    }
+
+    public URL getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(URL avatarUri) {
+        this.avatarUrl = avatarUri;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

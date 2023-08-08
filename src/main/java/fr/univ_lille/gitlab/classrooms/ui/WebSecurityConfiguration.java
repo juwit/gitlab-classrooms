@@ -65,8 +65,10 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
         return userRequest -> {
             var oauth2User = delegate.loadUser(userRequest);
 
-            // load additional authorities
-            var classroomUser = this.classroomUserService.loadOrCreateClassroomUser(oauth2User.getName());
+            // load user from the database, or create it
+            var classroomUser = this.classroomUserService.loadOrCreateClassroomUser(oauth2User);
+
+            // map roles
             var authorities = classroomUser.getRoles().stream()
                     .map(it -> new SimpleGrantedAuthority("ROLE_" + it.name()))
                     .toList();
