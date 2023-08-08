@@ -1,4 +1,4 @@
-# Create the application in Gitlab
+# gitlab configuration
 
 Here is the procedure to register _Gitlab Classroom_ as a Gitlab application on any Gitlab instance.
 
