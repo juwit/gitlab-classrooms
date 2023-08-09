@@ -89,7 +89,7 @@ public class ClassroomController {
     String createAssignment(@PathVariable UUID classroomId, Model model, @RequestParam String assignmentName, @RequestParam String quizName){
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        var quiz = this.quizRepository.findById(quizName).get();
+        var quiz = this.quizRepository.findById(quizName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var quizAssignment = new QuizAssignment();
         quizAssignment.setName(assignmentName);
