@@ -11,7 +11,7 @@ enum AssignmentType {
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-class Assignment {
+abstract class Assignment {
 
     @Id
     private UUID id = UUID.randomUUID();
@@ -23,6 +23,9 @@ class Assignment {
 
     @Enumerated(EnumType.STRING)
     private AssignmentType type;
+
+    @ManyToOne
+    private Classroom classroom;
 
     public UUID getId() {
         return id;
@@ -58,5 +61,13 @@ class Assignment {
 
     public void setType(AssignmentType type) {
         this.type = type;
+    }
+
+    public Classroom getClassroom() {
+        return classroom;
+    }
+
+    public void setClassroom(Classroom classroom) {
+        this.classroom = classroom;
     }
 }

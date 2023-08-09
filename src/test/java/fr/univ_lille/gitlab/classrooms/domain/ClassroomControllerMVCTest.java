@@ -62,8 +62,8 @@ class ClassroomControllerMVCTest {
 
     @AfterEach
     void tearDown() {
-        classroomRepository.deleteById(classroomId);
         assignmentRepository.deleteAll();
+        classroomRepository.deleteById(classroomId);
         classroomUserRepository.deleteById("luke.skywalker");
         quizRepository.deleteById("ClassroomControllerMVCTest quiz");
     }

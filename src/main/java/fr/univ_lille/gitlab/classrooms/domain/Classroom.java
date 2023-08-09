@@ -3,6 +3,7 @@ package fr.univ_lille.gitlab.classrooms.domain;
 import jakarta.persistence.*;
 
 import java.net.URL;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -11,17 +12,17 @@ import java.util.UUID;
 public class Classroom {
 
     @Id
-    UUID id;
+    private UUID id = UUID.randomUUID();
 
-    String name;
+    private String name;
 
-    URL gitlabUrl;
+    private URL gitlabUrl;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    Set<ClassroomUser> students;
+    private Set<ClassroomUser> students;
 
-    @OneToMany
-    List<Assignment> assignments;
+    @OneToMany(mappedBy = "classroom")
+    private List<Assignment> assignments = new LinkedList<>();
 
     public UUID getId() {
         return id;
@@ -65,5 +66,10 @@ public class Classroom {
 
     public void setAssignments(List<Assignment> assignments) {
         this.assignments = assignments;
+    }
+
+    public void addAssignment(Assignment assignment) {
+        this.assignments.add(assignment);
+        assignment.setClassroom(this);
     }
 }

@@ -1,5 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -20,13 +22,34 @@ public class AssignmentController {
 
     private final ClassroomUserService classroomUserService;
 
-    public AssignmentController(AssignmentRepository assignmentRepository, ClassroomUserService classroomUserService) {
+    private QuizScoreService quizScoreService;
+
+    public AssignmentController(AssignmentRepository assignmentRepository, ClassroomUserService classroomUserService, QuizScoreService quizScoreService) {
         this.assignmentRepository = assignmentRepository;
         this.classroomUserService = classroomUserService;
+        this.quizScoreService = quizScoreService;
+    }
+
+    @GetMapping("/{assignmentId}")
+    String viewAssignment(@PathVariable UUID assignmentId, Model model) {
+        var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        if (assignment.getType() == AssignmentType.QUIZ) {
+            var quizAssignment = (QuizAssignment)assignment;
+            // view quiz results for the classroom
+            model.addAttribute("quiz", quizAssignment.getQuiz());
+
+            var quizResult = this.quizScoreService.getQuizResultForClassroom(quizAssignment.getQuiz(), assignment.getClassroom());
+            model.addAttribute("quizResult", quizResult);
+
+            return "quiz/results";
+        }
+
+        throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{assignmentId}/accept")
-    String showAcceptAssignment(@PathVariable UUID assignmentId, Model model){
+    String showAcceptAssignment(@PathVariable UUID assignmentId, Model model) {
         var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("assignment", assignment);
@@ -34,7 +57,7 @@ public class AssignmentController {
     }
 
     @PostMapping("/{assignmentId}/accept")
-    String acceptAssignment(@PathVariable UUID assignmentId, Authentication authentication, Model model){
+    String acceptAssignment(@PathVariable UUID assignmentId, Authentication authentication, Model model) {
         var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var student = this.classroomUserService.getClassroomUser(authentication.getName());

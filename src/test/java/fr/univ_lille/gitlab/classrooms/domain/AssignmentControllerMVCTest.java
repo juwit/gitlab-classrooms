@@ -1,5 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,7 +9,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -33,14 +34,31 @@ class AssignmentControllerMVCTest {
     @Autowired
     private ClassroomUserRepository classroomUserRepository;
 
+    @Autowired
+    private QuizRepository quizRepository;
+
+    @Autowired
+    private ClassroomRepository classroomRepository;
+
     private String assignmentId = "bb886148-08d3-476f-bf7d-a65a8e1ce9a8";
 
     @BeforeEach
     void setUp() {
-        var assignment = new Assignment();
+        var quiz = new QuizEntity();
+        quiz.setName("AssignmentControllerMVCTest quiz");
+        quizRepository.save(quiz);
+
+        var classroom = new Classroom();
+        classroom.setName("AssignmentControllerMVCTest classroom");
+        classroomRepository.save(classroom);
+
+        var assignment = new QuizAssignment();
         assignment.setId(UUID.fromString(assignmentId));
-        assignment.setName("AssignmentControllerMVCTest Assignment");
-        assignment.setType(AssignmentType.QUIZ);
+        assignment.setName("AssignmentControllerMVCTest assignment");
+        assignment.setQuiz(quiz);
+
+        classroom.addAssignment(assignment);
+
         assignmentRepository.save(assignment);
 
         var luke = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
@@ -80,6 +98,16 @@ class AssignmentControllerMVCTest {
         assertThat(assignment).isPresent();
 
         assertThat(assignment.get().getStudents()).hasSize(1);
+    }
+
+    @Test
+    @WithMockClassroomUser
+    void viewAssignment_shouldShowTheAssignmentResults() throws Exception {
+        mockMvc.perform(get("/assignments/"+assignmentId))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("quiz"))
+                .andExpect(model().attributeExists("quizResult"))
+                .andExpect(view().name("quiz/results"));
     }
 
 }

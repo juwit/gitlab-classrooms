@@ -97,7 +97,7 @@ public class ClassroomController {
         quizAssignment.setName(assignmentName);
         quizAssignment.setQuiz(quiz);
 
-        classroom.assignments.add(quizAssignment);
+        classroom.addAssignment(quizAssignment);
 
         this.assignmentRepository.save(quizAssignment);
         this.classroomRepository.save(classroom);

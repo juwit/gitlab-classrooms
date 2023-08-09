@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
 import org.springframework.stereotype.Service;
 
@@ -37,6 +38,12 @@ class QuizScoreServiceImpl implements QuizScoreService {
     @Override
     public QuizResult getQuizResult(String quizId) {
         var quizScores = quizScoreRepository.findByQuizId(quizId);
+        return new QuizResult(quizScores);
+    }
+
+    @Override
+    public QuizResult getQuizResultForClassroom(QuizEntity quiz, Classroom classroom) {
+        var quizScores = quizScoreRepository.findByQuizIdAndAndClassroomUserIn(quiz.getName(), classroom.getStudents());
         return new QuizResult(quizScores);
     }
 }
