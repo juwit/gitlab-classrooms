@@ -27,7 +27,7 @@ class AssignmentControllerMVCTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @SpyBean
+    @Autowired
     private AssignmentRepository assignmentRepository;
 
     @Autowired

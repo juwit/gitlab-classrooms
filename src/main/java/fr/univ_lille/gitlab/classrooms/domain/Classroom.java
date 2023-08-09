@@ -1,9 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.net.URL;
 import java.util.List;
@@ -20,7 +17,7 @@ public class Classroom {
 
     URL gitlabUrl;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     Set<ClassroomUser> students;
 
     @OneToMany

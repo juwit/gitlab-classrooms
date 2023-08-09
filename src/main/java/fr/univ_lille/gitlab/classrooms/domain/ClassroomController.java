@@ -54,6 +54,7 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classroomId}/join")
+    @RolesAllowed({"TEACHER","STUDENT"})
     String showJoinClassroom(@PathVariable UUID classroomId, Model model){
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
@@ -62,6 +63,7 @@ public class ClassroomController {
     }
 
     @PostMapping("/{classroomId}/join")
+    @RolesAllowed({"TEACHER","STUDENT"})
     String joinClassroom(@PathVariable UUID classroomId, Authentication authentication, Model model){
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
