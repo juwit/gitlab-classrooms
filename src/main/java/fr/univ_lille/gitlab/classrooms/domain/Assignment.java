@@ -18,7 +18,7 @@ class Assignment {
 
     private String name;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private Set<ClassroomUser> students;
 
     @Enumerated(EnumType.STRING)

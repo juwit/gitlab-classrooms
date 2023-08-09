@@ -34,7 +34,7 @@ public class AssignmentController {
     }
 
     @PostMapping("/{assignmentId}/accept")
-    String acceptClassroom(@PathVariable UUID assignmentId, Authentication authentication, Model model){
+    String acceptAssignment(@PathVariable UUID assignmentId, Authentication authentication, Model model){
         var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var student = this.classroomUserService.getClassroomUser(authentication.getName());
