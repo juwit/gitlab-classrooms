@@ -2,6 +2,8 @@ package fr.univ_lille.gitlab.classrooms.domain;
 
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import jakarta.annotation.security.RolesAllowed;
+import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.GitLabApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -24,11 +26,17 @@ public class ClassroomController {
 
     private final AssignmentRepository assignmentRepository;
 
-    public ClassroomController(ClassroomRepository classroomRepository, ClassroomUserService classroomUserService, QuizRepository quizRepository, AssignmentRepository assignmentRepository) {
+    private final AssignmentServiceImpl assignmentService;
+
+    private final GitLabApi gitLabApi;
+
+    public ClassroomController(ClassroomRepository classroomRepository, ClassroomUserService classroomUserService, QuizRepository quizRepository, AssignmentRepository assignmentRepository, AssignmentServiceImpl assignmentService, GitLabApi gitLabApi) {
         this.classroomRepository = classroomRepository;
         this.classroomUserService = classroomUserService;
         this.quizRepository = quizRepository;
         this.assignmentRepository = assignmentRepository;
+        this.assignmentService = assignmentService;
+        this.gitLabApi = gitLabApi;
     }
 
     @GetMapping("/new")
@@ -46,7 +54,7 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classroomId}")
-    String showClassroom(@PathVariable UUID classroomId, Model model){
+    String showClassroom(@PathVariable UUID classroomId, Model model) {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("classroom", classroom);
@@ -54,8 +62,8 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classroomId}/join")
-    @RolesAllowed({"TEACHER","STUDENT"})
-    String showJoinClassroom(@PathVariable UUID classroomId, Model model){
+    @RolesAllowed({"TEACHER", "STUDENT"})
+    String showJoinClassroom(@PathVariable UUID classroomId, Model model) {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("classroom", classroom);
@@ -63,8 +71,8 @@ public class ClassroomController {
     }
 
     @PostMapping("/{classroomId}/join")
-    @RolesAllowed({"TEACHER","STUDENT"})
-    String joinClassroom(@PathVariable UUID classroomId, Authentication authentication, Model model){
+    @RolesAllowed({"TEACHER", "STUDENT"})
+    String joinClassroom(@PathVariable UUID classroomId, Authentication authentication, Model model) {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var student = this.classroomUserService.getClassroomUser(authentication.getName());
@@ -78,28 +86,36 @@ public class ClassroomController {
     }
 
     @GetMapping("/{classroomId}/assignments/new")
-    String newAssignment(@PathVariable UUID classroomId, Model model){
+    String newAssignment(@PathVariable UUID classroomId, Model model) throws GitLabApiException {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("classroom", classroom);
 
         model.addAttribute("quizzes", quizRepository.findAll());
+
+        model.addAttribute("repositories", this.gitLabApi.getProjectApi().getMemberProjects());
         return "assignments/new";
     }
 
+    record CreateAssignmentDTO(String assignmentName,
+                               AssignmentType assignmentType,
+                               String quizName,
+                               String repositoryId) {
+
+    }
+
     @PostMapping("/{classroomId}/assignments/new")
-    String createAssignment(@PathVariable UUID classroomId, Model model, @RequestParam String assignmentName, @RequestParam String quizName){
+    String createAssignment(@PathVariable UUID classroomId, Model model, CreateAssignmentDTO createAssignmentDTO) {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        var quiz = this.quizRepository.findById(quizName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var assignment = switch (createAssignmentDTO.assignmentType) {
+            case QUIZ -> this.assignmentService.createQuizAssignment(createAssignmentDTO.assignmentName, createAssignmentDTO.quizName);
+            case EXERCISE -> this.assignmentService.createExerciseAssignment(createAssignmentDTO.assignmentName, createAssignmentDTO.repositoryId);
+        };
 
-        var quizAssignment = new QuizAssignment();
-        quizAssignment.setName(assignmentName);
-        quizAssignment.setQuiz(quiz);
+        classroom.addAssignment(assignment);
 
-        classroom.addAssignment(quizAssignment);
-
-        this.assignmentRepository.save(quizAssignment);
+        this.assignmentRepository.save(assignment);
         this.classroomRepository.save(classroom);
 
         model.addAttribute("classroom", classroom);

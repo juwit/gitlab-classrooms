@@ -4,13 +4,16 @@ import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
+import org.gitlab4j.api.GitLabApi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -42,6 +45,9 @@ class ClassroomControllerMVCTest {
 
     @Autowired
     private QuizRepository quizRepository;
+
+    @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
+    private GitLabApi gitLabApi;
 
     private UUID classroomId = UUID.randomUUID();
 
@@ -129,16 +135,31 @@ class ClassroomControllerMVCTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("assignments/new"))
                 .andExpect(model().attributeExists("classroom"))
-                .andExpect(model().attributeExists("quizzes"));
+                .andExpect(model().attributeExists("quizzes"))
+                .andExpect(model().attributeExists("repositories"));
     }
 
     @Test
     @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
-    void createAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
+    void createQuizAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
         mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
                         .with(csrf())
                         .param("assignmentName", "ClassroomControllerMVCTest assignment")
+                        .param("assignmentType", "QUIZ")
                         .param("quizName", "ClassroomControllerMVCTest quiz"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("classrooms/view"))
+                .andExpect(model().attributeExists("classroom"));
+    }
+
+    @Test
+    @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
+    void createExerciseAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
+        mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
+                        .with(csrf())
+                        .param("assignmentName", "ClassroomControllerMVCTest assignment")
+                        .param("assignmentType", "EXERCISE")
+                        .param("repositoryId", "Fake ID"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("classrooms/view"))
                 .andExpect(model().attributeExists("classroom"));
