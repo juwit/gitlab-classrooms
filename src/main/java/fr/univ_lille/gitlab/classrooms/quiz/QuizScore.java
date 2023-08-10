@@ -5,6 +5,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.IdClass;
 import jakarta.persistence.ManyToOne;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.io.Serializable;
 import java.time.ZoneId;
@@ -12,11 +14,8 @@ import java.time.ZonedDateTime;
 
 class QuizScoreId implements Serializable {
 
-    @Id
     String quizId;
 
-    @Id
-    @ManyToOne
     ClassroomUser classroomUser;
 
     public QuizScoreId() {
@@ -42,11 +41,24 @@ class QuizScoreId implements Serializable {
     public void setClassroomUser(ClassroomUser classroomUser) {
         this.classroomUser = classroomUser;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        QuizScoreId that = (QuizScoreId) o;
+        return new EqualsBuilder().append(quizId, that.quizId).append(classroomUser, that.classroomUser).isEquals();
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37).append(quizId).append(classroomUser).toHashCode();
+    }
 }
 
 @Entity
 @IdClass(QuizScoreId.class)
-public class QuizScore extends QuizScoreId{
+public class QuizScore {
 
     @Id
     String quizId;

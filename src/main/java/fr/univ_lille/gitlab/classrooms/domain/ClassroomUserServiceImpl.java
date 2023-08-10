@@ -19,7 +19,7 @@ class ClassroomUserServiceImpl implements ClassroomUserService {
 
     @Override
     public ClassroomUser getClassroomUser(String userId) {
-        return this.classroomUserRepository.findById(userId).get();
+        return this.classroomUserRepository.findById(userId).orElseThrow();
     }
 
     @Override

@@ -2,11 +2,12 @@ package fr.univ_lille.gitlab.classrooms.domain;
 
 import jakarta.persistence.*;
 
+import java.io.Serializable;
 import java.net.URL;
 import java.util.Collection;
 
 @Entity
-public class ClassroomUser {
+public class ClassroomUser implements Serializable {
 
     @Id
     private String name;
