@@ -61,7 +61,7 @@ class QuizAnswerControllerMVCTest {
         mockMvc.perform(get("/quiz/death-star-quiz"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("quiz"))
+                .andExpect(view().name("quiz/answer"))
                 .andExpect(model().attributeExists("quiz"))
                 .andExpect(model().attributeDoesNotExist("previousSubmission"));
     }
@@ -84,7 +84,7 @@ class QuizAnswerControllerMVCTest {
         mockMvc.perform(get("/quiz/death-star-quiz"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(view().name("quiz"))
+                .andExpect(view().name("quiz/answer"))
                 .andExpect(model().attributeExists("quiz"))
                 .andExpect(model().attributeExists("previousSubmission"));
     }

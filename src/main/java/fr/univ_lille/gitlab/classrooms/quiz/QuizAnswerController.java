@@ -34,7 +34,7 @@ public class QuizAnswerController {
         var previousSubmission = this.quizScoreService.getPreviousQuizSubmission(quizId, studentId);
         previousSubmission.ifPresent(submission -> model.addAttribute("previousSubmission", submission));
 
-        return "quiz";
+        return "quiz/answer";
     }
 
     @PostMapping(path = "/{quizId}/submit",
@@ -53,13 +53,13 @@ public class QuizAnswerController {
         if (!quiz.isFullyAnswered()) {
             model.addAttribute("quiz", quiz);
             model.addAttribute("message", "Il manque des réponses à certaines questions.");
-            return "quiz";
+            return "quiz/answer";
         }
 
         var studentId = authentication.getName();
         this.quizScoreService.registerScoreForStudent(quiz, studentId);
 
         model.addAttribute("quiz", quiz);
-        return "quiz-submitted-with-answers-correction";
+        return "quiz/results";
     }
 }

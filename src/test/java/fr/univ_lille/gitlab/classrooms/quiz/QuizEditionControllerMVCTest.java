@@ -103,7 +103,7 @@ class QuizEditionControllerMVCTest {
             mockMvc.perform(get("/quiz/death-star-quiz/results"))
                     .andDo(print())
                     .andExpect(status().isOk())
-                    .andExpect(view().name("quiz/results"))
+                    .andExpect(view().name("quiz/all-submissions"))
                     .andExpect(model().attributeExists("quiz"))
                     .andExpect(model().attributeExists("quizResult"))
                     .andExpect(model().attribute("quiz", hasProperty("name", equalTo("death-star-quiz"))));

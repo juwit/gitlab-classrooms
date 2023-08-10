@@ -107,7 +107,7 @@ class AssignmentControllerMVCTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("quiz"))
                 .andExpect(model().attributeExists("quizResult"))
-                .andExpect(view().name("quiz/results"));
+                .andExpect(view().name("quiz/all-submissions"));
     }
 
 }

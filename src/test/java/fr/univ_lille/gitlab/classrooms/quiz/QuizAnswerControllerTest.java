@@ -71,7 +71,7 @@ class QuizAnswerControllerTest {
 
         var result = quizAnswerController.submitQuizAnswers(model, quizId, Map.of(answerKey, "wrong answer"), authentication);
 
-        assertThat(result).isEqualTo("quiz-submitted-with-answers-correction");
+        assertThat(result).isEqualTo("quiz/results");
 
         verify(quizScoreService).registerScoreForStudent(any(), any());
     }

@@ -60,6 +60,6 @@ public class QuizEditionController {
         var quizResult = this.quizScoreService.getQuizResult(quizId);
         model.addAttribute("quizResult", quizResult);
 
-        return "all-submissions";
+        return "quiz/all-submissions";
     }
 }
