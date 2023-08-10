@@ -41,7 +41,7 @@ public class AssignmentController {
             var quizResult = this.quizScoreService.getQuizResultForClassroom(quizAssignment.getQuiz(), assignment.getClassroom());
             model.addAttribute("quizResult", quizResult);
 
-            return "quiz/results";
+            return "all-submissions";
         }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
