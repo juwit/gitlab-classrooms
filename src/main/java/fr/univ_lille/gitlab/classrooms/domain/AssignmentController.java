@@ -14,18 +14,18 @@ import java.util.UUID;
 @RequestMapping("/assignments")
 public class AssignmentController {
 
-    private final AssignmentRepository assignmentRepository;
+    private final AssignmentServiceImpl assignmentService;
 
-    private QuizScoreService quizScoreService;
+    private final QuizScoreService quizScoreService;
 
-    public AssignmentController(AssignmentRepository assignmentRepository, QuizScoreService quizScoreService) {
-        this.assignmentRepository = assignmentRepository;
+    public AssignmentController(AssignmentServiceImpl assignmentService, QuizScoreService quizScoreService) {
+        this.assignmentService = assignmentService;
         this.quizScoreService = quizScoreService;
     }
 
     @GetMapping("/{assignmentId}")
     String viewAssignment(@PathVariable UUID assignmentId, Model model) {
-        var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (assignment.getType() == AssignmentType.QUIZ) {
             var quizAssignment = (QuizAssignment)assignment;
@@ -48,19 +48,17 @@ public class AssignmentController {
 
     @GetMapping("/{assignmentId}/accept")
     String showAcceptAssignment(@PathVariable UUID assignmentId, Model model) {
-        var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("assignment", assignment);
         return "assignments/accept";
     }
 
     @PostMapping("/{assignmentId}/accept")
-    String acceptAssignment(@PathVariable UUID assignmentId, @ModelAttribute("user") ClassroomUser student, Model model) throws GitLabApiException {
-        var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+    String acceptAssignment(@PathVariable UUID assignmentId, @ModelAttribute("user") ClassroomUser student, Model model) {
+        var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-
-        assignment.accept(student);
-        this.assignmentRepository.save(assignment);
+        this.assignmentService.acceptAssigment(assignment, student);
 
         model.addAttribute("assignment", assignment);
         return "assignments/accepted";

@@ -22,16 +22,13 @@ public class ClassroomController {
 
     private final QuizRepository quizRepository;
 
-    private final AssignmentRepository assignmentRepository;
-
     private final AssignmentServiceImpl assignmentService;
 
     private final GitLabApi gitLabApi;
 
-    public ClassroomController(ClassroomRepository classroomRepository, QuizRepository quizRepository, AssignmentRepository assignmentRepository, AssignmentServiceImpl assignmentService, GitLabApi gitLabApi) {
+    public ClassroomController(ClassroomRepository classroomRepository, QuizRepository quizRepository, AssignmentServiceImpl assignmentService, GitLabApi gitLabApi) {
         this.classroomRepository = classroomRepository;
         this.quizRepository = quizRepository;
-        this.assignmentRepository = assignmentRepository;
         this.assignmentService = assignmentService;
         this.gitLabApi = gitLabApi;
     }

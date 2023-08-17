@@ -9,6 +9,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 class AssignmentServiceImpl {
 
@@ -16,15 +19,26 @@ class AssignmentServiceImpl {
 
     private final GitLabApi gitLabApi;
 
-    private ClassroomRepository classroomRepository;
+    private final ClassroomRepository classroomRepository;
 
-    private AssignmentRepository assignmentRepository;
+    private final AssignmentRepository assignmentRepository;
 
     AssignmentServiceImpl(QuizRepository quizRepository, GitLabApi gitLabApi, ClassroomRepository classroomRepository, AssignmentRepository assignmentRepository) {
         this.quizRepository = quizRepository;
         this.gitLabApi = gitLabApi;
         this.classroomRepository = classroomRepository;
         this.assignmentRepository = assignmentRepository;
+    }
+
+    public Optional<Assignment> getAssignment(UUID id) {
+        return this.assignmentRepository.findById(id);
+    }
+
+    @Transactional
+    public void acceptAssigment(Assignment assignment, ClassroomUser student){
+        assignment.accept(student);
+
+        this.assignmentRepository.save(assignment);
     }
 
     @Transactional

@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.domain;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
@@ -19,7 +20,7 @@ abstract class Assignment {
     private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<ClassroomUser> students;
+    private Set<ClassroomUser> students = new HashSet<>();
 
     @Enumerated(EnumType.STRING)
     private AssignmentType type;
