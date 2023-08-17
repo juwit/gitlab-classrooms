@@ -15,7 +15,7 @@ import java.util.UUID;
 @Controller
 @RequestMapping("/classrooms")
 @RolesAllowed("TEACHER")
-public class ClassroomController {
+class ClassroomController {
 
     private final ClassroomService classroomService;
 

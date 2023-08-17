@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/quiz")
-public class QuizAnswerController {
+class QuizAnswerController {
 
     QuizRepository quizRepository;
 

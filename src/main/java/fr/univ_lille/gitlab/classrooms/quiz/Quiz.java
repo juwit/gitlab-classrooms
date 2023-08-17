@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class Quiz {
+class Quiz {
 
     private final List<Question> questions;
     private String name;

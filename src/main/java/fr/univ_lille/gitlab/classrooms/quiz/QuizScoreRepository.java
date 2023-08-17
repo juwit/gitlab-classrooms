@@ -5,7 +5,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Collection;
 
-public interface QuizScoreRepository extends CrudRepository<QuizScore, QuizScoreId> {
+interface QuizScoreRepository extends CrudRepository<QuizScore, QuizScoreId> {
     Collection<QuizScore> findByQuizId(String quizId);
 
     Collection<QuizScore> findByQuizIdAndAndClassroomUserIn(String quizId, Collection<ClassroomUser> classroomUsers);

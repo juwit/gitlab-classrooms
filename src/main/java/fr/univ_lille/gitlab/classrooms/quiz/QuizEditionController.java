@@ -11,7 +11,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Controller
 @RequestMapping("/quiz")
 @RolesAllowed("TEACHER")
-public class QuizEditionController {
+class QuizEditionController {
 
     private static final String QUIZ_LIST_PAGE = "quiz/list";
     private static final String QUIZ_EDIT_PAGE = "quiz/edit";
