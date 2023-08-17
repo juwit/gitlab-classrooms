@@ -20,14 +20,17 @@ public class ClassroomController {
 
     private final ClassroomRepository classroomRepository;
 
+    private final ClassroomService classroomService;
+
     private final QuizRepository quizRepository;
 
     private final AssignmentService assignmentService;
 
     private final GitLabApi gitLabApi;
 
-    public ClassroomController(ClassroomRepository classroomRepository, QuizRepository quizRepository, AssignmentService assignmentService, GitLabApi gitLabApi) {
+    public ClassroomController(ClassroomRepository classroomRepository, ClassroomService classroomService, QuizRepository quizRepository, AssignmentService assignmentService, GitLabApi gitLabApi) {
         this.classroomRepository = classroomRepository;
+        this.classroomService = classroomService;
         this.quizRepository = quizRepository;
         this.assignmentService = assignmentService;
         this.gitLabApi = gitLabApi;
@@ -41,24 +44,7 @@ public class ClassroomController {
 
     @PostMapping("/new")
     String newClassroom(@RequestParam String classroomName, @RequestParam(required = false) Long parentGitlabGroupId, @ModelAttribute("user") ClassroomUser teacher) throws GitLabApiException {
-        var classroom = new Classroom();
-        classroom.setName(classroomName);
-        classroom.setTeacher(teacher);
-
-        var groupPath = classroomName.trim().replaceAll("[^\\w\\d\\-_.]", "_");
-
-        var groupParams = new GroupParams()
-                .withName(classroomName)
-                .withPath(groupPath)
-                .withDescription("Gitlab group for the Classroom " + classroomName);
-        if(parentGitlabGroupId != null){
-            groupParams.withParentId(parentGitlabGroupId);
-        }
-        var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
-
-        classroom.setGitlabGroupId(group.getId());
-
-        classroomRepository.save(classroom);
+        this.classroomService.createClassroom(classroomName, parentGitlabGroupId, teacher);
         return "redirect:/";
     }
 
