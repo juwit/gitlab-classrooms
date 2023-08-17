@@ -1,8 +1,11 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
 import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
+import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.Namespace;
+import org.gitlab4j.api.models.Project;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,14 +22,14 @@ public class AssignmentController {
 
     private final AssignmentRepository assignmentRepository;
 
-    private final ClassroomUserService classroomUserService;
-
     private QuizScoreService quizScoreService;
 
-    public AssignmentController(AssignmentRepository assignmentRepository, ClassroomUserService classroomUserService, QuizScoreService quizScoreService) {
+    private GitLabApi gitLabApi;
+
+    public AssignmentController(AssignmentRepository assignmentRepository, QuizScoreService quizScoreService, GitLabApi gitLabApi) {
         this.assignmentRepository = assignmentRepository;
-        this.classroomUserService = classroomUserService;
         this.quizScoreService = quizScoreService;
+        this.gitLabApi = gitLabApi;
     }
 
     @GetMapping("/{assignmentId}")
@@ -61,13 +64,11 @@ public class AssignmentController {
     }
 
     @PostMapping("/{assignmentId}/accept")
-    String acceptAssignment(@PathVariable UUID assignmentId, Authentication authentication, Model model) {
+    String acceptAssignment(@PathVariable UUID assignmentId, ClassroomUser student, Model model) throws GitLabApiException {
         var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        var student = this.classroomUserService.getClassroomUser(authentication.getName());
 
         assignment.accept(student);
-
         this.assignmentRepository.save(assignment);
 
         model.addAttribute("assignment", assignment);

@@ -6,7 +6,6 @@ import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.GroupParams;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,6 @@ public class ClassroomController {
 
     private final ClassroomRepository classroomRepository;
 
-    private final ClassroomUserService classroomUserService;
-
     private final QuizRepository quizRepository;
 
     private final AssignmentRepository assignmentRepository;
@@ -31,9 +28,8 @@ public class ClassroomController {
 
     private final GitLabApi gitLabApi;
 
-    public ClassroomController(ClassroomRepository classroomRepository, ClassroomUserService classroomUserService, QuizRepository quizRepository, AssignmentRepository assignmentRepository, AssignmentServiceImpl assignmentService, GitLabApi gitLabApi) {
+    public ClassroomController(ClassroomRepository classroomRepository, QuizRepository quizRepository, AssignmentRepository assignmentRepository, AssignmentServiceImpl assignmentService, GitLabApi gitLabApi) {
         this.classroomRepository = classroomRepository;
-        this.classroomUserService = classroomUserService;
         this.quizRepository = quizRepository;
         this.assignmentRepository = assignmentRepository;
         this.assignmentService = assignmentService;
@@ -87,10 +83,8 @@ public class ClassroomController {
 
     @PostMapping("/{classroomId}/join")
     @RolesAllowed({"TEACHER", "STUDENT"})
-    String joinClassroom(@PathVariable UUID classroomId, Authentication authentication, Model model) {
+    String joinClassroom(@PathVariable UUID classroomId, ClassroomUser student, Model model) {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        var student = this.classroomUserService.getClassroomUser(authentication.getName());
 
         classroom.join(student);
 
