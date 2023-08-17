@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -11,28 +11,24 @@ class QuizScoreServiceImpl implements QuizScoreService {
 
     private final QuizScoreRepository quizScoreRepository;
 
-    private final ClassroomUserService classroomUserService;
-
-    QuizScoreServiceImpl(QuizScoreRepository quizScoreRepository, ClassroomUserService classroomUserService) {
+    QuizScoreServiceImpl(QuizScoreRepository quizScoreRepository) {
         this.quizScoreRepository = quizScoreRepository;
-        this.classroomUserService = classroomUserService;
     }
 
     @Override
-    public void registerScoreForStudent(Quiz quiz, String studentId) {
+    public void registerScoreForStudent(Quiz quiz, ClassroomUser student) {
         // saves the score of the student
         var score = new QuizScore();
         score.setQuizId(quiz.getName());
-        score.setClassroomUser(this.classroomUserService.getClassroomUser(studentId));
+        score.setClassroomUser(student);
         score.setScore(quiz.score());
         score.setMaxScore(quiz.getQuestions().size());
         quizScoreRepository.save(score);
     }
 
     @Override
-    public Optional<QuizScore> getPreviousQuizSubmission(String quizId, String studentId) {
-        var classroomUser = this.classroomUserService.getClassroomUser(studentId);
-        return quizScoreRepository.findById(new QuizScoreId(quizId, classroomUser));
+    public Optional<QuizScore> getPreviousQuizSubmission(String quizId, ClassroomUser student) {
+        return quizScoreRepository.findById(new QuizScoreId(quizId, student));
     }
 
     @Override

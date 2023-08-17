@@ -43,9 +43,8 @@ class QuizScoreServiceImplTest {
         question.answer(firstAnswer, "");
 
         var vader = new ClassroomUser();
-        when(classroomUserService.getClassroomUser("darth-vader")).thenReturn(vader);
 
-        quizScoreService.registerScoreForStudent(quiz, "darth-vader");
+        quizScoreService.registerScoreForStudent(quiz, vader);
 
         verify(quizScoreRepository).save(captor.capture());
 

@@ -30,7 +30,7 @@ public class QuizAnswerController {
 
         model.addAttribute("quiz", quiz);
 
-        var previousSubmission = this.quizScoreService.getPreviousQuizSubmission(quizId, student.getName());
+        var previousSubmission = this.quizScoreService.getPreviousQuizSubmission(quizId, student);
         previousSubmission.ifPresent(submission -> model.addAttribute("previousSubmission", submission));
 
         return "quiz/answer";
@@ -55,7 +55,7 @@ public class QuizAnswerController {
             return "quiz/answer";
         }
 
-        this.quizScoreService.registerScoreForStudent(quiz, student.getName());
+        this.quizScoreService.registerScoreForStudent(quiz, student);
 
         model.addAttribute("quiz", quiz);
         return "quiz/results";
