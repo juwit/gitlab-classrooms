@@ -4,6 +4,7 @@ import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.GroupParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
@@ -40,15 +41,29 @@ public class ClassroomController {
     }
 
     @GetMapping("/new")
-    String newClassroom() {
+    String newClassroom(Model model) throws GitLabApiException {
+        model.addAttribute("groups", this.gitLabApi.getGroupApi().getGroups());
         return "classrooms/new";
     }
 
     @PostMapping("/new")
-    String newClassroom(@RequestParam String classroomName) {
+    String newClassroom(@RequestParam String classroomName, @RequestParam(required = false) Long parentGitlabGroupId) throws GitLabApiException {
         var classroom = new Classroom();
-        classroom.setId(UUID.randomUUID());
         classroom.setName(classroomName);
+
+        var groupPath = classroomName.trim().replaceAll("[^\\w\\d\\-_.]", "_");
+
+        var groupParams = new GroupParams()
+                .withName(classroomName)
+                .withPath(groupPath)
+                .withDescription("Gitlab group for the Classroom " + classroomName);
+        if(parentGitlabGroupId != null){
+            groupParams.withParentId(parentGitlabGroupId);
+        }
+        var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
+
+        classroom.setGitlabGroupId(group.getId());
+
         classroomRepository.save(classroom);
         return "redirect:/";
     }

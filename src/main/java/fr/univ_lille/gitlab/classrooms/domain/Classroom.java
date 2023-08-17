@@ -18,6 +18,8 @@ public class Classroom {
 
     private URL gitlabUrl;
 
+    private Long gitlabGroupId;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<ClassroomUser> students;
 
@@ -71,5 +73,13 @@ public class Classroom {
     public void addAssignment(Assignment assignment) {
         this.assignments.add(assignment);
         assignment.setClassroom(this);
+    }
+
+    public Long getGitlabGroupId() {
+        return gitlabGroupId;
+    }
+
+    public void setGitlabGroupId(Long gitlabGroupId) {
+        this.gitlabGroupId = gitlabGroupId;
     }
 }
