@@ -7,11 +7,13 @@ import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.GitLabApiForm;
 import org.gitlab4j.api.models.AccessLevel;
+import org.gitlab4j.api.models.GroupParams;
 import org.gitlab4j.api.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -83,5 +85,28 @@ class ClassroomServiceImplTest {
         classroomService.joinClassroom(classroom, student);
 
         verify(gitLabApi.getGroupApi()).addMember(12L, 5L, AccessLevel.DEVELOPER);
+    }
+
+    @Test
+    void createClassroom_shouldCreateTheGitlabGroupAndSave() throws GitLabApiException {
+        var teacher = new ClassroomUser();
+        teacher.setName("obiwan.kenobi");
+
+        classroomService.createClassroom("Test classroom", 12L, teacher);
+
+        var gitlabGroupCaptor = ArgumentCaptor.forClass(GroupParams.class);
+        verify(this.gitLabApi.getGroupApi()).createGroup(gitlabGroupCaptor.capture());
+
+        assertThat(gitlabGroupCaptor.getValue())
+                .hasFieldOrPropertyWithValue("name", "Test classroom")
+                .hasFieldOrPropertyWithValue("path", "Test_classroom")
+                .hasFieldOrPropertyWithValue("description", "Gitlab group for the Classroom Test classroom");
+
+        var classroomCaptor = ArgumentCaptor.forClass(Classroom.class);
+
+        verify(classroomRepository).save(classroomCaptor.capture());
+        assertThat(classroomCaptor.getValue())
+                .isNotNull()
+                .hasFieldOrPropertyWithValue("teacher.name", "obiwan.kenobi");
     }
 }

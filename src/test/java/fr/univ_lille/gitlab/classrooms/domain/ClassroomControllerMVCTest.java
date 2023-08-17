@@ -48,9 +48,6 @@ class ClassroomControllerMVCTest {
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
 
-    @Captor
-    private ArgumentCaptor<GroupParams> gitlabGroupCaptor;
-
     private UUID classroomId = UUID.randomUUID();
 
     @BeforeEach
