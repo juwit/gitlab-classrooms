@@ -41,9 +41,6 @@ class AssignmentControllerMVCTest {
     private AssignmentService assignmentService;
 
     @MockBean
-    private QuizRepository quizRepository;
-
-    @MockBean
     private QuizScoreService quizScoreService;
 
     @MockBean

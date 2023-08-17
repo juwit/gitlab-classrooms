@@ -1,7 +1,5 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.gitlab4j.api.GitLabApi;
@@ -43,9 +41,6 @@ class ClassroomControllerMVCTest {
     @Autowired
     private ClassroomRepository classroomRepository;
 
-    @Autowired
-    private QuizRepository quizRepository;
-
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
 
@@ -60,16 +55,11 @@ class ClassroomControllerMVCTest {
         classroom.setId(classroomId);
         classroom.setName("ClassroomControllerMVCTest classroom");
         classroomRepository.save(classroom);
-
-        var quiz = new QuizEntity();
-        quiz.setName("ClassroomControllerMVCTest quiz");
-        quizRepository.save(quiz);
     }
 
     @AfterEach
     void tearDown() {
         classroomRepository.deleteAll();
-        quizRepository.deleteById("ClassroomControllerMVCTest quiz");
     }
 
 
