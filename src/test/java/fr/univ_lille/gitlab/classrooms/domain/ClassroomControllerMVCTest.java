@@ -1,5 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.gitlab.GitlabConfiguration;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.gitlab4j.api.GitLabApi;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -19,11 +22,12 @@ import org.springframework.data.domain.Example;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,8 +42,8 @@ class ClassroomControllerMVCTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ClassroomRepository classroomRepository;
+    @MockBean
+    private ClassroomService classroomService;
 
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
@@ -54,14 +58,8 @@ class ClassroomControllerMVCTest {
         var classroom = new Classroom();
         classroom.setId(classroomId);
         classroom.setName("ClassroomControllerMVCTest classroom");
-        classroomRepository.save(classroom);
+        when(classroomService.getClassroom(classroomId)).thenReturn(Optional.of(classroom));
     }
-
-    @AfterEach
-    void tearDown() {
-        classroomRepository.deleteAll();
-    }
-
 
     @Nested
     @WithMockTeacher
@@ -104,12 +102,7 @@ class ClassroomControllerMVCTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
-        verify(this.gitLabApi.getGroupApi()).createGroup(gitlabGroupCaptor.capture());
-
-        assertThat(gitlabGroupCaptor.getValue())
-                .hasFieldOrPropertyWithValue("name", "ClassroomControllerMVCTest newClassroom")
-                .hasFieldOrPropertyWithValue("path", "ClassroomControllerMVCTest_newClassroom")
-                .hasFieldOrPropertyWithValue("description", "Gitlab group for the Classroom ClassroomControllerMVCTest newClassroom");
+        verify(classroomService).createClassroom(eq("ClassroomControllerMVCTest newClassroom"), isNull(), any());
     }
 
     @Test
@@ -122,15 +115,13 @@ class ClassroomControllerMVCTest {
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/"));
 
-        var exampleClassroom = new Classroom();
-        exampleClassroom.setId(null);
-        exampleClassroom.setName("ClassroomControllerMVCTest newClassroom");
+        var captor = ArgumentCaptor.forClass(ClassroomUser.class);
 
-        var createdClassroom = this.classroomRepository.findOne(Example.of(exampleClassroom));
+        verify(classroomService).createClassroom(eq("ClassroomControllerMVCTest newClassroom"), isNull(), captor.capture());
 
-        assertThat(createdClassroom).isPresent()
-                .get()
-                .extracting("teacher.name").isEqualTo("obiwan.kenobi");
+        assertThat(captor.getValue())
+                .isNotNull()
+                .extracting("name").isEqualTo("obiwan.kenobi");
     }
 
     @Test
@@ -149,10 +140,7 @@ class ClassroomControllerMVCTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("classrooms/joined"));
 
-        var classroom = this.classroomRepository.findById(classroomId);
-        assertThat(classroom).isPresent();
-
-        assertThat(classroom.get().getStudents()).hasSize(1);
+        verify(classroomService).joinClassroom(any(), any());
     }
 
 }

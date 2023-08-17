@@ -5,10 +5,7 @@ import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.persistence.*;
 
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class Classroom {
@@ -26,7 +23,7 @@ public class Classroom {
     private ClassroomUser teacher;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<ClassroomUser> students;
+    private Set<ClassroomUser> students = new HashSet<>();
 
     @OneToMany(mappedBy = "classroom")
     private List<Assignment> assignments = new LinkedList<>();
