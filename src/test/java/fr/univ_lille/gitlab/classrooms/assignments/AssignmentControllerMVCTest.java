@@ -1,10 +1,10 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.quiz.*;
-import fr.univ_lille.gitlab.classrooms.users.WithMockClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
+import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.gitlab4j.api.GitLabApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -85,7 +85,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser
+    @WithMockStudent
     void acceptAssignment_shouldShowAcceptPage() throws Exception {
         mockMvc.perform(get("/assignments/"+assignmentId+"/accept"))
                 .andExpect(status().isOk())
@@ -94,7 +94,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser
+    @WithMockStudent
     void acceptAssignment_shouldShowAddStudentToTheListOfAccepted() throws Exception {
         mockMvc.perform(post("/assignments/"+assignmentId+"/accept").with(csrf()))
                 .andExpect(status().isOk())
@@ -104,7 +104,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser
+    @WithMockStudent
     void viewAssignment_shouldShowTheAssignmentResults() throws Exception {
         mockMvc.perform(get("/assignments/"+assignmentId))
                 .andExpect(status().isOk())
@@ -114,7 +114,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
+    @WithMockTeacher
     void createAssignment_shouldShowNewAssignmentPage() throws Exception {
         mockMvc.perform(get("/classrooms/"+classroomId+"/assignments/new"))
                 .andExpect(status().isOk())
@@ -127,7 +127,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
+    @WithMockTeacher
     void createQuizAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
         mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
                         .with(csrf())
@@ -139,7 +139,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
+    @WithMockTeacher
     void createExerciseAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
         mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
                         .with(csrf())

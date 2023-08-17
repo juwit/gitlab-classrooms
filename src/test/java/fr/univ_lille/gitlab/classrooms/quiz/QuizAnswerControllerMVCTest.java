@@ -1,7 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
-import fr.univ_lille.gitlab.classrooms.users.WithMockClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,7 +33,7 @@ class QuizAnswerControllerMVCTest {
     private QuizScoreService quizScoreService;
 
     @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     void shouldReturn404_whenQuizDoesNotExists() throws Exception {
         mockMvc.perform(get("/quiz/unknown"))
                 .andDo(print())
@@ -42,7 +41,7 @@ class QuizAnswerControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     void shouldReturnQuizPage_whenQuizExists() throws Exception {
         var quiz = new QuizEntity();
         quiz.setName("death-star-quiz");
@@ -62,7 +61,7 @@ class QuizAnswerControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     void shouldReturnQuizPage_withPreviouslySubmittedAnswer_whenQuizExists() throws Exception {
         var quiz = new QuizEntity();
         quiz.setName("death-star-quiz");

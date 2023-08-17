@@ -2,8 +2,8 @@ package fr.univ_lille.gitlab.classrooms.domain;
 
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.users.WithMockClassroomUser;
-import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
+import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.models.GroupParams;
 import org.junit.jupiter.api.AfterEach;
@@ -74,7 +74,7 @@ class ClassroomControllerMVCTest {
 
 
     @Nested
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    @WithMockTeacher
     class TeacherRole {
 
         @Test
@@ -86,7 +86,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Nested
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     class StudentRole {
 
         @Test
@@ -105,7 +105,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    @WithMockTeacher
     void createClassroom_shouldCreateAGitlabGroup() throws Exception {
         mockMvc.perform(
                     post("/classrooms/new")
@@ -123,7 +123,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    @WithMockTeacher
     void createClassroom_shouldSaveTheAssociatedTeacher() throws Exception {
         mockMvc.perform(
                         post("/classrooms/new")
@@ -144,7 +144,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser
+    @WithMockStudent
     void joinClassroom_shouldShowJoinPage() throws Exception {
         mockMvc.perform(get("/classrooms/"+classroomId+"/join"))
                 .andExpect(status().isOk())
@@ -153,7 +153,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser
+    @WithMockStudent
     void joinClassroom_shouldAddStudentToTheListOfJoined() throws Exception {
         mockMvc.perform(post("/classrooms/"+classroomId+"/join").with(csrf()))
                 .andExpect(status().isOk())

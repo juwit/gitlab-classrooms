@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
-import fr.univ_lille.gitlab.classrooms.users.WithMockClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
+import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +34,7 @@ class QuizEditionControllerMVCTest {
     private QuizRepository quizRepository;
 
     @Nested
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    @WithMockTeacher
     class TeacherRole {
 
         @Test
@@ -110,7 +110,7 @@ class QuizEditionControllerMVCTest {
     }
 
     @Nested
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     class StudentRole {
 
         @Test
