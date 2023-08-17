@@ -115,10 +115,11 @@ public class ClassroomController {
     String createAssignment(@PathVariable UUID classroomId, CreateAssignmentDTO createAssignmentDTO) throws GitLabApiException {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        switch (createAssignmentDTO.assignmentType) {
-            case QUIZ -> this.assignmentService.createQuizAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.quizName);
-            case EXERCISE -> this.assignmentService.createExerciseAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.repositoryId);
-        };
+        if (createAssignmentDTO.assignmentType == AssignmentType.QUIZ) {
+            this.assignmentService.createQuizAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.quizName);
+        } else if (createAssignmentDTO.assignmentType == AssignmentType.EXERCISE) {
+            this.assignmentService.createExerciseAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.repositoryId);
+        }
 
         return "redirect:/classrooms/"+classroomId;
     }
