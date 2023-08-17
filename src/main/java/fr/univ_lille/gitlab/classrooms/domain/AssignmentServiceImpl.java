@@ -63,7 +63,7 @@ class AssignmentServiceImpl implements AssignmentService {
     @Override
     @Transactional
     public Assignment createExerciseAssignment(Classroom classroom, String assignmentName, String repositoryId) throws GitLabApiException {
-        var groupPath = assignmentName.trim().replaceAll("[^\\w\\d\\-_.]", "_");
+        var groupPath = assignmentName.trim().replaceAll("[^\\w\\-.]", "_");
         var groupParams = new GroupParams()
                 .withName(assignmentName)
                 .withPath(groupPath)
