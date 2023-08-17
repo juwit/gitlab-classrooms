@@ -1,17 +1,21 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
 import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
@@ -27,6 +31,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql(scripts = "/sql/init-test-users.sql")
 class QuizEditionControllerMVCTest {
 
     @Autowired

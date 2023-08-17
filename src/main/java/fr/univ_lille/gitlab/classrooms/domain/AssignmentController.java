@@ -8,10 +8,7 @@ import org.gitlab4j.api.models.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
@@ -64,7 +61,7 @@ public class AssignmentController {
     }
 
     @PostMapping("/{assignmentId}/accept")
-    String acceptAssignment(@PathVariable UUID assignmentId, ClassroomUser student, Model model) throws GitLabApiException {
+    String acceptAssignment(@PathVariable UUID assignmentId, @ModelAttribute("user") ClassroomUser student, Model model) throws GitLabApiException {
         var assignment = this.assignmentRepository.findById(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
 

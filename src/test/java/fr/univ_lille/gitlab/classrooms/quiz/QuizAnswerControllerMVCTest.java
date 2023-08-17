@@ -1,32 +1,25 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScore;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql("/sql/init-test-users.sql")
 class QuizAnswerControllerMVCTest {
 
     @Autowired

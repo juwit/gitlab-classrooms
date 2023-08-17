@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql("/sql/init-test-users.sql")
 class ClassroomControllerMVCTest {
 
     @Autowired
@@ -57,9 +59,6 @@ class ClassroomControllerMVCTest {
         classroom.setId(classroomId);
         classroom.setName("ClassroomControllerMVCTest classroom");
         classroomRepository.save(classroom);
-
-        var luke = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
-        classroomUserRepository.save(luke);
 
         var quiz = new QuizEntity();
         quiz.setName("ClassroomControllerMVCTest quiz");
@@ -129,7 +128,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
     void createAssignment_shouldShowNewAssignmentPage() throws Exception {
         mockMvc.perform(get("/classrooms/"+classroomId+"/assignments/new"))
                 .andExpect(status().isOk())
@@ -140,7 +139,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
     void createQuizAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
         mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
                         .with(csrf())
@@ -152,7 +151,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
     void createExerciseAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
         mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
                         .with(csrf())
