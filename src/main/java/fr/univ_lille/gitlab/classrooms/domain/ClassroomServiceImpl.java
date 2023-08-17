@@ -62,4 +62,9 @@ class ClassroomServiceImpl implements ClassroomService {
 
         this.classroomRepository.save(classroom);
     }
+
+    @Override
+    public void saveClassroom(Classroom classroom) {
+        this.classroomRepository.save(classroom);
+    }
 }

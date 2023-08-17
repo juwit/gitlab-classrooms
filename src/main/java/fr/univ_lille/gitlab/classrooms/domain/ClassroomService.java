@@ -15,4 +15,6 @@ public interface ClassroomService {
     void joinClassroom(Classroom classroom, ClassroomUser student);
 
     void createClassroom(String classroomName, Long parentGitlabGroupId, ClassroomUser teacher) throws GitLabApiException;
+
+    void saveClassroom(Classroom classroom);
 }

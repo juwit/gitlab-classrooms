@@ -20,14 +20,14 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final GitLabApi gitLabApi;
 
-    private final ClassroomRepository classroomRepository;
+    private final ClassroomService classroomService;
 
     private final AssignmentRepository assignmentRepository;
 
-    AssignmentServiceImpl(QuizRepository quizRepository, GitLabApi gitLabApi, ClassroomRepository classroomRepository, AssignmentRepository assignmentRepository) {
+    AssignmentServiceImpl(QuizRepository quizRepository, GitLabApi gitLabApi, ClassroomService classroomService, AssignmentRepository assignmentRepository) {
         this.quizRepository = quizRepository;
         this.gitLabApi = gitLabApi;
-        this.classroomRepository = classroomRepository;
+        this.classroomService = classroomService;
         this.assignmentRepository = assignmentRepository;
     }
 
@@ -56,7 +56,7 @@ class AssignmentServiceImpl implements AssignmentService {
         classroom.addAssignment(quizAssignment);
 
         this.assignmentRepository.save(quizAssignment);
-        this.classroomRepository.save(classroom);
+        this.classroomService.saveClassroom(classroom);
 
         return quizAssignment;
     }
@@ -80,7 +80,7 @@ class AssignmentServiceImpl implements AssignmentService {
         classroom.addAssignment(exerciseAssignment);
 
         this.assignmentRepository.save(exerciseAssignment);
-        this.classroomRepository.save(classroom);
+        this.classroomService.saveClassroom(classroom);
 
         return exerciseAssignment;
     }
