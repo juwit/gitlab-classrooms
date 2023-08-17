@@ -3,22 +3,33 @@ package fr.univ_lille.gitlab.classrooms.domain;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
+import org.checkerframework.checker.units.qual.A;
+import org.checkerframework.checker.units.qual.C;
 import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.models.Group;
+import org.gitlab4j.api.models.GroupParams;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.mock.mockito.SpyBean;
+import org.springframework.data.domain.Example;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -37,9 +48,6 @@ class ClassroomControllerMVCTest {
     private ClassroomRepository classroomRepository;
 
     @Autowired
-    private ClassroomUserRepository classroomUserRepository;
-
-    @Autowired
     private AssignmentRepository assignmentRepository;
 
     @Autowired
@@ -47,6 +55,9 @@ class ClassroomControllerMVCTest {
 
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
+
+    @Captor
+    private ArgumentCaptor<GroupParams> gitlabGroupCaptor;
 
     private UUID classroomId = UUID.randomUUID();
 
@@ -65,8 +76,7 @@ class ClassroomControllerMVCTest {
     @AfterEach
     void tearDown() {
         assignmentRepository.deleteAll();
-        classroomRepository.deleteById(classroomId);
-        classroomUserRepository.deleteById("luke.skywalker");
+        classroomRepository.deleteAll();
         quizRepository.deleteById("ClassroomControllerMVCTest quiz");
     }
 
@@ -100,6 +110,45 @@ class ClassroomControllerMVCTest {
                     .andDo(print())
                     .andExpect(status().isForbidden());
         }
+    }
+
+    @Test
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    void createClassroom_shouldCreateAGitlabGroup() throws Exception {
+        mockMvc.perform(
+                    post("/classrooms/new")
+                            .with(csrf())
+                            .param("classroomName", "ClassroomControllerMVCTest newClassroom"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        verify(this.gitLabApi.getGroupApi()).createGroup(gitlabGroupCaptor.capture());
+
+        assertThat(gitlabGroupCaptor.getValue())
+                .hasFieldOrPropertyWithValue("name", "ClassroomControllerMVCTest newClassroom")
+                .hasFieldOrPropertyWithValue("path", "ClassroomControllerMVCTest_newClassroom")
+                .hasFieldOrPropertyWithValue("description", "Gitlab group for the Classroom ClassroomControllerMVCTest newClassroom");
+    }
+
+    @Test
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    void createClassroom_shouldSaveTheAssociatedTeacher() throws Exception {
+        mockMvc.perform(
+                        post("/classrooms/new")
+                                .with(csrf())
+                                .param("classroomName", "ClassroomControllerMVCTest newClassroom"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        var exampleClassroom = new Classroom();
+        exampleClassroom.setId(null);
+        exampleClassroom.setName("ClassroomControllerMVCTest newClassroom");
+
+        var createdClassroom = this.classroomRepository.findOne(Example.of(exampleClassroom));
+
+        assertThat(createdClassroom).isPresent()
+                .get()
+                .extracting("teacher.name").isEqualTo("obiwan.kenobi");
     }
 
     @Test

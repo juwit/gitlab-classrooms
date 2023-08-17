@@ -43,9 +43,10 @@ public class ClassroomController {
     }
 
     @PostMapping("/new")
-    String newClassroom(@RequestParam String classroomName, @RequestParam(required = false) Long parentGitlabGroupId) throws GitLabApiException {
+    String newClassroom(@RequestParam String classroomName, @RequestParam(required = false) Long parentGitlabGroupId, @ModelAttribute("user") ClassroomUser teacher) throws GitLabApiException {
         var classroom = new Classroom();
         classroom.setName(classroomName);
+        classroom.setTeacher(teacher);
 
         var groupPath = classroomName.trim().replaceAll("[^\\w\\d\\-_.]", "_");
 

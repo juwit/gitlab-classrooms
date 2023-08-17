@@ -1,6 +1,9 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
 
 import java.io.Serializable;
 import java.net.URL;

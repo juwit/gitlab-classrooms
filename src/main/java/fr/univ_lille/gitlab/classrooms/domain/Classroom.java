@@ -20,6 +20,9 @@ public class Classroom {
 
     private Long gitlabGroupId;
 
+    @ManyToOne
+    private ClassroomUser teacher;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<ClassroomUser> students;
 
@@ -48,6 +51,14 @@ public class Classroom {
 
     public void setGitlabUrl(URL gitlabUrl) {
         this.gitlabUrl = gitlabUrl;
+    }
+
+    public ClassroomUser getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(ClassroomUser teacher) {
+        this.teacher = teacher;
     }
 
     public Set<ClassroomUser> getStudents() {
