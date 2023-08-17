@@ -43,6 +43,11 @@ public class AssignmentController {
 
             return "quiz/all-submissions";
         }
+        if (assignment.getType() == AssignmentType.EXERCISE ){
+            var exerciseAssignment = (ExerciseAssignment)assignment;
+            model.addAttribute("exercise", exerciseAssignment);
+            return "exercise/all-submissions";
+        }
 
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }

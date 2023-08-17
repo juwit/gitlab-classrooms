@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout('Exercise Submissions', ~{::section} , '')}">
+<head>
+</head>
+<body>
+<section>
+
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h1 class="text-base font-semibold leading-6 text-gray-900"><span th:text="${exercise.name}">name</span> results.</h1>
+                <p class="mt-2 text-sm text-gray-700">List of all exercise submissions.</p>
+            </div>
+        </div>
+
+        <!-- empty state -->
+        <div class="text-center" th:if="${ true }">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto h-12 w-12 text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+            </svg>
+            <h3 class="mt-2 text-sm font-semibold text-gray-900">No exercise submission found</h3>
+        </div>
+
+        <div th:if="${! true }" class="mt-8">
+            <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                    <dt class="truncate text-sm font-medium text-gray-500">Total Submissions</dt>
+                    <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900" th:text="${quizResult.quizScores.size}">12</dd>
+                </div>
+                <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                    <dt class="truncate text-sm font-medium text-gray-500">Avg. Score</dt>
+                    <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900" th:text="${quizResult.average()} + ' / ' + ${quizResult.questionCount()}">12 / 20</dd>
+                </div>
+            </dl>
+        </div>
+
+        <div class="mt-8 flow-root" th:if="${ ! exercise.students.empty }">
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Result</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Date</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr th:each="student: ${exercise.students}">
+                            <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                                <div class="flex items-center">
+                                    <div class="h-11 w-11 flex-shrink-0">
+                                        <img class="h-11 w-11 rounded-full" th:src="${student.avatarUrl}" alt="">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="font-medium text-gray-900" th:text="${student.name}">Lindsay Walton</div>
+                                        <div class="mt-1 text-gray-500" th:text="${student.email}">lindsay.walton@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- More people... -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>
