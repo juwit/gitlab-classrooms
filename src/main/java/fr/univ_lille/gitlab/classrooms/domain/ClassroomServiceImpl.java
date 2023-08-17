@@ -34,6 +34,14 @@ class ClassroomServiceImpl implements ClassroomService {
 
     @Transactional
     @Override
+    public void joinClassroom(Classroom classroom, ClassroomUser student) {
+        classroom.join(student);
+
+        this.classroomRepository.save(classroom);
+    }
+
+    @Transactional
+    @Override
     public void createClassroom(String classroomName, Long parentGitlabGroupId, ClassroomUser teacher) throws GitLabApiException {
         var classroom = new Classroom();
         classroom.setName(classroomName);

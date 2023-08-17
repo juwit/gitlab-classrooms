@@ -70,9 +70,7 @@ public class ClassroomController {
     String joinClassroom(@PathVariable UUID classroomId, @ModelAttribute("user") ClassroomUser student, Model model) {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        classroom.join(student);
-
-        this.classroomRepository.save(classroom);
+        this.classroomService.joinClassroom(classroom, student);
 
         model.addAttribute("classroom", classroom);
         return "classrooms/joined";
