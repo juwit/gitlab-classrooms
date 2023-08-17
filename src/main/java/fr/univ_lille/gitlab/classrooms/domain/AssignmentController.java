@@ -14,11 +14,11 @@ import java.util.UUID;
 @RequestMapping("/assignments")
 public class AssignmentController {
 
-    private final AssignmentServiceImpl assignmentService;
+    private final AssignmentService assignmentService;
 
     private final QuizScoreService quizScoreService;
 
-    public AssignmentController(AssignmentServiceImpl assignmentService, QuizScoreService quizScoreService) {
+    public AssignmentController(AssignmentService assignmentService, QuizScoreService quizScoreService) {
         this.assignmentService = assignmentService;
         this.quizScoreService = quizScoreService;
     }

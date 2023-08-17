@@ -13,7 +13,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-class AssignmentServiceImpl {
+class AssignmentServiceImpl implements AssignmentService {
 
     private final QuizRepository quizRepository;
 
@@ -30,10 +30,12 @@ class AssignmentServiceImpl {
         this.assignmentRepository = assignmentRepository;
     }
 
+    @Override
     public Optional<Assignment> getAssignment(UUID id) {
         return this.assignmentRepository.findById(id);
     }
 
+    @Override
     @Transactional
     public void acceptAssigment(Assignment assignment, ClassroomUser student){
         assignment.accept(student);
@@ -41,6 +43,7 @@ class AssignmentServiceImpl {
         this.assignmentRepository.save(assignment);
     }
 
+    @Override
     @Transactional
     public Assignment createQuizAssignment(Classroom classroom, String assignmentName, String quizName){
         var quiz = this.quizRepository.findById(quizName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
@@ -57,6 +60,7 @@ class AssignmentServiceImpl {
         return quizAssignment;
     }
 
+    @Override
     @Transactional
     public Assignment createExerciseAssignment(Classroom classroom, String assignmentName, String repositoryId) throws GitLabApiException {
         var groupPath = assignmentName.trim().replaceAll("[^\\w\\d\\-_.]", "_");
