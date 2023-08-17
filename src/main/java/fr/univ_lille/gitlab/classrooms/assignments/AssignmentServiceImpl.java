@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.domain.*;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApi;
@@ -17,7 +17,7 @@ import java.util.UUID;
 @Service
 class AssignmentServiceImpl implements AssignmentService {
 
-    private final QuizRepository quizRepository;
+    private final QuizService quizService;
 
     private final GitLabApi gitLabApi;
 
@@ -25,8 +25,8 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final AssignmentRepository assignmentRepository;
 
-    AssignmentServiceImpl(QuizRepository quizRepository, GitLabApi gitLabApi, ClassroomService classroomService, AssignmentRepository assignmentRepository) {
-        this.quizRepository = quizRepository;
+    AssignmentServiceImpl(QuizService quizService, GitLabApi gitLabApi, ClassroomService classroomService, AssignmentRepository assignmentRepository) {
+        this.quizService = quizService;
         this.gitLabApi = gitLabApi;
         this.classroomService = classroomService;
         this.assignmentRepository = assignmentRepository;
@@ -48,7 +48,7 @@ class AssignmentServiceImpl implements AssignmentService {
     @Override
     @Transactional
     public Assignment createQuizAssignment(Classroom classroom, String assignmentName, String quizName){
-        var quiz = this.quizRepository.findById(quizName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var quiz = this.quizService.getQuiz(quizName).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         var quizAssignment = new QuizAssignment();
         quizAssignment.setName(assignmentName);

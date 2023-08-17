@@ -1,8 +1,8 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
 import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApi;
@@ -22,16 +22,16 @@ class AssignmentController {
 
     private final QuizScoreService quizScoreService;
 
-    private final QuizRepository quizRepository;
+    private final QuizService quizService;
 
     private final ClassroomService classroomService;
 
     private final GitLabApi gitLabApi;
 
-    public AssignmentController(AssignmentService assignmentService, QuizScoreService quizScoreService, QuizRepository quizRepository, ClassroomService classroomService, GitLabApi gitLabApi) {
+    public AssignmentController(AssignmentService assignmentService, QuizScoreService quizScoreService, QuizService quizService, ClassroomService classroomService, GitLabApi gitLabApi) {
         this.assignmentService = assignmentService;
         this.quizScoreService = quizScoreService;
-        this.quizRepository = quizRepository;
+        this.quizService = quizService;
         this.classroomService = classroomService;
         this.gitLabApi = gitLabApi;
     }
@@ -84,7 +84,7 @@ class AssignmentController {
 
         model.addAttribute("classroom", classroom);
 
-        model.addAttribute("quizzes", quizRepository.findAll());
+        model.addAttribute("quizzes", this.quizService.getAllQuizzes());
 
         model.addAttribute("repositories", this.gitLabApi.getProjectApi().getMemberProjects());
         return "assignments/new";
