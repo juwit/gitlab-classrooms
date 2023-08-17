@@ -1,6 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;

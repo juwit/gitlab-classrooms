@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.users;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;

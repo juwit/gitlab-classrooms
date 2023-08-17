@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -14,7 +14,6 @@ import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class QuizScoreServiceImplTest {

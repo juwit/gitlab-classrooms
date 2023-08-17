@@ -1,6 +1,5 @@
-package fr.univ_lille.gitlab.classrooms.ui;
+package fr.univ_lille.gitlab.classrooms.users;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.Retention;

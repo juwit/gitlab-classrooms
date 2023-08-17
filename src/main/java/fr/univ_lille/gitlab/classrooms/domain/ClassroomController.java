@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;

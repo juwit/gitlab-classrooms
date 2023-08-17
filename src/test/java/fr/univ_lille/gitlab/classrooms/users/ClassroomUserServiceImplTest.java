@@ -1,5 +1,9 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.users;
 
+import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUserRepository;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUserServiceImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

@@ -1,12 +1,10 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
-import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
-import fr.univ_lille.gitlab.classrooms.assignments.QuizAssignment;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.quiz.*;
-import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.WithMockClassroomUser;
 import org.gitlab4j.api.GitLabApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

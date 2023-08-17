@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 

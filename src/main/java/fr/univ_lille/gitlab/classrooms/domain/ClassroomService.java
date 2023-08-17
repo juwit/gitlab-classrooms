@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.gitlab4j.api.GitLabApiException;
 
 import java.util.List;

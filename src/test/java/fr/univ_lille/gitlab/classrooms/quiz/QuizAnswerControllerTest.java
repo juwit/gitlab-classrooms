@@ -1,6 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

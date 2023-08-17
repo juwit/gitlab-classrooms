@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.persistence.*;
 
 import java.util.HashSet;

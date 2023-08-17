@@ -1,7 +1,8 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.users.WithMockClassroomUser;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
