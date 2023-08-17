@@ -1,10 +1,5 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizAnswerController;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

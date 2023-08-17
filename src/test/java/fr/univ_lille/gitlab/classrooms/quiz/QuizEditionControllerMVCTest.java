@@ -1,14 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
-import org.hamcrest.Matcher;
-import org.hamcrest.Matchers;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
+import static org.hamcrest.Matchers.equalTo;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;

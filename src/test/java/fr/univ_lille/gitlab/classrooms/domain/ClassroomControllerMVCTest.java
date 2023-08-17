@@ -1,6 +1,5 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
@@ -17,7 +16,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -26,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
 @AutoConfigureMockMvc
