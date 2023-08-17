@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.assignments.Assignment;
 import jakarta.persistence.*;
 
 import java.net.URL;

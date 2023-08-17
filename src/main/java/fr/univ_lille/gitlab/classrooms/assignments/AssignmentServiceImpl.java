@@ -1,5 +1,6 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.domain.*;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApi;

@@ -1,18 +1,16 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
-enum AssignmentType {
-    QUIZ, EXERCISE
-}
-
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-abstract class Assignment {
+public abstract class Assignment {
 
     @Id
     private UUID id = UUID.randomUUID();

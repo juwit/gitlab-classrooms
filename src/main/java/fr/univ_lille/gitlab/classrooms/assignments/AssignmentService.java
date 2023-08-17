@@ -1,5 +1,7 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
 import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApiException;
 
