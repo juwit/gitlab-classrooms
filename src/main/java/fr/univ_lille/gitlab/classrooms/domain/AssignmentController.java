@@ -1,10 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
 import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.Namespace;
-import org.gitlab4j.api.models.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,12 +18,9 @@ public class AssignmentController {
 
     private QuizScoreService quizScoreService;
 
-    private GitLabApi gitLabApi;
-
-    public AssignmentController(AssignmentRepository assignmentRepository, QuizScoreService quizScoreService, GitLabApi gitLabApi) {
+    public AssignmentController(AssignmentRepository assignmentRepository, QuizScoreService quizScoreService) {
         this.assignmentRepository = assignmentRepository;
         this.quizScoreService = quizScoreService;
-        this.gitLabApi = gitLabApi;
     }
 
     @GetMapping("/{assignmentId}")
