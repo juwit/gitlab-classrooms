@@ -1,11 +1,14 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.GroupParams;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 class ClassroomServiceImpl implements ClassroomService {
@@ -22,6 +25,11 @@ class ClassroomServiceImpl implements ClassroomService {
     @Override
     public List<Classroom> getAllClassrooms() {
         return this.classroomRepository.findAll();
+    }
+
+    @Override
+    public Optional<Classroom> getClassroom(UUID uuid) {
+        return this.classroomRepository.findById(uuid);
     }
 
     @Transactional

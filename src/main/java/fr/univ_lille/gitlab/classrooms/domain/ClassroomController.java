@@ -50,7 +50,7 @@ public class ClassroomController {
 
     @GetMapping("/{classroomId}")
     String showClassroom(@PathVariable UUID classroomId, Model model) {
-        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("classroom", classroom);
         return "classrooms/view";
@@ -59,7 +59,7 @@ public class ClassroomController {
     @GetMapping("/{classroomId}/join")
     @RolesAllowed({"TEACHER", "STUDENT"})
     String showJoinClassroom(@PathVariable UUID classroomId, Model model) {
-        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("classroom", classroom);
         return "classrooms/join";
@@ -68,7 +68,7 @@ public class ClassroomController {
     @PostMapping("/{classroomId}/join")
     @RolesAllowed({"TEACHER", "STUDENT"})
     String joinClassroom(@PathVariable UUID classroomId, @ModelAttribute("user") ClassroomUser student, Model model) {
-        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         classroom.join(student);
 
@@ -80,7 +80,7 @@ public class ClassroomController {
 
     @GetMapping("/{classroomId}/assignments/new")
     String newAssignment(@PathVariable UUID classroomId, Model model) throws GitLabApiException {
-        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         model.addAttribute("classroom", classroom);
 
@@ -99,7 +99,7 @@ public class ClassroomController {
 
     @PostMapping("/{classroomId}/assignments/new")
     String createAssignment(@PathVariable UUID classroomId, CreateAssignmentDTO createAssignmentDTO) throws GitLabApiException {
-        var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (createAssignmentDTO.assignmentType == AssignmentType.QUIZ) {
             this.assignmentService.createQuizAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.quizName);
