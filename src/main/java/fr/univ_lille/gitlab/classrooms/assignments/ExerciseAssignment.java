@@ -5,7 +5,7 @@ import fr.univ_lille.gitlab.classrooms.assignments.AssignmentType;
 import jakarta.persistence.Entity;
 
 @Entity
-public class ExerciseAssignment extends Assignment {
+class ExerciseAssignment extends Assignment {
 
     private String gitlabRepositoryTemplateId;
 

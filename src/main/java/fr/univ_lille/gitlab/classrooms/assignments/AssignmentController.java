@@ -16,7 +16,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.UUID;
 
 @Controller
-public class AssignmentController {
+class AssignmentController {
 
     private final AssignmentService assignmentService;
 
