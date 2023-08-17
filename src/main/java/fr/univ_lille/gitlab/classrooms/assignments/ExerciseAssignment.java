@@ -1,7 +1,5 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
-import fr.univ_lille.gitlab.classrooms.assignments.Assignment;
-import fr.univ_lille.gitlab.classrooms.assignments.AssignmentType;
 import jakarta.persistence.Entity;
 
 @Entity
