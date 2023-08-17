@@ -147,9 +147,8 @@ class ClassroomControllerMVCTest {
                         .param("assignmentName", "ClassroomControllerMVCTest assignment")
                         .param("assignmentType", "QUIZ")
                         .param("quizName", "ClassroomControllerMVCTest quiz"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("classrooms/view"))
-                .andExpect(model().attributeExists("classroom"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/classrooms/"+classroomId));
     }
 
     @Test
@@ -160,9 +159,8 @@ class ClassroomControllerMVCTest {
                         .param("assignmentName", "ClassroomControllerMVCTest assignment")
                         .param("assignmentType", "EXERCISE")
                         .param("repositoryId", "Fake ID"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("classrooms/view"))
-                .andExpect(model().attributeExists("classroom"));
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/classrooms/"+classroomId));
     }
 
 }

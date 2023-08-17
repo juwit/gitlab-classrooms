@@ -7,6 +7,8 @@ public class ExerciseAssignment extends Assignment {
 
     private String gitlabRepositoryTemplateId;
 
+    private Long gitlabGroupId;
+
     public ExerciseAssignment() {
         this.setType(AssignmentType.EXERCISE);
     }
@@ -17,5 +19,13 @@ public class ExerciseAssignment extends Assignment {
 
     public String getGitlabRepositoryTemplateId() {
         return gitlabRepositoryTemplateId;
+    }
+
+    public Long getGitlabGroupId() {
+        return gitlabGroupId;
+    }
+
+    public void setGitlabGroupId(Long gitlabGroupId) {
+        this.gitlabGroupId = gitlabGroupId;
     }
 }

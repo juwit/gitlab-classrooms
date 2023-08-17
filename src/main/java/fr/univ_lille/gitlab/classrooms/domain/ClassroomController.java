@@ -120,20 +120,14 @@ public class ClassroomController {
     }
 
     @PostMapping("/{classroomId}/assignments/new")
-    String createAssignment(@PathVariable UUID classroomId, Model model, CreateAssignmentDTO createAssignmentDTO) {
+    String createAssignment(@PathVariable UUID classroomId, CreateAssignmentDTO createAssignmentDTO) throws GitLabApiException {
         var classroom = this.classroomRepository.findById(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        var assignment = switch (createAssignmentDTO.assignmentType) {
-            case QUIZ -> this.assignmentService.createQuizAssignment(createAssignmentDTO.assignmentName, createAssignmentDTO.quizName);
-            case EXERCISE -> this.assignmentService.createExerciseAssignment(createAssignmentDTO.assignmentName, createAssignmentDTO.repositoryId);
+        switch (createAssignmentDTO.assignmentType) {
+            case QUIZ -> this.assignmentService.createQuizAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.quizName);
+            case EXERCISE -> this.assignmentService.createExerciseAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.repositoryId);
         };
 
-        classroom.addAssignment(assignment);
-
-        this.assignmentRepository.save(assignment);
-        this.classroomRepository.save(classroom);
-
-        model.addAttribute("classroom", classroom);
-        return "classrooms/view";
+        return "redirect:/classrooms/"+classroomId;
     }
 }
