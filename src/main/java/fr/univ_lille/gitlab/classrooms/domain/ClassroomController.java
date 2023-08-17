@@ -1,6 +1,5 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -19,16 +18,10 @@ public class ClassroomController {
 
     private final ClassroomService classroomService;
 
-    private final QuizRepository quizRepository;
-
-    private final AssignmentService assignmentService;
-
     private final GitLabApi gitLabApi;
 
-    public ClassroomController(ClassroomService classroomService, QuizRepository quizRepository, AssignmentService assignmentService, GitLabApi gitLabApi) {
+    public ClassroomController(ClassroomService classroomService, GitLabApi gitLabApi) {
         this.classroomService = classroomService;
-        this.quizRepository = quizRepository;
-        this.assignmentService = assignmentService;
         this.gitLabApi = gitLabApi;
     }
 
@@ -72,35 +65,4 @@ public class ClassroomController {
         return "classrooms/joined";
     }
 
-    @GetMapping("/{classroomId}/assignments/new")
-    String newAssignment(@PathVariable UUID classroomId, Model model) throws GitLabApiException {
-        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        model.addAttribute("classroom", classroom);
-
-        model.addAttribute("quizzes", quizRepository.findAll());
-
-        model.addAttribute("repositories", this.gitLabApi.getProjectApi().getMemberProjects());
-        return "assignments/new";
-    }
-
-    record CreateAssignmentDTO(String assignmentName,
-                               AssignmentType assignmentType,
-                               String quizName,
-                               String repositoryId) {
-
-    }
-
-    @PostMapping("/{classroomId}/assignments/new")
-    String createAssignment(@PathVariable UUID classroomId, CreateAssignmentDTO createAssignmentDTO) throws GitLabApiException {
-        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-
-        if (createAssignmentDTO.assignmentType == AssignmentType.QUIZ) {
-            this.assignmentService.createQuizAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.quizName);
-        } else if (createAssignmentDTO.assignmentType == AssignmentType.EXERCISE) {
-            this.assignmentService.createExerciseAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.repositoryId);
-        }
-
-        return "redirect:/classrooms/"+classroomId;
-    }
 }
