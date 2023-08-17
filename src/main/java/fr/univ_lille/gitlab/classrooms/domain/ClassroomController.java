@@ -4,7 +4,6 @@ import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
 import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.GroupParams;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,8 +17,6 @@ import java.util.UUID;
 @RolesAllowed("TEACHER")
 public class ClassroomController {
 
-    private final ClassroomRepository classroomRepository;
-
     private final ClassroomService classroomService;
 
     private final QuizRepository quizRepository;
@@ -28,8 +25,7 @@ public class ClassroomController {
 
     private final GitLabApi gitLabApi;
 
-    public ClassroomController(ClassroomRepository classroomRepository, ClassroomService classroomService, QuizRepository quizRepository, AssignmentService assignmentService, GitLabApi gitLabApi) {
-        this.classroomRepository = classroomRepository;
+    public ClassroomController(ClassroomService classroomService, QuizRepository quizRepository, AssignmentService assignmentService, GitLabApi gitLabApi) {
         this.classroomService = classroomService;
         this.quizRepository = quizRepository;
         this.assignmentService = assignmentService;
