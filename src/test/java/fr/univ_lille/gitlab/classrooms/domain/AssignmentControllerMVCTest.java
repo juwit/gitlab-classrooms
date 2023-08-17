@@ -1,21 +1,28 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
+import fr.univ_lille.gitlab.classrooms.quiz.*;
 import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
+import org.gitlab4j.api.GitLabApi;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.Answers;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -29,47 +36,44 @@ class AssignmentControllerMVCTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private AssignmentRepository assignmentRepository;
+    @MockBean
+    private AssignmentService assignmentService;
 
-    @Autowired
-    private ClassroomUserRepository classroomUserRepository;
-
-    @Autowired
+    @MockBean
     private QuizRepository quizRepository;
 
-    @Autowired
-    private ClassroomRepository classroomRepository;
+    @MockBean
+    private QuizScoreService quizScoreService;
 
-    private String assignmentId = "bb886148-08d3-476f-bf7d-a65a8e1ce9a8";
+    @MockBean
+    private ClassroomService classroomService;
+
+    @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
+    private GitLabApi gitLabApi;
+
+    private final UUID assignmentId = UUID.randomUUID();
+
+    private final UUID classroomId = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
-        var quiz = new QuizEntity();
-        quiz.setName("AssignmentControllerMVCTest quiz");
-        quizRepository.save(quiz);
-
         var classroom = new Classroom();
         classroom.setName("AssignmentControllerMVCTest classroom");
-        classroomRepository.save(classroom);
+        classroom.setId(classroomId);
+        when(classroomService.getClassroom(classroomId)).thenReturn(Optional.of(classroom));
+
+        var quiz = new QuizEntity();
 
         var assignment = new QuizAssignment();
-        assignment.setId(UUID.fromString(assignmentId));
+        assignment.setId(assignmentId);
         assignment.setName("AssignmentControllerMVCTest assignment");
         assignment.setQuiz(quiz);
 
         classroom.addAssignment(assignment);
 
-        assignmentRepository.save(assignment);
+        when(assignmentService.getAssignment(assignmentId)).thenReturn(Optional.of(assignment));
 
-        var luke = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
-        classroomUserRepository.save(luke);
-    }
-
-    @AfterEach
-    void tearDown() {
-        assignmentRepository.deleteAll();
-        classroomUserRepository.deleteAll();
+        when(quizScoreService.getQuizResultForClassroom(quiz, classroom)).thenReturn(new QuizResult(List.of()));
     }
 
     @Test
@@ -95,10 +99,7 @@ class AssignmentControllerMVCTest {
                 .andExpect(status().isOk())
                 .andExpect(view().name("assignments/accepted"));
 
-        var assignment = this.assignmentRepository.findById(UUID.fromString(assignmentId));
-        assertThat(assignment).isPresent();
-
-        assertThat(assignment.get().getStudents()).hasSize(1);
+        verify(assignmentService).acceptAssigment(any(), any());
     }
 
     @Test
@@ -109,6 +110,43 @@ class AssignmentControllerMVCTest {
                 .andExpect(model().attributeExists("quiz"))
                 .andExpect(model().attributeExists("quizResult"))
                 .andExpect(view().name("quiz/all-submissions"));
+    }
+
+    @Test
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
+    void createAssignment_shouldShowNewAssignmentPage() throws Exception {
+        mockMvc.perform(get("/classrooms/"+classroomId+"/assignments/new"))
+                .andExpect(status().isOk())
+                .andExpect(view().name("assignments/new"))
+                .andExpect(model().attributeExists("classroom"))
+                .andExpect(model().attributeExists("quizzes"))
+                .andExpect(model().attributeExists("repositories"));
+
+        verify(this.gitLabApi.getProjectApi()).getMemberProjects();
+    }
+
+    @Test
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
+    void createQuizAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
+        mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
+                        .with(csrf())
+                        .param("assignmentName", "ClassroomControllerMVCTest assignment")
+                        .param("assignmentType", "QUIZ")
+                        .param("quizName", "ClassroomControllerMVCTest quiz"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/classrooms/"+classroomId));
+    }
+
+    @Test
+    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
+    void createExerciseAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
+        mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
+                        .with(csrf())
+                        .param("assignmentName", "ClassroomControllerMVCTest assignment")
+                        .param("assignmentType", "EXERCISE")
+                        .param("repositoryId", "Fake ID"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/classrooms/"+classroomId));
     }
 
 }

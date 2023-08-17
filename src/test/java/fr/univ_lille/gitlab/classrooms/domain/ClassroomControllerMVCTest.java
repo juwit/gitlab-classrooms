@@ -48,9 +48,6 @@ class ClassroomControllerMVCTest {
     private ClassroomRepository classroomRepository;
 
     @Autowired
-    private AssignmentRepository assignmentRepository;
-
-    @Autowired
     private QuizRepository quizRepository;
 
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
@@ -75,7 +72,6 @@ class ClassroomControllerMVCTest {
 
     @AfterEach
     void tearDown() {
-        assignmentRepository.deleteAll();
         classroomRepository.deleteAll();
         quizRepository.deleteById("ClassroomControllerMVCTest quiz");
     }
@@ -171,41 +167,6 @@ class ClassroomControllerMVCTest {
         assertThat(classroom).isPresent();
 
         assertThat(classroom.get().getStudents()).hasSize(1);
-    }
-
-    @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
-    void createAssignment_shouldShowNewAssignmentPage() throws Exception {
-        mockMvc.perform(get("/classrooms/"+classroomId+"/assignments/new"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("assignments/new"))
-                .andExpect(model().attributeExists("classroom"))
-                .andExpect(model().attributeExists("quizzes"))
-                .andExpect(model().attributeExists("repositories"));
-    }
-
-    @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
-    void createQuizAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
-        mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
-                        .with(csrf())
-                        .param("assignmentName", "ClassroomControllerMVCTest assignment")
-                        .param("assignmentType", "QUIZ")
-                        .param("quizName", "ClassroomControllerMVCTest quiz"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/classrooms/"+classroomId));
-    }
-
-    @Test
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = ClassroomRole.TEACHER)
-    void createExerciseAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
-        mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
-                        .with(csrf())
-                        .param("assignmentName", "ClassroomControllerMVCTest assignment")
-                        .param("assignmentType", "EXERCISE")
-                        .param("repositoryId", "Fake ID"))
-                .andExpect(status().is3xxRedirection())
-                .andExpect(redirectedUrl("/classrooms/"+classroomId));
     }
 
 }
