@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -80,6 +81,11 @@ class AssignmentServiceImpl implements AssignmentService {
         }
 
         this.assignmentRepository.save(assignment);
+    }
+
+    @Override
+    public List<StudentExercise> getAssignmentResults(Assignment assignment) {
+        return this.studentExerciseRepository.findAllByAssignment(assignment);
     }
 
     @Override

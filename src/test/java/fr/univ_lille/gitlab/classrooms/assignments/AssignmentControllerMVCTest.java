@@ -53,7 +53,9 @@ class AssignmentControllerMVCTest {
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
 
-    private final UUID assignmentId = UUID.randomUUID();
+    private final UUID quizAssignmentId = UUID.randomUUID();
+
+    private final UUID exerciseAssignmentId = UUID.randomUUID();
 
     private final UUID classroomId = UUID.randomUUID();
 
@@ -67,21 +69,28 @@ class AssignmentControllerMVCTest {
 
         var quiz = new QuizEntity();
 
-        var assignment = new QuizAssignment();
-        assignment.setId(assignmentId);
-        assignment.setName("AssignmentControllerMVCTest assignment");
-        assignment.setQuiz(quiz);
+        var quizAssignment = new QuizAssignment();
+        quizAssignment.setId(quizAssignmentId);
+        quizAssignment.setName("AssignmentControllerMVCTest Quiz assignment");
+        quizAssignment.setQuiz(quiz);
 
-        classroom.addAssignment(assignment);
+        var exerciseAssignment = new ExerciseAssignment();
+        exerciseAssignment.setId(exerciseAssignmentId);
 
-        when(assignmentService.getAssignment(assignmentId)).thenReturn(Optional.of(assignment));
+        classroom.addAssignment(quizAssignment);
+        classroom.addAssignment(exerciseAssignment);
+
+        when(assignmentService.getAssignment(quizAssignmentId)).thenReturn(Optional.of(quizAssignment));
+        when(assignmentService.getAssignment(exerciseAssignmentId)).thenReturn(Optional.of(exerciseAssignment));
 
         when(quizScoreService.getQuizResultForClassroom(quiz, classroom)).thenReturn(new QuizResult(List.of()));
+
+        when(assignmentService.getAssignmentResults(exerciseAssignment)).thenReturn(List.of());
     }
 
     @Test
     void acceptAssignment_shouldAskForLogin() throws Exception {
-        mockMvc.perform(get("/assignments/"+assignmentId+"/accept"))
+        mockMvc.perform(get("/assignments/"+ quizAssignmentId +"/accept"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("http://localhost/login"));
     }
@@ -89,7 +98,7 @@ class AssignmentControllerMVCTest {
     @Test
     @WithMockStudent
     void acceptAssignment_shouldRedirectToClassroomJoin_ifStudentDoesNotBelongToTheClassroom() throws Exception {
-        mockMvc.perform(get("/assignments/"+assignmentId+"/accept"))
+        mockMvc.perform(get("/assignments/"+ quizAssignmentId +"/accept"))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/classrooms/" + classroomId + "/join"));
     }
@@ -101,7 +110,7 @@ class AssignmentControllerMVCTest {
         var classroom = this.classroomService.getClassroom(this.classroomId).orElseThrow();
         classroom.join(classroomUserService.getClassroomUser("luke.skywalker"));
 
-        mockMvc.perform(get("/assignments/"+assignmentId+"/accept"))
+        mockMvc.perform(get("/assignments/"+ quizAssignmentId +"/accept"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("assignments/accept"))
                 .andExpect(model().attributeExists("assignment"));
@@ -110,7 +119,7 @@ class AssignmentControllerMVCTest {
     @Test
     @WithMockStudent
     void acceptAssignment_shouldShowAddStudentToTheListOfAccepted() throws Exception {
-        mockMvc.perform(post("/assignments/"+assignmentId+"/accept").with(csrf()))
+        mockMvc.perform(post("/assignments/"+ quizAssignmentId +"/accept").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("assignments/accepted"));
 
@@ -119,12 +128,22 @@ class AssignmentControllerMVCTest {
 
     @Test
     @WithMockStudent
-    void viewAssignment_shouldShowTheAssignmentResults() throws Exception {
-        mockMvc.perform(get("/assignments/"+assignmentId))
+    void viewQuizAssignment_shouldShowTheAssignmentResults() throws Exception {
+        mockMvc.perform(get("/assignments/"+ quizAssignmentId))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("quiz"))
                 .andExpect(model().attributeExists("quizResult"))
                 .andExpect(view().name("quiz/all-submissions"));
+    }
+
+    @Test
+    @WithMockStudent
+    void viewExerciseAssignment_shouldShowTheAssignmentResults() throws Exception {
+        mockMvc.perform(get("/assignments/"+ exerciseAssignmentId))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("exercise"))
+                .andExpect(model().attributeExists("exerciseResults"))
+                .andExpect(view().name("exercise/all-submissions"));
     }
 
     @Test

@@ -59,6 +59,9 @@ class AssignmentController {
         if (assignment.getType() == AssignmentType.EXERCISE) {
             var exerciseAssignment = (ExerciseAssignment) assignment;
             model.addAttribute("exercise", exerciseAssignment);
+
+            var exerciseResults = this.assignmentService.getAssignmentResults(assignment);
+            model.addAttribute("exerciseResults", exerciseResults);
             return "exercise/all-submissions";
         }
 

@@ -5,6 +5,7 @@ import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApiException;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -13,6 +14,8 @@ public interface AssignmentService {
 
     @Transactional
     void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException;
+
+    List<StudentExercise> getAssignmentResults(Assignment assignment);
 
     @Transactional
     Assignment createQuizAssignment(Classroom classroom, String assignmentName, String quizName);
