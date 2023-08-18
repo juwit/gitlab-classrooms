@@ -12,7 +12,7 @@ public interface AssignmentService {
     Optional<Assignment> getAssignment(UUID id);
 
     @Transactional
-    void acceptAssigment(Assignment assignment, ClassroomUser student);
+    void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException;
 
     @Transactional
     Assignment createQuizAssignment(Classroom classroom, String assignmentName, String quizName);

@@ -32,6 +32,8 @@ class AssignmentController {
 
     private final GitLabApi gitLabApi;
 
+    private static final System.Logger LOGGER = System.getLogger(AssignmentController.class.getName());
+
     public AssignmentController(AssignmentService assignmentService, QuizScoreService quizScoreService, QuizService quizService, ClassroomService classroomService, GitLabApi gitLabApi) {
         this.assignmentService = assignmentService;
         this.quizScoreService = quizScoreService;
@@ -82,7 +84,14 @@ class AssignmentController {
     String acceptAssignment(@PathVariable UUID assignmentId, @ModelAttribute("user") ClassroomUser student, Model model) {
         var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
-        this.assignmentService.acceptAssigment(assignment, student);
+        try {
+            this.assignmentService.acceptAssigment(assignment, student);
+        }
+        catch (GitLabApiException e){
+            LOGGER.log(System.Logger.Level.ERROR, "Could not accept assignment");
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept assignment", e);
+        }
+
 
         model.addAttribute("assignment", assignment);
         return "assignments/accepted";
