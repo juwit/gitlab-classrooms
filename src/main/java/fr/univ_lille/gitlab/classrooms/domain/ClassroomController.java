@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
+import java.util.logging.Logger;
 
 @Controller
 @RequestMapping("/classrooms")
@@ -21,6 +22,8 @@ class ClassroomController {
     private final ClassroomService classroomService;
 
     private final GitLabApi gitLabApi;
+
+    private static final System.Logger LOGGER = System.getLogger(ClassroomController.class.getName());
 
     public ClassroomController(ClassroomService classroomService, GitLabApi gitLabApi) {
         this.classroomService = classroomService;
@@ -43,7 +46,17 @@ class ClassroomController {
     String showClassroom(@PathVariable UUID classroomId, Model model) {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
+        try {
+            var group = gitLabApi.getGroupApi().getGroup(classroom.getGitlabGroupId());
+            model.addAttribute("gitlabGroupUrl", group.getWebUrl());
+        }
+        catch (GitLabApiException e){
+            LOGGER.log(System.Logger.Level.ERROR, e.getMessage());
+        }
+
+
         model.addAttribute("classroom", classroom);
+
         return "classrooms/view";
     }
 
