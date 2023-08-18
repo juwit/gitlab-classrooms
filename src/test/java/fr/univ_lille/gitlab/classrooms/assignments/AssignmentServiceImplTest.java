@@ -43,6 +43,9 @@ class AssignmentServiceImplTest {
     @Mock
     private GitlabApiFactory gitlabApiFactory;
 
+    @Mock
+    private StudentExerciseRepository studentExerciseRepository;
+
     @Test
     void acceptAssignment_shouldAssociateTheStudentWithTheAssignment_andSave() throws GitLabApiException {
         var assignment = new QuizAssignment();
@@ -54,6 +57,34 @@ class AssignmentServiceImplTest {
         assertThat(assignment.getStudents()).contains(student);
 
         verify(assignmentRepository).save(assignment);
+    }
+
+    @Test
+    void acceptExerciceAssignment_shouldAlsoCreateAStudentExerciseEntity() throws GitLabApiException {
+        var teacher = new ClassroomUser();
+
+        var classroom = new Classroom();
+        classroom.setTeacher(teacher);
+
+        var assignment = new ExerciseAssignment();
+        assignment.setName("Exercice 1");
+        assignment.setGitlabGroupId(12L);
+        assignment.setClassroom(classroom);
+
+        when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
+
+        var student = new ClassroomUser();
+        student.setName("luke.skywalker");
+
+        this.assignmentService.acceptAssigment(assignment, student);
+
+        var studentExerciseCaptor = ArgumentCaptor.forClass(StudentExercise.class);
+        verify(studentExerciseRepository).save(studentExerciseCaptor.capture());
+
+        var studentExercise = studentExerciseCaptor.getValue();
+        assertThat(studentExercise).isNotNull();
+        assertThat(studentExercise.getAssignment()).isEqualTo(assignment);
+        assertThat(studentExercise.getStudent()).isEqualTo(student);
     }
 
     @Test

@@ -30,12 +30,15 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final AssignmentRepository assignmentRepository;
 
-    AssignmentServiceImpl(QuizService quizService, GitLabApi gitLabApi, GitlabApiFactory gitlabApiFactory, ClassroomService classroomService, AssignmentRepository assignmentRepository) {
+    private final StudentExerciseRepository studentExerciseRepository;
+
+    AssignmentServiceImpl(QuizService quizService, GitLabApi gitLabApi, GitlabApiFactory gitlabApiFactory, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentExerciseRepository studentExerciseRepository) {
         this.quizService = quizService;
         this.gitLabApi = gitLabApi;
         this.gitlabApiFactory = gitlabApiFactory;
         this.classroomService = classroomService;
         this.assignmentRepository = assignmentRepository;
+        this.studentExerciseRepository = studentExerciseRepository;
     }
 
     @Override
@@ -65,6 +68,14 @@ class AssignmentServiceImpl implements AssignmentService {
 
                 // grant the student access to its project
                 teacherGitlabApi.getProjectApi().addMember(project.getId(), studentUserId, AccessLevel.MAINTAINER);
+
+                // create the student exercise in the database
+                var studentExercise = new StudentExercise();
+                studentExercise.setAssignment(exerciseAssignment);
+                studentExercise.setStudent(student);
+                studentExercise.setGitlabProjectId(project.getId());
+                studentExercise.setGitlabProjectUrl(project.getWebUrl());
+                this.studentExerciseRepository.save(studentExercise);
             }
         }
 
