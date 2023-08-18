@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.domain;
 
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.servlet.http.HttpSession;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.http.HttpStatus;
@@ -57,10 +58,16 @@ class ClassroomController {
 
     @PostMapping("/{classroomId}/join")
     @RolesAllowed({"TEACHER", "STUDENT"})
-    String joinClassroom(@PathVariable UUID classroomId, @ModelAttribute("user") ClassroomUser student, Model model) throws GitLabApiException {
+    String joinClassroom(@PathVariable UUID classroomId, @ModelAttribute("user") ClassroomUser student, Model model, HttpSession session) throws GitLabApiException {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         this.classroomService.joinClassroom(classroom, student);
+
+        var redirect = session.getAttribute("redirect");
+        if (redirect != null) {
+            session.removeAttribute("redirect");
+            return "redirect:" + redirect;
+        }
 
         model.addAttribute("classroom", classroom);
         return "classrooms/joined";

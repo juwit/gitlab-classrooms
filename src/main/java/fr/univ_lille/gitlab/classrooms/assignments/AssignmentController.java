@@ -1,16 +1,20 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.servlet.http.HttpSession;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
@@ -41,7 +45,7 @@ class AssignmentController {
         var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (assignment.getType() == AssignmentType.QUIZ) {
-            var quizAssignment = (QuizAssignment)assignment;
+            var quizAssignment = (QuizAssignment) assignment;
             // view quiz results for the classroom
             model.addAttribute("quiz", quizAssignment.getQuiz());
 
@@ -50,8 +54,8 @@ class AssignmentController {
 
             return "quiz/all-submissions";
         }
-        if (assignment.getType() == AssignmentType.EXERCISE ){
-            var exerciseAssignment = (ExerciseAssignment)assignment;
+        if (assignment.getType() == AssignmentType.EXERCISE) {
+            var exerciseAssignment = (ExerciseAssignment) assignment;
             model.addAttribute("exercise", exerciseAssignment);
             return "exercise/all-submissions";
         }
@@ -60,8 +64,15 @@ class AssignmentController {
     }
 
     @GetMapping("/assignments/{assignmentId}/accept")
-    String showAcceptAssignment(@PathVariable UUID assignmentId, Model model) {
+    String showAcceptAssignment(@PathVariable UUID assignmentId, @ModelAttribute("user") ClassroomUser student, Model model, HttpSession session) {
         var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+
+        // check if the student already belongs to the classroom, if not, redirect to the classroom join link
+        var classroom = assignment.getClassroom();
+        if (!classroom.getStudents().contains(student)) {
+            session.setAttribute("redirect", "/assignments/" + assignmentId + "/accept");
+            return "redirect:/classrooms/" + classroom.getId() + "/join";
+        }
 
         model.addAttribute("assignment", assignment);
         return "assignments/accept";
@@ -108,7 +119,7 @@ class AssignmentController {
             this.assignmentService.createExerciseAssignment(classroom, createAssignmentDTO.assignmentName, createAssignmentDTO.repositoryId);
         }
 
-        return "redirect:/classrooms/"+classroomId;
+        return "redirect:/classrooms/" + classroomId;
     }
 
 }

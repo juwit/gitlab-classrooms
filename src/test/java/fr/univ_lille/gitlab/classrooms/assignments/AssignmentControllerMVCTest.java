@@ -3,6 +3,7 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.quiz.*;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.gitlab4j.api.GitLabApi;
@@ -46,6 +47,9 @@ class AssignmentControllerMVCTest {
     @MockBean
     private ClassroomService classroomService;
 
+    @Autowired
+    private ClassroomUserService classroomUserService;
+
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
 
@@ -58,6 +62,7 @@ class AssignmentControllerMVCTest {
         var classroom = new Classroom();
         classroom.setName("AssignmentControllerMVCTest classroom");
         classroom.setId(classroomId);
+
         when(classroomService.getClassroom(classroomId)).thenReturn(Optional.of(classroom));
 
         var quiz = new QuizEntity();
@@ -83,7 +88,19 @@ class AssignmentControllerMVCTest {
 
     @Test
     @WithMockStudent
-    void acceptAssignment_shouldShowAcceptPage() throws Exception {
+    void acceptAssignment_shouldRedirectToClassroomJoin_ifStudentDoesNotBelongToTheClassroom() throws Exception {
+        mockMvc.perform(get("/assignments/"+assignmentId+"/accept"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/classrooms/" + classroomId + "/join"));
+    }
+
+    @Test
+    @WithMockStudent
+    void acceptAssignment_shouldShowAcceptPage_ifStudentBelongsToTheClassroom() throws Exception {
+        // make the student join the classroom first
+        var classroom = this.classroomService.getClassroom(this.classroomId).orElseThrow();
+        classroom.join(classroomUserService.getClassroomUser("luke.skywalker"));
+
         mockMvc.perform(get("/assignments/"+assignmentId+"/accept"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("assignments/accept"))
