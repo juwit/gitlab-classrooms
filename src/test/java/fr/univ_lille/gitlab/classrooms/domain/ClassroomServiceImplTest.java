@@ -58,33 +58,11 @@ class ClassroomServiceImplTest {
         var classroom = new Classroom();
         classroom.setGitlabGroupId(12L);
 
-        when(gitlabApiFactory.userGitlabApi(any())).thenReturn(gitLabApi);
-
         classroomService.joinClassroom(classroom, student);
 
         assertThat(classroom.getStudents()).contains(student);
 
         verify(classroomRepository).save(classroom);
-    }
-
-    @Test
-    void joinClassroom_shouldAddTheStudentToTheGitlabGroup() throws GitLabApiException {
-        var student = new ClassroomUser();
-        student.setName("luke.skywalker");
-
-        var teacher = new ClassroomUser();
-        teacher.setName("obiwan.kenobi");
-
-        var classroom = new Classroom();
-        classroom.setTeacher(teacher);
-        classroom.setGitlabGroupId(12L);
-
-        when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
-        when(gitLabApi.getUserApi().getUser("luke.skywalker")).thenReturn(new User().withId(5L));
-
-        classroomService.joinClassroom(classroom, student);
-
-        verify(gitLabApi.getGroupApi()).addMember(12L, 5L, AccessLevel.DEVELOPER);
     }
 
     @Test

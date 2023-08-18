@@ -1,11 +1,9 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.gitlab.GitlabApiFactory;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.AccessLevel;
 import org.gitlab4j.api.models.GroupParams;
 import org.springframework.stereotype.Service;
 
@@ -20,12 +18,9 @@ class ClassroomServiceImpl implements ClassroomService {
 
     private final GitLabApi gitLabApi;
 
-    private final GitlabApiFactory gitlabApiFactory;
-
-    ClassroomServiceImpl(ClassroomRepository classroomRepository, GitLabApi gitLabApi, GitlabApiFactory gitlabApiFactory) {
+    ClassroomServiceImpl(ClassroomRepository classroomRepository, GitLabApi gitLabApi) {
         this.classroomRepository = classroomRepository;
         this.gitLabApi = gitLabApi;
-        this.gitlabApiFactory = gitlabApiFactory;
     }
 
     @Override
@@ -42,13 +37,6 @@ class ClassroomServiceImpl implements ClassroomService {
     @Override
     public void joinClassroom(Classroom classroom, ClassroomUser student) throws GitLabApiException {
         classroom.join(student);
-
-        // make the student join the gitlab group
-        var teacher = classroom.getTeacher();
-        var teacherGitlabApi = gitlabApiFactory.userGitlabApi(teacher);
-
-        var user = teacherGitlabApi.getUserApi().getUser(student.getName());
-        teacherGitlabApi.getGroupApi().addMember(classroom.getGitlabGroupId(), user.getId(), AccessLevel.DEVELOPER);
 
         this.classroomRepository.save(classroom);
     }
