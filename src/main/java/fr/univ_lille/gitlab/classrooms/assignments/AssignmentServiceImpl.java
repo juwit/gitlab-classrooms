@@ -128,4 +128,9 @@ class AssignmentServiceImpl implements AssignmentService {
 
         return exerciseAssignment;
     }
+
+    @Override
+    public StudentExercise getAssignmentResultsForStudent(Assignment assignment, ClassroomUser student) {
+        return this.studentExerciseRepository.findByAssignmentAndStudent(assignment, student);
+    }
 }

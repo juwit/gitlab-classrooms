@@ -22,4 +22,6 @@ public interface AssignmentService {
 
     @Transactional
     Assignment createExerciseAssignment(Classroom classroom, String assignmentName, String repositoryId) throws GitLabApiException;
+
+    StudentExercise getAssignmentResultsForStudent(Assignment assignment, ClassroomUser student);
 }

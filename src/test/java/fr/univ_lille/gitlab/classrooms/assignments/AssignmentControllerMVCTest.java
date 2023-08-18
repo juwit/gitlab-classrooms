@@ -23,6 +23,7 @@ import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -86,6 +87,7 @@ class AssignmentControllerMVCTest {
         when(quizScoreService.getQuizResultForClassroom(quiz, classroom)).thenReturn(new QuizResult(List.of()));
 
         when(assignmentService.getAssignmentResults(exerciseAssignment)).thenReturn(List.of());
+        when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExercise());
     }
 
     @Test
@@ -118,9 +120,20 @@ class AssignmentControllerMVCTest {
 
     @Test
     @WithMockStudent
-    void acceptAssignment_shouldShowAddStudentToTheListOfAccepted() throws Exception {
+    void acceptAssignment_shouldShowAcceptPage_afterStudentAcceptation() throws Exception {
         mockMvc.perform(post("/assignments/"+ quizAssignmentId +"/accept").with(csrf()))
                 .andExpect(status().isOk())
+                .andExpect(view().name("assignments/accepted"));
+
+        verify(assignmentService).acceptAssigment(any(), any());
+    }
+
+    @Test
+    @WithMockStudent
+    void acceptAssignment_shouldShowAcceptPageAndGitlabLink_afterStudentAcceptation() throws Exception {
+        mockMvc.perform(post("/assignments/"+ exerciseAssignmentId +"/accept").with(csrf()))
+                .andExpect(status().isOk())
+                .andExpect(model().attributeExists("assignmentResult"))
                 .andExpect(view().name("assignments/accepted"));
 
         verify(assignmentService).acceptAssigment(any(), any());

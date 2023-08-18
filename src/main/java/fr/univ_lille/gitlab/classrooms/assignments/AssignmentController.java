@@ -96,6 +96,11 @@ class AssignmentController {
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept assignment", e);
         }
 
+        if(assignment instanceof ExerciseAssignment exerciseAssignment){
+            // loading the assignment result to be able to show the gitlab URL after project creation
+            var assignmentResult = this.assignmentService.getAssignmentResultsForStudent(exerciseAssignment, student);
+            model.addAttribute("assignmentResult", assignmentResult);
+        }
 
         model.addAttribute("assignment", assignment);
         return "assignments/accepted";
