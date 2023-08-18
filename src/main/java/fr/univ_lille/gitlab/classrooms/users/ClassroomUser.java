@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import java.io.Serializable;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Objects;
 
 @Entity
 public class ClassroomUser implements Serializable {
@@ -60,5 +61,20 @@ public class ClassroomUser implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ClassroomUser that = (ClassroomUser) o;
+
+        return Objects.equals(name, that.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
     }
 }
