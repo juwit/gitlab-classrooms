@@ -43,6 +43,7 @@ class AssignmentController {
     }
 
     @GetMapping("/assignments/{assignmentId}")
+    @RolesAllowed("TEACHER")
     String viewAssignment(@PathVariable UUID assignmentId, Model model) {
         var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 

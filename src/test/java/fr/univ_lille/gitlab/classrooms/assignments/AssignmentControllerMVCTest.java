@@ -127,7 +127,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockStudent
+    @WithMockTeacher
     void viewQuizAssignment_shouldShowTheAssignmentResults() throws Exception {
         mockMvc.perform(get("/assignments/"+ quizAssignmentId))
                 .andExpect(status().isOk())
@@ -137,7 +137,7 @@ class AssignmentControllerMVCTest {
     }
 
     @Test
-    @WithMockStudent
+    @WithMockTeacher
     void viewExerciseAssignment_shouldShowTheAssignmentResults() throws Exception {
         mockMvc.perform(get("/assignments/"+ exerciseAssignmentId))
                 .andExpect(status().isOk())
