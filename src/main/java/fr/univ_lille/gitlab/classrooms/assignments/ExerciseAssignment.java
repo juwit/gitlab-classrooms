@@ -3,7 +3,7 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 import jakarta.persistence.Entity;
 
 @Entity
-class ExerciseAssignment extends Assignment {
+public class ExerciseAssignment extends Assignment {
 
     private String gitlabRepositoryTemplateId;
 

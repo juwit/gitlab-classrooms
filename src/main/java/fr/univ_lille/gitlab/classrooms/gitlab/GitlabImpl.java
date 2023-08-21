@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.gitlab;
 
+import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -51,5 +52,21 @@ class GitlabImpl implements Gitlab {
         var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
 
         classroom.setGitlabGroupId(group.getId());
+    }
+
+    @Override
+    public void createGroup(ExerciseAssignment exerciseAssignment, Classroom classroom) throws GitLabApiException {
+        var assignmentName = exerciseAssignment.getName();
+        var groupPath = assignmentName.trim().replaceAll("[^\\w\\-.]", "_");
+
+        var groupParams = new GroupParams()
+                .withName(assignmentName)
+                .withPath(groupPath)
+                .withDescription("Gitlab group for the assignment " + assignmentName)
+                .withParentId(classroom.getGitlabGroupId());
+
+        var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
+
+        exerciseAssignment.setGitlabGroupId(group.getId());
     }
 }

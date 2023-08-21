@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.gitlab;
 
+import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
@@ -78,5 +79,32 @@ class GitlabImplTest {
                 .hasFieldOrPropertyWithValue("description", "Gitlab group for the Classroom Test classroom");
 
         assertThat(classroom.getGitlabGroupId()).isEqualTo(36L);
+    }
+
+    @Test
+    void createGroup_shouldCreateAGroup_forAGivenExerciseAssignment() throws GitLabApiException{
+        var classroom = new Classroom();
+        classroom.setName("Test classroom");
+        classroom.setGitlabGroupId(12L);
+
+        var assignment = new ExerciseAssignment();
+        assignment.setName("Exercice 1");
+
+        var group = new Group();
+        group.setId(72L);
+        when(gitLabApi.getGroupApi().createGroup(any())).thenReturn(group);
+
+        gitlab.createGroup(assignment, classroom);
+
+        var gitlabGroupCaptor = ArgumentCaptor.forClass(GroupParams.class);
+        verify(this.gitLabApi.getGroupApi()).createGroup(gitlabGroupCaptor.capture());
+
+        assertThat(gitlabGroupCaptor.getValue())
+                .hasFieldOrPropertyWithValue("name", "Exercice 1")
+                .hasFieldOrPropertyWithValue("path", "Exercice_1")
+                .hasFieldOrPropertyWithValue("parentId", 12L)
+                .hasFieldOrPropertyWithValue("description", "Gitlab group for the assignment Exercice 1");
+
+        assertThat(assignment.getGitlabGroupId()).isEqualTo(72L);
     }
 }

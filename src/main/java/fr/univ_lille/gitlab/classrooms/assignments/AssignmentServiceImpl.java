@@ -1,14 +1,14 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
-import fr.univ_lille.gitlab.classrooms.domain.*;
+import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.gitlab.GitlabApiFactory;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.AccessLevel;
-import org.gitlab4j.api.models.GroupParams;
 import org.gitlab4j.api.models.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final QuizService quizService;
 
-    private final GitLabApi gitLabApi;
+    private final Gitlab gitlab;
 
     private final GitlabApiFactory gitlabApiFactory;
 
@@ -33,9 +33,9 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final StudentExerciseRepository studentExerciseRepository;
 
-    AssignmentServiceImpl(QuizService quizService, GitLabApi gitLabApi, GitlabApiFactory gitlabApiFactory, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentExerciseRepository studentExerciseRepository) {
+    AssignmentServiceImpl(QuizService quizService, Gitlab gitlab, GitlabApiFactory gitlabApiFactory, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentExerciseRepository studentExerciseRepository) {
         this.quizService = quizService;
-        this.gitLabApi = gitLabApi;
+        this.gitlab = gitlab;
         this.gitlabApiFactory = gitlabApiFactory;
         this.classroomService = classroomService;
         this.assignmentRepository = assignmentRepository;
@@ -108,18 +108,11 @@ class AssignmentServiceImpl implements AssignmentService {
     @Override
     @Transactional
     public Assignment createExerciseAssignment(Classroom classroom, String assignmentName, String repositoryId) throws GitLabApiException {
-        var groupPath = assignmentName.trim().replaceAll("[^\\w\\-.]", "_");
-        var groupParams = new GroupParams()
-                .withName(assignmentName)
-                .withPath(groupPath)
-                .withDescription("Gitlab group for the assignment " + assignmentName)
-                .withParentId(classroom.getGitlabGroupId());
-        var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
-
         var exerciseAssignment = new ExerciseAssignment();
         exerciseAssignment.setName(assignmentName);
         exerciseAssignment.setGitlabRepositoryTemplateId(repositoryId);
-        exerciseAssignment.setGitlabGroupId(group.getId());
+
+        this.gitlab.createGroup(exerciseAssignment, classroom);
 
         classroom.addAssignment(exerciseAssignment);
 

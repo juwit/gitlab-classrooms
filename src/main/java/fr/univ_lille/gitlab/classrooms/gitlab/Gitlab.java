@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.gitlab;
 
+import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Group;
@@ -27,4 +28,12 @@ public interface Gitlab {
      * @param parentGroupId the optional parent group id to create the classroom group in.
      */
     void createGroup(Classroom classroom, Optional<Long> parentGroupId) throws GitLabApiException;
+
+    /**
+     * Create a Gitlab group for the ExerciseAssignment, in the group of the given Classroom.
+     * The ID of the created group is set to the {@link ExerciseAssignment#setGitlabGroupId(Long)} attribute.
+     * @param exerciseAssignment the exerciseAssignment to create a group for.
+     * @param classroom the classroom of the assignment.
+     */
+    void createGroup(ExerciseAssignment exerciseAssignment, Classroom classroom) throws GitLabApiException;
 }
