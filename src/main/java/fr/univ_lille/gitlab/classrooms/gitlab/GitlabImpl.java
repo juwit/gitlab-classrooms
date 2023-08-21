@@ -4,11 +4,13 @@ import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Group;
+import org.gitlab4j.api.models.GroupParams;
 import org.gitlab4j.api.models.Project;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 class GitlabImpl implements Gitlab {
@@ -33,5 +35,21 @@ class GitlabImpl implements Gitlab {
     public URI getGroupURI(Classroom classroom) throws GitLabApiException {
         var group = this.gitLabApi.getGroupApi().getGroup(classroom.getGitlabGroupId());
         return URI.create(group.getWebUrl());
+    }
+
+    @Override
+    public void createGroup(Classroom classroom, Optional<Long> parentGroupId) throws GitLabApiException {
+        var classroomName = classroom.getName();
+        var groupPath = classroomName.trim().replaceAll("[^\\w\\-.]", "_");
+
+        var groupParams = new GroupParams()
+                .withName(classroomName)
+                .withPath(groupPath)
+                .withDescription("Gitlab group for the Classroom " + classroomName);
+        parentGroupId.ifPresent(groupParams::withParentId);
+
+        var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
+
+        classroom.setGitlabGroupId(group.getId());
     }
 }

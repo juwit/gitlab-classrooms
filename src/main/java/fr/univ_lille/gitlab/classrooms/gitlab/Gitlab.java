@@ -7,6 +7,7 @@ import org.gitlab4j.api.models.Project;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Provides an abstraction to the Gitlab API.
@@ -18,4 +19,12 @@ public interface Gitlab {
     List<Group> getGroupsOfConnectedUser() throws GitLabApiException;
 
     URI getGroupURI(Classroom classroom) throws GitLabApiException;
+
+    /**
+     * Create a Gitlab group for the Classroom.
+     * The ID of the created group is set to the {@link Classroom#setGitlabGroupId(Long)} attribute.
+     * @param classroom the classroom to create a group for.
+     * @param parentGroupId the optional parent group id to create the classroom group in.
+     */
+    void createGroup(Classroom classroom, Optional<Long> parentGroupId) throws GitLabApiException;
 }

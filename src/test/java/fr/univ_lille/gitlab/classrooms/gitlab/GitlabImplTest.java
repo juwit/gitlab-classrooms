@@ -4,14 +4,17 @@ import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Group;
+import org.gitlab4j.api.models.GroupParams;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.URI;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -52,5 +55,28 @@ class GitlabImplTest {
         var uri = gitlab.getGroupURI(classroom);
 
         assertThat(uri).isEqualTo(URI.create("https://gitlab.univ-lille.fr/gitlab-classrooms"));
+    }
+
+    @Test
+    void createGroup_shouldCreateAGroup_forAGivenClassroom() throws GitLabApiException{
+        var classroom = new Classroom();
+        classroom.setName("Test classroom");
+
+        var group = new Group();
+        group.setId(36L);
+
+        when(gitLabApi.getGroupApi().createGroup(any())).thenReturn(group);
+
+        gitlab.createGroup(classroom, Optional.empty());
+
+        var gitlabGroupCaptor = ArgumentCaptor.forClass(GroupParams.class);
+        verify(this.gitLabApi.getGroupApi()).createGroup(gitlabGroupCaptor.capture());
+
+        assertThat(gitlabGroupCaptor.getValue())
+                .hasFieldOrPropertyWithValue("name", "Test classroom")
+                .hasFieldOrPropertyWithValue("path", "Test_classroom")
+                .hasFieldOrPropertyWithValue("description", "Gitlab group for the Classroom Test classroom");
+
+        assertThat(classroom.getGitlabGroupId()).isEqualTo(36L);
     }
 }
