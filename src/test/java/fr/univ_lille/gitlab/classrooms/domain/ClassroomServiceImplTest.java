@@ -1,22 +1,17 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.gitlab.GitlabApiFactory;
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
-import org.checkerframework.checker.units.qual.C;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.GitLabApiForm;
-import org.gitlab4j.api.models.AccessLevel;
-import org.gitlab4j.api.models.GroupParams;
-import org.gitlab4j.api.models.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
@@ -31,15 +26,7 @@ class ClassroomServiceImplTest {
     private ClassroomRepository classroomRepository;
 
     @Mock
-    private GitlabApiFactory gitlabApiFactory;
-
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private GitLabApi gitLabApi;
-
-    @BeforeEach
-    void setUp() {
-
-    }
+    private Gitlab gitlab;
 
     @Test
     void getAllClassrooms_shouldReturnAllClassrooms() {
@@ -51,7 +38,7 @@ class ClassroomServiceImplTest {
     }
 
     @Test
-    void joinClassroom_shouldAddTheStudentToTheClassroom() throws GitLabApiException {
+    void joinClassroom_shouldAddTheStudentToTheClassroom() {
         var student = new ClassroomUser();
         student.setName("luke.skywalker");
 
@@ -72,17 +59,12 @@ class ClassroomServiceImplTest {
 
         classroomService.createClassroom("Test classroom", 12L, teacher);
 
-        var gitlabGroupCaptor = ArgumentCaptor.forClass(GroupParams.class);
-        verify(this.gitLabApi.getGroupApi()).createGroup(gitlabGroupCaptor.capture());
-
-        assertThat(gitlabGroupCaptor.getValue())
-                .hasFieldOrPropertyWithValue("name", "Test classroom")
-                .hasFieldOrPropertyWithValue("path", "Test_classroom")
-                .hasFieldOrPropertyWithValue("description", "Gitlab group for the Classroom Test classroom");
-
         var classroomCaptor = ArgumentCaptor.forClass(Classroom.class);
 
+        verify(gitlab).createGroup(classroomCaptor.capture(), eq(Optional.of(12L)));
+
         verify(classroomRepository).save(classroomCaptor.capture());
+
         assertThat(classroomCaptor.getValue())
                 .isNotNull()
                 .hasFieldOrPropertyWithValue("teacher.name", "obiwan.kenobi");

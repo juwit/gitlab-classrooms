@@ -1,13 +1,12 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
-import org.gitlab4j.api.GitLabApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
 import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -39,8 +38,8 @@ class ClassroomControllerMVCTest {
     @MockBean
     private ClassroomService classroomService;
 
-    @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
-    private GitLabApi gitLabApi;
+    @MockBean
+    private Gitlab gitlab;
 
     private UUID classroomId = UUID.randomUUID();
 
@@ -81,6 +80,16 @@ class ClassroomControllerMVCTest {
                     .andDo(print())
                     .andExpect(status().isForbidden());
         }
+    }
+
+    @Test
+    @WithMockTeacher
+    void newClassroom_shouldListTheGroupsOfTheTeacher() throws Exception {
+        mockMvc.perform(get("/classrooms/new"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(this.gitlab).getGroupsOfConnectedUser();
     }
 
     @Test

@@ -2,15 +2,11 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
-import fr.univ_lille.gitlab.classrooms.gitlab.GitlabApiFactory;
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.AccessLevel;
-import org.gitlab4j.api.models.Group;
-import org.gitlab4j.api.models.GroupParams;
 import org.gitlab4j.api.models.Project;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -37,11 +33,8 @@ class AssignmentServiceImplTest {
     @Mock
     private QuizService quizService;
 
-    @Mock(answer = Answers.RETURNS_DEEP_STUBS)
-    private GitLabApi gitLabApi;
-
     @Mock
-    private GitlabApiFactory gitlabApiFactory;
+    private Gitlab gitlab;
 
     @Mock
     private StudentExerciseRepository studentExerciseRepository;
@@ -60,7 +53,7 @@ class AssignmentServiceImplTest {
     }
 
     @Test
-    void acceptExerciceAssignment_shouldAlsoCreateAStudentExerciseEntity() throws GitLabApiException {
+    void acceptExerciceAssignment_shouldCreateAGitlabProject() throws GitLabApiException {
         var teacher = new ClassroomUser();
 
         var classroom = new Classroom();
@@ -69,14 +62,19 @@ class AssignmentServiceImplTest {
         var assignment = new ExerciseAssignment();
         assignment.setName("Exercice 1");
         assignment.setGitlabGroupId(12L);
-        assignment.setClassroom(classroom);
-
-        when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
+        classroom.addAssignment(assignment);
 
         var student = new ClassroomUser();
         student.setName("luke.skywalker");
 
+        var project = new Project();
+        project.setId(25L);
+        project.setWebUrl("https://gitlab.univ-lille.fr/gitlab-classroom");
+        when(gitlab.createProject(assignment, student)).thenReturn(project);
+
         this.assignmentService.acceptAssigment(assignment, student);
+
+        verify(gitlab).createProject(assignment, student);
 
         var studentExerciseCaptor = ArgumentCaptor.forClass(StudentExercise.class);
         verify(studentExerciseRepository).save(studentExerciseCaptor.capture());
@@ -85,36 +83,8 @@ class AssignmentServiceImplTest {
         assertThat(studentExercise).isNotNull();
         assertThat(studentExercise.getAssignment()).isEqualTo(assignment);
         assertThat(studentExercise.getStudent()).isEqualTo(student);
-    }
-
-    @Test
-    void acceptExerciceAssignment_shouldAlsoCreateAGitlabRepository() throws GitLabApiException {
-        var teacher = new ClassroomUser();
-
-        var classroom = new Classroom();
-        classroom.setTeacher(teacher);
-
-        var assignment = new ExerciseAssignment();
-        assignment.setName("Exercice 1");
-        assignment.setGitlabGroupId(12L);
-        assignment.setClassroom(classroom);
-
-        when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
-
-        var student = new ClassroomUser();
-        student.setName("luke.skywalker");
-
-        this.assignmentService.acceptAssigment(assignment, student);
-
-        var projectCaptor = ArgumentCaptor.forClass(Project.class);
-        verify(gitLabApi.getProjectApi()).createProject(projectCaptor.capture());
-
-        var project = projectCaptor.getValue();
-        assertThat(project).isNotNull();
-        assertThat(project.getName()).isEqualTo("Exercice 1-luke.skywalker");
-        assertThat(project.getNamespace().getId()).isEqualTo(12L);
-
-        verify(gitLabApi.getProjectApi()).addMember(any(), any(), eq(AccessLevel.MAINTAINER));
+        assertThat(studentExercise.getGitlabProjectId()).isEqualTo(25L);
+        assertThat(studentExercise.getGitlabProjectUrl()).isEqualTo("https://gitlab.univ-lille.fr/gitlab-classroom");
     }
 
     @Test
@@ -141,9 +111,6 @@ class AssignmentServiceImplTest {
 
     @Test
     void createExerciseAssignment_shouldCreateAGitlabGroup_andSaveTheClassroom() throws GitLabApiException {
-        var group = new Group().withId(12L);
-        when(gitLabApi.getGroupApi().createGroup(any())).thenReturn(group);
-
         var classroom = new Classroom();
         classroom.setGitlabGroupId(9L);
         var assignment = this.assignmentService.createExerciseAssignment(classroom, "Test Exercise Assignment", null);
@@ -153,19 +120,9 @@ class AssignmentServiceImplTest {
                 .isInstanceOf(ExerciseAssignment.class);
         assertThat(assignment.getName()).isEqualTo("Test Exercise Assignment");
 
-        var exerciseAssignment = ((ExerciseAssignment) assignment);
-        assertThat(exerciseAssignment.getGitlabGroupId()).isEqualTo(12);
-
         assertThat(classroom.getAssignments()).contains(assignment);
 
-        var captor = ArgumentCaptor.forClass(GroupParams.class);
-        verify(gitLabApi.getGroupApi()).createGroup(captor.capture());
-        var groupParams = captor.getValue();
-        assertThat(groupParams)
-                .isNotNull()
-                .hasFieldOrPropertyWithValue("name", "Test Exercise Assignment")
-                .hasFieldOrPropertyWithValue("path", "Test_Exercise_Assignment")
-                .hasFieldOrPropertyWithValue("parentId", 9L);
+        verify(gitlab).createGroup((ExerciseAssignment) assignment, classroom);
 
         verify(assignmentRepository).save(assignment);
         verify(classroomService).saveClassroom(classroom);

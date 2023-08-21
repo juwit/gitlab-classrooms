@@ -29,7 +29,10 @@ class ClassroomUserServiceImpl implements ClassroomUserService {
         var classroomUser = classroomUserRepository.findById(name)
                 .orElseGet(() -> new ClassroomUser(name, List.of(ClassroomRole.STUDENT)));
 
-        // update email and avatar if needed
+        // update id, email and avatar if needed
+        var id = oauth2User.getAttributes().get("id");
+        classroomUser.setGitlabUserId(Long.parseLong(id.toString()));
+
         if(oauth2User.getAttributes().containsKey("avatar_url")){
             try {
                 classroomUser.setAvatarUrl(new URL(oauth2User.getAttribute("avatar_url")));
