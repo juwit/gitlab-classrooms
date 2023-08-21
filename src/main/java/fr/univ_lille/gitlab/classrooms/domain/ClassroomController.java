@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpSession;
@@ -22,16 +23,19 @@ class ClassroomController {
 
     private final GitLabApi gitLabApi;
 
+    private final Gitlab gitlab;
+
     private static final System.Logger LOGGER = System.getLogger(ClassroomController.class.getName());
 
-    public ClassroomController(ClassroomService classroomService, GitLabApi gitLabApi) {
+    public ClassroomController(ClassroomService classroomService, GitLabApi gitLabApi, Gitlab gitlab) {
         this.classroomService = classroomService;
         this.gitLabApi = gitLabApi;
+        this.gitlab = gitlab;
     }
 
     @GetMapping("/new")
     String newClassroom(Model model) throws GitLabApiException {
-        model.addAttribute("groups", this.gitLabApi.getGroupApi().getGroups());
+        model.addAttribute("groups", this.gitlab.getGroupsOfConnectedUser());
         return "classrooms/new";
     }
 

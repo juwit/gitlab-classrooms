@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
@@ -39,8 +40,8 @@ class ClassroomControllerMVCTest {
     @MockBean
     private ClassroomService classroomService;
 
-    @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
-    private GitLabApi gitLabApi;
+    @MockBean
+    private Gitlab gitlab;
 
     private UUID classroomId = UUID.randomUUID();
 
@@ -81,6 +82,16 @@ class ClassroomControllerMVCTest {
                     .andDo(print())
                     .andExpect(status().isForbidden());
         }
+    }
+
+    @Test
+    @WithMockTeacher
+    void newClassroom_shouldListTheGroupsOfTheTeacher() throws Exception {
+        mockMvc.perform(get("/classrooms/new"))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(this.gitlab).getGroupsOfConnectedUser();
     }
 
     @Test

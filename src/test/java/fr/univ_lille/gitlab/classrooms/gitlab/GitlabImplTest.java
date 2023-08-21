@@ -27,4 +27,11 @@ class GitlabImplTest {
 
         verify(gitLabApi.getProjectApi()).getMemberProjects();
     }
+
+    @Test
+    void getGroupsOfConnectedUser_shouldListUserGroups() throws GitLabApiException {
+        gitlab.getGroupsOfConnectedUser();
+
+        verify(gitLabApi.getGroupApi()).getGroups();
+    }
 }
