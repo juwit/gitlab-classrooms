@@ -34,7 +34,7 @@ class ClassroomServiceImpl implements ClassroomService {
 
     @Transactional
     @Override
-    public void joinClassroom(Classroom classroom, ClassroomUser student) throws GitLabApiException {
+    public void joinClassroom(Classroom classroom, ClassroomUser student) {
         classroom.join(student);
 
         this.classroomRepository.save(classroom);

@@ -13,7 +13,7 @@ public interface ClassroomService {
 
     Optional<Classroom> getClassroom(UUID uuid);
 
-    void joinClassroom(Classroom classroom, ClassroomUser student) throws GitLabApiException;
+    void joinClassroom(Classroom classroom, ClassroomUser student);
 
     void createClassroom(String classroomName, Long parentGitlabGroupId, ClassroomUser teacher) throws GitLabApiException;
 

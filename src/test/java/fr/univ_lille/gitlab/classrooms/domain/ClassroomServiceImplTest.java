@@ -38,7 +38,7 @@ class ClassroomServiceImplTest {
     }
 
     @Test
-    void joinClassroom_shouldAddTheStudentToTheClassroom() throws GitLabApiException {
+    void joinClassroom_shouldAddTheStudentToTheClassroom() {
         var student = new ClassroomUser();
         student.setName("luke.skywalker");
 

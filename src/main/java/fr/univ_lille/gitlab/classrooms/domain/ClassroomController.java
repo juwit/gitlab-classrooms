@@ -68,7 +68,7 @@ class ClassroomController {
 
     @PostMapping("/{classroomId}/join")
     @RolesAllowed({"TEACHER", "STUDENT"})
-    String joinClassroom(@PathVariable UUID classroomId, @ModelAttribute("user") ClassroomUser student, Model model, HttpSession session) throws GitLabApiException {
+    String joinClassroom(@PathVariable UUID classroomId, @ModelAttribute("user") ClassroomUser student, Model model, HttpSession session) {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         this.classroomService.joinClassroom(classroom, student);
