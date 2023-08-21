@@ -3,7 +3,7 @@ package fr.univ_lille.gitlab.classrooms.quiz;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Answer {
+class Answer {
 
     private static final Pattern multipleChoiceCorrectRegex = Pattern.compile("\\[x\\] (.*)");
     private static final Pattern multipleChoiceIncorrectRegex = Pattern.compile("\\[ \\] (.*)");

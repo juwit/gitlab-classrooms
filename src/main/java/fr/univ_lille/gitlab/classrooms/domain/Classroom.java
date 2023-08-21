@@ -1,12 +1,11 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
+import fr.univ_lille.gitlab.classrooms.assignments.Assignment;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.persistence.*;
 
 import java.net.URL;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 public class Classroom {
@@ -18,8 +17,13 @@ public class Classroom {
 
     private URL gitlabUrl;
 
+    private Long gitlabGroupId;
+
+    @ManyToOne
+    private ClassroomUser teacher;
+
     @ManyToMany(fetch = FetchType.EAGER)
-    private Set<ClassroomUser> students;
+    private Set<ClassroomUser> students = new HashSet<>();
 
     @OneToMany(mappedBy = "classroom")
     private List<Assignment> assignments = new LinkedList<>();
@@ -48,6 +52,14 @@ public class Classroom {
         this.gitlabUrl = gitlabUrl;
     }
 
+    public ClassroomUser getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(ClassroomUser teacher) {
+        this.teacher = teacher;
+    }
+
     public Set<ClassroomUser> getStudents() {
         return students;
     }
@@ -71,5 +83,13 @@ public class Classroom {
     public void addAssignment(Assignment assignment) {
         this.assignments.add(assignment);
         assignment.setClassroom(this);
+    }
+
+    public Long getGitlabGroupId() {
+        return gitlabGroupId;
+    }
+
+    public void setGitlabGroupId(Long gitlabGroupId) {
+        this.gitlabGroupId = gitlabGroupId;
     }
 }

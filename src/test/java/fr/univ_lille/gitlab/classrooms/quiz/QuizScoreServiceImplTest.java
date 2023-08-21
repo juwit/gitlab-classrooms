@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUser;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -11,12 +11,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.time.ZonedDateTime;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class QuizScoreServiceImplTest {
@@ -45,9 +42,8 @@ class QuizScoreServiceImplTest {
         question.answer(firstAnswer, "");
 
         var vader = new ClassroomUser();
-        when(classroomUserService.getClassroomUser("darth-vader")).thenReturn(vader);
 
-        quizScoreService.registerScoreForStudent(quiz, "darth-vader");
+        quizScoreService.registerScoreForStudent(quiz, vader);
 
         verify(quizScoreRepository).save(captor.capture());
 

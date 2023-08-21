@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.users;
 
 import jakarta.transaction.Transactional;
 import org.springframework.security.oauth2.core.user.OAuth2User;

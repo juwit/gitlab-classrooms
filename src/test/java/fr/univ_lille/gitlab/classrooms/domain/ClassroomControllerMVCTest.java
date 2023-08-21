@@ -1,50 +1,43 @@
 package fr.univ_lille.gitlab.classrooms.domain;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
+import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.gitlab4j.api.GitLabApi;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Answers;
+import org.mockito.ArgumentCaptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql("/sql/init-test-users.sql")
 class ClassroomControllerMVCTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private ClassroomRepository classroomRepository;
-
-    @Autowired
-    private ClassroomUserRepository classroomUserRepository;
-
-    @Autowired
-    private AssignmentRepository assignmentRepository;
-
-    @Autowired
-    private QuizRepository quizRepository;
+    @MockBean
+    private ClassroomService classroomService;
 
     @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
@@ -56,27 +49,11 @@ class ClassroomControllerMVCTest {
         var classroom = new Classroom();
         classroom.setId(classroomId);
         classroom.setName("ClassroomControllerMVCTest classroom");
-        classroomRepository.save(classroom);
-
-        var luke = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
-        classroomUserRepository.save(luke);
-
-        var quiz = new QuizEntity();
-        quiz.setName("ClassroomControllerMVCTest quiz");
-        quizRepository.save(quiz);
+        when(classroomService.getClassroom(classroomId)).thenReturn(Optional.of(classroom));
     }
-
-    @AfterEach
-    void tearDown() {
-        assignmentRepository.deleteAll();
-        classroomRepository.deleteById(classroomId);
-        classroomUserRepository.deleteById("luke.skywalker");
-        quizRepository.deleteById("ClassroomControllerMVCTest quiz");
-    }
-
 
     @Nested
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    @WithMockTeacher
     class TeacherRole {
 
         @Test
@@ -88,7 +65,7 @@ class ClassroomControllerMVCTest {
     }
 
     @Nested
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     class StudentRole {
 
         @Test
@@ -100,69 +77,74 @@ class ClassroomControllerMVCTest {
 
         @Test
         void shouldNotAccessNewAssignmentPage() throws Exception {
-            mockMvc.perform(get("/classrooms/"+classroomId+"/assignments/new"))
+            mockMvc.perform(get("/classrooms/" + classroomId + "/assignments/new"))
                     .andDo(print())
                     .andExpect(status().isForbidden());
         }
     }
 
     @Test
-    @WithMockClassroomUser
+    @WithMockTeacher
+    void createClassroom_shouldCreateAGitlabGroup() throws Exception {
+        mockMvc.perform(
+                        post("/classrooms/new")
+                                .with(csrf())
+                                .param("classroomName", "ClassroomControllerMVCTest newClassroom"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        verify(classroomService).createClassroom(eq("ClassroomControllerMVCTest newClassroom"), isNull(), any());
+    }
+
+    @Test
+    @WithMockTeacher
+    void createClassroom_shouldSaveTheAssociatedTeacher() throws Exception {
+        mockMvc.perform(
+                        post("/classrooms/new")
+                                .with(csrf())
+                                .param("classroomName", "ClassroomControllerMVCTest newClassroom"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        var captor = ArgumentCaptor.forClass(ClassroomUser.class);
+
+        verify(classroomService).createClassroom(eq("ClassroomControllerMVCTest newClassroom"), isNull(), captor.capture());
+
+        assertThat(captor.getValue())
+                .isNotNull()
+                .extracting("name").isEqualTo("obiwan.kenobi");
+    }
+
+    @Test
+    @WithMockStudent
     void joinClassroom_shouldShowJoinPage() throws Exception {
-        mockMvc.perform(get("/classrooms/"+classroomId+"/join"))
+        mockMvc.perform(get("/classrooms/" + classroomId + "/join"))
                 .andExpect(status().isOk())
                 .andExpect(view().name("classrooms/join"))
                 .andExpect(model().attributeExists("classroom"));
     }
 
     @Test
-    @WithMockClassroomUser
+    @WithMockStudent
     void joinClassroom_shouldAddStudentToTheListOfJoined() throws Exception {
-        mockMvc.perform(post("/classrooms/"+classroomId+"/join").with(csrf()))
+        mockMvc.perform(post("/classrooms/" + classroomId + "/join").with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(view().name("classrooms/joined"));
 
-        var classroom = this.classroomRepository.findById(classroomId);
-        assertThat(classroom).isPresent();
-
-        assertThat(classroom.get().getStudents()).hasSize(1);
+        verify(classroomService).joinClassroom(any(), any());
     }
 
     @Test
-    @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
-    void createAssignment_shouldShowNewAssignmentPage() throws Exception {
-        mockMvc.perform(get("/classrooms/"+classroomId+"/assignments/new"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("assignments/new"))
-                .andExpect(model().attributeExists("classroom"))
-                .andExpect(model().attributeExists("quizzes"))
-                .andExpect(model().attributeExists("repositories"));
-    }
+    @WithMockStudent
+    void joinClassroom_shouldAddStudentToTheListOfJoined_andRedirectIfSessionAttributExists() throws Exception {
+        mockMvc.perform(
+                        post("/classrooms/" + classroomId + "/join")
+                                .sessionAttr("redirect", "/assignments/123456/accept")
+                                .with(csrf()))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/assignments/123456/accept"));
 
-    @Test
-    @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
-    void createQuizAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
-        mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
-                        .with(csrf())
-                        .param("assignmentName", "ClassroomControllerMVCTest assignment")
-                        .param("assignmentType", "QUIZ")
-                        .param("quizName", "ClassroomControllerMVCTest quiz"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("classrooms/view"))
-                .andExpect(model().attributeExists("classroom"));
-    }
-
-    @Test
-    @WithMockClassroomUser(username = "darth.vader", roles = ClassroomRole.TEACHER)
-    void createExerciseAssignment_shouldSaveTheAssignmentToTheClassroom() throws Exception {
-        mockMvc.perform(post("/classrooms/"+classroomId+"/assignments/new")
-                        .with(csrf())
-                        .param("assignmentName", "ClassroomControllerMVCTest assignment")
-                        .param("assignmentType", "EXERCISE")
-                        .param("repositoryId", "Fake ID"))
-                .andExpect(status().isOk())
-                .andExpect(view().name("classrooms/view"))
-                .andExpect(model().attributeExists("classroom"));
+        verify(classroomService).joinClassroom(any(), any());
     }
 
 }

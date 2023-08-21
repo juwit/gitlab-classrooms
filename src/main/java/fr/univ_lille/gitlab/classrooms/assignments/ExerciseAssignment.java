@@ -1,11 +1,13 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.assignments;
 
 import jakarta.persistence.Entity;
 
 @Entity
-public class ExerciseAssignment extends Assignment {
+class ExerciseAssignment extends Assignment {
 
     private String gitlabRepositoryTemplateId;
+
+    private Long gitlabGroupId;
 
     public ExerciseAssignment() {
         this.setType(AssignmentType.EXERCISE);
@@ -17,5 +19,13 @@ public class ExerciseAssignment extends Assignment {
 
     public String getGitlabRepositoryTemplateId() {
         return gitlabRepositoryTemplateId;
+    }
+
+    public Long getGitlabGroupId() {
+        return gitlabGroupId;
+    }
+
+    public void setGitlabGroupId(Long gitlabGroupId) {
+        this.gitlabGroupId = gitlabGroupId;
     }
 }

@@ -1,11 +1,11 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 
 @Entity
-public class QuizAssignment extends Assignment {
+class QuizAssignment extends Assignment {
 
     @OneToOne
     private QuizEntity quiz;

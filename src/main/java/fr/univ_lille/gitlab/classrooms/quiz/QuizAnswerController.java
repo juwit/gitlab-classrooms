@@ -1,8 +1,8 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 @Controller
 @RequestMapping("/quiz")
-public class QuizAnswerController {
+class QuizAnswerController {
 
     QuizRepository quizRepository;
 
@@ -24,14 +24,13 @@ public class QuizAnswerController {
     }
 
     @GetMapping("/{quizId}")
-    public String showQuiz(Model model, @PathVariable String quizId, Authentication authentication) {
+    public String showQuiz(Model model, @PathVariable String quizId, @ModelAttribute("user") ClassroomUser student) {
         var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizId);
 
         model.addAttribute("quiz", quiz);
 
-        var studentId = authentication.getName();
-        var previousSubmission = this.quizScoreService.getPreviousQuizSubmission(quizId, studentId);
+        var previousSubmission = this.quizScoreService.getPreviousQuizSubmission(quizId, student);
         previousSubmission.ifPresent(submission -> model.addAttribute("previousSubmission", submission));
 
         return "quiz/answer";
@@ -43,7 +42,7 @@ public class QuizAnswerController {
             Model model,
             @PathVariable String quizId,
             @RequestParam Map<String, String> quizAnswers,
-            Authentication authentication
+            @ModelAttribute("user") ClassroomUser student
     ) {
         var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizId);
@@ -56,8 +55,7 @@ public class QuizAnswerController {
             return "quiz/answer";
         }
 
-        var studentId = authentication.getName();
-        this.quizScoreService.registerScoreForStudent(quiz, studentId);
+        this.quizScoreService.registerScoreForStudent(quiz, student);
 
         model.addAttribute("quiz", quiz);
         return "quiz/results";

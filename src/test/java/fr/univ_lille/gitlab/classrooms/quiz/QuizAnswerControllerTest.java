@@ -1,16 +1,11 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.quiz.Quiz;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizAnswerController;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.security.core.Authentication;
 import org.springframework.ui.Model;
 
 import java.util.Map;
@@ -18,6 +13,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -34,10 +30,9 @@ class QuizAnswerControllerTest {
     private QuizScoreService quizScoreService;
 
     @Mock
-    private Authentication authentication;
-
-    @Mock
     private Model model;
+
+    private ClassroomUser student = new ClassroomUser();
 
     @Test
     void submitQuizAnswers_shouldOutputAnError_whenQuizIsNotFullyAnswered(){
@@ -49,7 +44,7 @@ class QuizAnswerControllerTest {
                 """);
         when(quizRepository.findById("testQuiz")).thenReturn(Optional.of(quiz));
 
-        quizAnswerController.submitQuizAnswers(model, "testQuiz", Map.of(), authentication);
+        quizAnswerController.submitQuizAnswers(model, "testQuiz", Map.of(), student);
 
         verify(model).addAttribute("message", "Il manque des réponses à certaines questions.");
     }
@@ -69,11 +64,11 @@ class QuizAnswerControllerTest {
         // get the answer id from the first answer of the quiz
         var answerKey = Quiz.fromMarkdown(quiz.getMarkdownContent(), quizId).getQuestions().get(0).getAnswers().get(0).getId();
 
-        var result = quizAnswerController.submitQuizAnswers(model, quizId, Map.of(answerKey, "wrong answer"), authentication);
+        var result = quizAnswerController.submitQuizAnswers(model, quizId, Map.of(answerKey, "wrong answer"), student);
 
         assertThat(result).isEqualTo("quiz/results");
 
-        verify(quizScoreService).registerScoreForStudent(any(), any());
+        verify(quizScoreService).registerScoreForStudent(any(), eq(student));
     }
 
 }

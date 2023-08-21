@@ -1,6 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomUserService;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -8,8 +8,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.oauth2.client.JdbcOAuth2AuthorizedClientService;
-import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.*;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -54,10 +53,43 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                 .build();
     }
 
+    /**
+     * OAuth2AuthorizedClientService is used to store oauth2 authorized clients (end-users).
+     * This implementation uses the database instead of in-memory which is the default.
+     *
+     * @param jdbcOperations
+     * @param clientRegistrationRepository
+     * @return a JdbcOAuth2AuthorizedClientService
+     * @see <a href="https://docs.spring.io/spring-security/reference/servlet/oauth2/client/core.html#oauth2Client-authorized-repo-service">Spring Documentation</a>
+     * @see OAuth2AuthorizedClientService
+     */
     @Bean
     OAuth2AuthorizedClientService oAuth2AuthorizedClientService(JdbcOperations jdbcOperations, ClientRegistrationRepository clientRegistrationRepository) {
         return new JdbcOAuth2AuthorizedClientService(jdbcOperations, clientRegistrationRepository);
     }
+
+    /**
+     * OAuth2AuthorizedClientManager is used to access an oauth2 authorized client (end-user), out of the scope of a HttpServletRequest. It will also refresh the token if needed.
+     * @param authorizedClientService
+     * @param clientRegistrationRepository
+     * @return
+     */
+    @Bean
+    OAuth2AuthorizedClientManager oAuth2AuthorizedClientManager(OAuth2AuthorizedClientService authorizedClientService, ClientRegistrationRepository clientRegistrationRepository) {
+        OAuth2AuthorizedClientProvider authorizedClientProvider =
+                OAuth2AuthorizedClientProviderBuilder.builder()
+                        .authorizationCode()
+                        .refreshToken()
+                        .build();
+
+        AuthorizedClientServiceOAuth2AuthorizedClientManager authorizedClientManager =
+                new AuthorizedClientServiceOAuth2AuthorizedClientManager(
+                        clientRegistrationRepository, authorizedClientService);
+        authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
+
+        return authorizedClientManager;
+    }
+
 
     private OAuth2UserService<OAuth2UserRequest, OAuth2User> userService() {
         var delegate = new DefaultOAuth2UserService();

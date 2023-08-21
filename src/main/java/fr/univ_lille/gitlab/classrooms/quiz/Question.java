@@ -6,7 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class Question {
+class Question {
     private final String text;
     private final List<Answer> answers;
     private final String explanation;

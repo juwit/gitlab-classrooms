@@ -1,13 +1,15 @@
 package fr.univ_lille.gitlab.classrooms.ui;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRepository;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
+import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -16,16 +18,17 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql(scripts = "/sql/init-test-users.sql")
 class HomeControllerMVCTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private ClassroomRepository classroomRepository;
+    private ClassroomService classroomService;
 
     @Nested
-    @WithMockClassroomUser(username = "obiwan.kenobi", roles = {ClassroomRole.TEACHER})
+    @WithMockTeacher
     class TeacherRole {
 
         @Test
@@ -37,7 +40,7 @@ class HomeControllerMVCTest {
     }
 
     @Nested
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     class StudentRole {
 
         @Test

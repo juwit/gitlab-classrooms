@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html th:replace="~{layout :: layout('Exercise Submissions', ~{::section} , '')}">
+<head>
+</head>
+<body>
+<section>
+
+    <div class="px-4 sm:px-6 lg:px-8">
+        <div class="sm:flex sm:items-center">
+            <div class="sm:flex-auto">
+                <h1 class="text-base font-semibold leading-6 text-gray-900"><span th:text="${exercise.name}">name</span> results.</h1>
+                <p class="mt-2 text-sm text-gray-700">List of all exercise submissions.</p>
+            </div>
+        </div>
+
+        <!-- empty state -->
+        <div class="text-center" th:if="${ exerciseResults.empty }">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="mx-auto h-12 w-12 text-gray-400">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M7.5 14.25v2.25m3-4.5v4.5m3-6.75v6.75m3-9v9M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z" />
+            </svg>
+            <h3 class="mt-2 text-sm font-semibold text-gray-900">No exercise submission found</h3>
+        </div>
+
+        <div th:if="${ ! exerciseResults.empty }" class="mt-8">
+            <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-3">
+                <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">
+                    <dt class="truncate text-sm font-medium text-gray-500">Total Submissions</dt>
+                    <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900" th:text="${ exercise.students.size }">12</dd>
+                </div>
+<!--                <div class="overflow-hidden rounded-lg bg-white px-4 py-5 shadow sm:p-6">-->
+<!--                    <dt class="truncate text-sm font-medium text-gray-500">Avg. Score</dt>-->
+<!--                    <dd class="mt-1 text-3xl font-semibold tracking-tight text-gray-900">12 / 20</dd>-->
+<!--                </div>-->
+            </dl>
+        </div>
+
+        <div class="mt-8 flow-root" th:if="${ ! exerciseResults.empty }">
+            <div class="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+                <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                    <table class="min-w-full divide-y divide-gray-300">
+                        <thead>
+                        <tr>
+                            <th scope="col" class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">Name</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Result</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">Date</th>
+                            <th scope="col" class="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">View Repository</th>
+                        </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-200 bg-white">
+                        <tr th:each="result: ${exerciseResults}">
+                            <td class="whitespace-nowrap py-5 pl-4 pr-3 text-sm sm:pl-0">
+                                <div class="flex items-center">
+                                    <div class="h-11 w-11 flex-shrink-0">
+                                        <img class="h-11 w-11 rounded-full" th:src="${result.student.avatarUrl}" alt="">
+                                    </div>
+                                    <div class="ml-4">
+                                        <div class="font-medium text-gray-900" th:text="${result.student.name}">Lindsay Walton</div>
+                                        <div class="mt-1 text-gray-500" th:text="${result.student.email}">lindsay.walton@example.com</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <!-- TODO result -->
+                            </td>
+                            <td>
+                                <!-- TODO Date -->
+                            </td>
+                            <td>
+                                <a th:href="${result.gitlabProjectUrl}" target="_blank" class="inline-flex items-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                                    </svg>
+                                    <svg fill="currentColor" stroke="currentColor" viewBox="0 0 256 256" id="Flat" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-1.5">
+                                        <path d="M234.415,153.53322,207.08594,51.04787a7.99994,7.99994,0,0,0-15.22022-.74756L170.228,108H85.772L64.13477,50.3008a8.00014,8.00014,0,0,0-15.22071.74707L21.585,153.53322a12.02834,12.02834,0,0,0,4.76416,12.958l94.82031,65.645a11.94608,11.94608,0,0,0,5.45264,2.03467,3.97163,3.97163,0,0,0,.71924.07275c.02734,0,.05517-.00683.08252-.00732.19214.00879.384.02148.57617.02148s.384-.01269.57617-.02148c.02735.00049.05518.00732.08252.00732a3.95865,3.95865,0,0,0,.71826-.07275,11.9487,11.9487,0,0,0,5.45362-2.03467l94.82031-65.645A12.02834,12.02834,0,0,0,234.415,153.53322ZM199.35645,53.1094,213.9939,108H178.772ZM128,220.60891,88.77173,116h78.45654ZM56.644,53.1094,77.228,108H42.00635ZM29.31445,155.59426,39.87305,116H80.228l39.53784,105.43457-88.863-61.52051A4.01148,4.01148,0,0,1,29.31445,155.59426Zm195.78272,4.31982-88.863,61.52051L175.772,116H216.1272l10.55835,39.59424A4.01148,4.01148,0,0,1,225.09717,159.91408Z"></path>
+                                    </svg>
+                                    Open in Gitlab
+                                </a>
+                            </td>
+                        </tr>
+
+                        <!-- More people... -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>

@@ -1,32 +1,26 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomRole;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizRepository;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScore;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
-import fr.univ_lille.gitlab.classrooms.ui.WithMockClassroomUser;
-import org.junit.jupiter.api.Nested;
+import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.when;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql("/sql/init-test-users.sql")
 class QuizAnswerControllerMVCTest {
 
     @Autowired
@@ -39,7 +33,7 @@ class QuizAnswerControllerMVCTest {
     private QuizScoreService quizScoreService;
 
     @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     void shouldReturn404_whenQuizDoesNotExists() throws Exception {
         mockMvc.perform(get("/quiz/unknown"))
                 .andDo(print())
@@ -47,7 +41,7 @@ class QuizAnswerControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     void shouldReturnQuizPage_whenQuizExists() throws Exception {
         var quiz = new QuizEntity();
         quiz.setName("death-star-quiz");
@@ -67,7 +61,7 @@ class QuizAnswerControllerMVCTest {
     }
 
     @Test
-    @WithMockClassroomUser(username = "luke.skywalker", roles = {ClassroomRole.STUDENT})
+    @WithMockStudent
     void shouldReturnQuizPage_withPreviouslySubmittedAnswer_whenQuizExists() throws Exception {
         var quiz = new QuizEntity();
         quiz.setName("death-star-quiz");
@@ -79,7 +73,7 @@ class QuizAnswerControllerMVCTest {
         when(quizRepository.findById("death-star-quiz")).thenReturn(Optional.of(quiz));
 
         var quizScore = new QuizScore();
-        when(quizScoreService.getPreviousQuizSubmission("death-star-quiz", "luke.skywalker")).thenReturn(Optional.of(quizScore));
+        when(quizScoreService.getPreviousQuizSubmission(eq("death-star-quiz"), any())).thenReturn(Optional.of(quizScore));
 
         mockMvc.perform(get("/quiz/death-star-quiz"))
                 .andDo(print())
