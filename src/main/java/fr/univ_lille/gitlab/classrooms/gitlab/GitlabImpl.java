@@ -1,0 +1,23 @@
+package fr.univ_lille.gitlab.classrooms.gitlab;
+
+import org.gitlab4j.api.GitLabApi;
+import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.Project;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+class GitlabImpl implements Gitlab {
+
+    private final GitLabApi gitLabApi;
+
+    public GitlabImpl(GitLabApi gitLabApi) {
+        this.gitLabApi = gitLabApi;
+    }
+
+    @Override
+    public List<Project> getProjectsOfConnectedUser() throws GitLabApiException {
+        return this.gitLabApi.getProjectApi().getMemberProjects();
+    }
+}
