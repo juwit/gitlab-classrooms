@@ -3,13 +3,10 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
-import fr.univ_lille.gitlab.classrooms.gitlab.GitlabApiFactory;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.AccessLevel;
-import org.gitlab4j.api.models.Project;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,18 +22,15 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final Gitlab gitlab;
 
-    private final GitlabApiFactory gitlabApiFactory;
-
     private final ClassroomService classroomService;
 
     private final AssignmentRepository assignmentRepository;
 
     private final StudentExerciseRepository studentExerciseRepository;
 
-    AssignmentServiceImpl(QuizService quizService, Gitlab gitlab, GitlabApiFactory gitlabApiFactory, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentExerciseRepository studentExerciseRepository) {
+    AssignmentServiceImpl(QuizService quizService, Gitlab gitlab, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentExerciseRepository studentExerciseRepository) {
         this.quizService = quizService;
         this.gitlab = gitlab;
-        this.gitlabApiFactory = gitlabApiFactory;
         this.classroomService = classroomService;
         this.assignmentRepository = assignmentRepository;
         this.studentExerciseRepository = studentExerciseRepository;
@@ -51,36 +45,20 @@ class AssignmentServiceImpl implements AssignmentService {
     @Transactional
     public void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException {
         assignment.accept(student);
+        this.assignmentRepository.save(assignment);
 
         if (assignment instanceof ExerciseAssignment exerciseAssignment) {
-            // get a gitlab api client ith the teacher's rights
-            var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(assignment.getClassroom().getTeacher());
+            // create the project in gitlab
+            var project = gitlab.createProject(exerciseAssignment, student);
 
-            var templateRepo = exerciseAssignment.getGitlabRepositoryTemplateId();
-            if (templateRepo == null || templateRepo.isBlank()) {
-                // get student id in gitlab
-                var studentUserId = teacherGitlabApi.getUserApi().getUser(student.getName()).getId();
-
-                // create a blank project
-                var projectParams = new Project()
-                        .withName(assignment.getName() + "-" + student.getName())
-                        .withNamespaceId(exerciseAssignment.getGitlabGroupId());
-                var project = teacherGitlabApi.getProjectApi().createProject(projectParams);
-
-                // grant the student access to its project
-                teacherGitlabApi.getProjectApi().addMember(project.getId(), studentUserId, AccessLevel.MAINTAINER);
-
-                // create the student exercise in the database
-                var studentExercise = new StudentExercise();
-                studentExercise.setAssignment(exerciseAssignment);
-                studentExercise.setStudent(student);
-                studentExercise.setGitlabProjectId(project.getId());
-                studentExercise.setGitlabProjectUrl(project.getWebUrl());
-                this.studentExerciseRepository.save(studentExercise);
-            }
+            // create the student exercise in the database
+            var studentExercise = new StudentExercise();
+            studentExercise.setAssignment(exerciseAssignment);
+            studentExercise.setStudent(student);
+            studentExercise.setGitlabProjectId(project.getId());
+            studentExercise.setGitlabProjectUrl(project.getWebUrl());
+            this.studentExerciseRepository.save(studentExercise);
         }
-
-        this.assignmentRepository.save(assignment);
     }
 
     @Override

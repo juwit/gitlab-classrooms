@@ -2,10 +2,14 @@ package fr.univ_lille.gitlab.classrooms.gitlab;
 
 import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.AccessLevel;
 import org.gitlab4j.api.models.Group;
 import org.gitlab4j.api.models.GroupParams;
+import org.gitlab4j.api.models.Project;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Answers;
@@ -15,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -28,6 +33,9 @@ class GitlabImplTest {
 
     @Mock(answer = Answers.RETURNS_DEEP_STUBS)
     private GitLabApi gitLabApi;
+
+    @Mock
+    private GitlabApiFactory gitlabApiFactory;
 
     @Test
     void getProjectsOfConnectedUser_shouldListMemberProjects() throws GitLabApiException {
@@ -106,5 +114,40 @@ class GitlabImplTest {
                 .hasFieldOrPropertyWithValue("description", "Gitlab group for the assignment Exercice 1");
 
         assertThat(assignment.getGitlabGroupId()).isEqualTo(72L);
+    }
+
+    @Test
+    void createProject_shouldCreateAProject_andGiveAccessToTheStudent() throws GitLabApiException {
+        var student = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
+        student.setGitlabUserId(8L);
+        var teacher = new ClassroomUser("obiwan.kenobi", List.of(ClassroomRole.TEACHER));
+
+        var assignment = new ExerciseAssignment();
+        assignment.setName("Exercice 1");
+        assignment.setGitlabGroupId(72L);
+
+        var classroom = new Classroom();
+        classroom.setTeacher(teacher);
+        classroom.addAssignment(assignment);
+
+        when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
+
+        var projectMock = new Project();
+        projectMock.setId(125L);
+        when(gitLabApi.getProjectApi().createProject(any(Project.class))).thenReturn(projectMock);
+
+        gitlab.createProject(assignment, student);
+
+        var projectCaptor = ArgumentCaptor.forClass(Project.class);
+        verify(gitLabApi.getProjectApi()).createProject(projectCaptor.capture());
+
+        var project = projectCaptor.getValue();
+        assertThat(project).isNotNull();
+        assertThat(project.getName()).isEqualTo("Exercice 1-luke.skywalker");
+        assertThat(project.getNamespace().getId()).isEqualTo(72L);
+
+        verify(gitLabApi.getProjectApi()).addMember(125L, 8L, AccessLevel.MAINTAINER);
+
+        verifyNoMoreInteractions(gitLabApi.getProjectApi());
     }
 }

@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.gitlab;
 
 import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Group;
 import org.gitlab4j.api.models.Project;
@@ -36,4 +37,12 @@ public interface Gitlab {
      * @param classroom the classroom of the assignment.
      */
     void createGroup(ExerciseAssignment exerciseAssignment, Classroom classroom) throws GitLabApiException;
+
+    /**
+     * Creates the Gitlab project for the ExerciseAssignment, for the given Student.
+     * @param exerciseAssignment the exerciseAssignment to create the project for.
+     * @param student the student who accepted the assignment
+     * @return the Gitlab Project
+     */
+    Project createProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException;
 }

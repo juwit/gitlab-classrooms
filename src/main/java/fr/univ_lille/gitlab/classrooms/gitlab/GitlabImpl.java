@@ -2,8 +2,10 @@ package fr.univ_lille.gitlab.classrooms.gitlab;
 
 import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
+import org.gitlab4j.api.models.AccessLevel;
 import org.gitlab4j.api.models.Group;
 import org.gitlab4j.api.models.GroupParams;
 import org.gitlab4j.api.models.Project;
@@ -18,8 +20,11 @@ class GitlabImpl implements Gitlab {
 
     private final GitLabApi gitLabApi;
 
-    public GitlabImpl(GitLabApi gitLabApi) {
+    private final GitlabApiFactory gitlabApiFactory;
+
+    public GitlabImpl(GitLabApi gitLabApi, GitlabApiFactory gitlabApiFactory) {
         this.gitLabApi = gitLabApi;
+        this.gitlabApiFactory = gitlabApiFactory;
     }
 
     @Override
@@ -68,5 +73,24 @@ class GitlabImpl implements Gitlab {
         var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
 
         exerciseAssignment.setGitlabGroupId(group.getId());
+    }
+
+    @Override
+    public Project createProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException {
+        var classroom = exerciseAssignment.getClassroom();
+        var teacher = classroom.getTeacher();
+        // get a gitlab api client ith the teacher's rights
+        var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher);
+
+        // create a blank project
+        var projectParams = new Project()
+                .withName(exerciseAssignment.getName() + "-" + student.getName())
+                .withNamespaceId(exerciseAssignment.getGitlabGroupId());
+        var project = teacherGitlabApi.getProjectApi().createProject(projectParams);
+
+        // grant the student access to its project
+        teacherGitlabApi.getProjectApi().addMember(project.getId(), student.getGitlabUserId(), AccessLevel.MAINTAINER);
+
+        return project;
     }
 }
