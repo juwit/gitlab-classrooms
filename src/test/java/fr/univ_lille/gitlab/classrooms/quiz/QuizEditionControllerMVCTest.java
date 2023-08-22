@@ -103,28 +103,6 @@ class QuizEditionControllerMVCTest {
                     .andDo(print())
                     .andExpect(status().isOk());
         }
-
-        @Test
-        void shouldSeeQuizResults() throws Exception {
-            var quiz = new QuizEntity();
-            quiz.setName("death-star-quiz");
-            quiz.setMarkdownContent("""
-                # who build the Death Star ?
-                (x) the Galactic Empire
-                ( ) Sauron
-                """);
-            when(quizRepository.findById("death-star-quiz")).thenReturn(Optional.of(quiz));
-
-
-            mockMvc.perform(get("/quiz/death-star-quiz/results"))
-                    .andDo(print())
-                    .andExpect(status().isOk())
-                    .andExpect(view().name("quiz/all-submissions"))
-                    .andExpect(model().attributeExists("quiz"))
-                    .andExpect(model().attributeExists("quizResult"))
-                    .andExpect(model().attribute("quiz", hasProperty("name", equalTo("death-star-quiz"))));
-        }
-
     }
 
     @Nested

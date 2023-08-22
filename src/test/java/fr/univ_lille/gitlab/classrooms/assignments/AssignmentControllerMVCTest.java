@@ -41,9 +41,6 @@ class AssignmentControllerMVCTest {
     private AssignmentService assignmentService;
 
     @MockBean
-    private QuizScoreService quizScoreService;
-
-    @MockBean
     private ClassroomService classroomService;
 
     @Autowired
@@ -81,8 +78,6 @@ class AssignmentControllerMVCTest {
 
         when(assignmentService.getAssignment(quizAssignmentId)).thenReturn(Optional.of(quizAssignment));
         when(assignmentService.getAssignment(exerciseAssignmentId)).thenReturn(Optional.of(exerciseAssignment));
-
-        when(quizScoreService.getQuizResultForClassroom(quiz, classroom)).thenReturn(new QuizResult(List.of()));
 
         when(assignmentService.getAssignmentResults(exerciseAssignment)).thenReturn(List.of());
         when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExerciseAssignment());
@@ -143,7 +138,7 @@ class AssignmentControllerMVCTest {
         mockMvc.perform(get("/assignments/"+ quizAssignmentId))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("quiz"))
-                .andExpect(model().attributeExists("quizResult"))
+                .andExpect(model().attributeExists("quizResults"))
                 .andExpect(view().name("quiz/all-submissions"));
     }
 

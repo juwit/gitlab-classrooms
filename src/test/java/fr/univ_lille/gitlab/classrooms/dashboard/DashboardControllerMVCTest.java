@@ -1,11 +1,9 @@
 package fr.univ_lille.gitlab.classrooms.dashboard;
 
 import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
-import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.assignments.QuizAssignment;
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizResult;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.junit.jupiter.api.Nested;
