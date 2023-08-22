@@ -1,6 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.dashboard;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.annotation.security.RolesAllowed;
 import org.springframework.stereotype.Controller;

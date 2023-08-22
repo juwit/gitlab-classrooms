@@ -1,6 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
-import fr.univ_lille.gitlab.classrooms.domain.Classroom;
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.springframework.stereotype.Service;
 
