@@ -82,12 +82,31 @@ class GitlabImpl implements Gitlab {
         // get a gitlab api client ith the teacher's rights
         var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher);
 
-        // create a blank project
-        var projectParams = new Project()
-                .withName(exerciseAssignment.getName() + "-" + student.getName())
-                .withNamespaceId(exerciseAssignment.getGitlabGroupId());
-        var project = teacherGitlabApi.getProjectApi().createProject(projectParams);
 
+
+        Project project;
+
+        var projectName = exerciseAssignment.getName() + "-" + student.getName();
+
+        if (exerciseAssignment.getGitlabRepositoryTemplateId() != null) {
+            // get gitlab group info
+            var group = teacherGitlabApi.getGroupApi().getGroup(exerciseAssignment.getGitlabGroupId());
+
+            // fork the template project
+            project = teacherGitlabApi.getProjectApi().forkProject(
+                    exerciseAssignment.getGitlabRepositoryTemplateId(),
+                    group.getFullPath(),
+                    null,
+                    projectName);
+            // remove the fork link
+            teacherGitlabApi.getProjectApi().deleteForkedFromRelationship(project.getId());
+        } else {
+            // create a blank project
+            var projectParams = new Project()
+                    .withName(projectName)
+                    .withNamespaceId(exerciseAssignment.getGitlabGroupId());
+            project = teacherGitlabApi.getProjectApi().createProject(projectParams);
+        }
         // grant the student access to its project
         teacherGitlabApi.getProjectApi().addMember(project.getId(), student.getGitlabUserId(), AccessLevel.MAINTAINER);
 

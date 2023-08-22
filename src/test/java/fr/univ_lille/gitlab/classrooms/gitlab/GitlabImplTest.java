@@ -150,4 +150,34 @@ class GitlabImplTest {
 
         verifyNoMoreInteractions(gitLabApi.getProjectApi());
     }
+
+    @Test
+    void createProject_withTemplate_shouldForkAProject_andGiveAccessToTheStudent() throws GitLabApiException {
+        var student = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
+        student.setGitlabUserId(8L);
+        var teacher = new ClassroomUser("obiwan.kenobi", List.of(ClassroomRole.TEACHER));
+
+        var assignment = new ExerciseAssignment();
+        assignment.setName("Exercice 2 - Template");
+        assignment.setGitlabGroupId(72L);
+        assignment.setGitlabRepositoryTemplateId("12");
+
+        var classroom = new Classroom();
+        classroom.setTeacher(teacher);
+        classroom.addAssignment(assignment);
+
+        when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
+
+        var projectMock = new Project();
+        projectMock.setId(125L);
+        when(gitLabApi.getProjectApi().forkProject("12", null, null, "Exercice 2 - Template-luke.skywalker")).thenReturn(projectMock);
+
+        gitlab.createProject(assignment, student);
+
+        verify(gitLabApi.getProjectApi()).forkProject("12", null, null, "Exercice 2 - Template-luke.skywalker");
+        verify(gitLabApi.getProjectApi()).deleteForkedFromRelationship(125L);
+        verify(gitLabApi.getProjectApi()).addMember(125L, 8L, AccessLevel.MAINTAINER);
+
+        verifyNoMoreInteractions(gitLabApi.getProjectApi());
+    }
 }

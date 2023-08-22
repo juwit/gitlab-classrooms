@@ -1,5 +1,20 @@
 # Changelog
 
+<a name="0.0.3"></a>
+## 0.0.3 (2023-08-22)
+
+### Added
+
+- ✨ : fork projects for assignments with templates [5cc89e9]
+- ✅ : correct broken tests [bfa26c0]
+- ✨ : return to dashboard when clicking main icon [c3566a8]
+- ✨ : add an answer the quiz button when assignment is accepted [10bac4e]
+
+### Miscellaneous
+
+- 🔀 : merge tag &#x27;0.0.2&#x27; into develop [a1c6c6a]
+
+
 <a name="0.0.2"></a>
 ## 0.0.2 (2023-08-22)
 

@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.time.ZonedDateTime;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -65,12 +66,14 @@ class QuizAnswerControllerMVCTest {
 
         when(assignmentService.getAssignment(assignment.getId())).thenReturn(Optional.of(assignment));
 
+        var student = classroomUserService.getClassroomUser("luke.skywalker");
+        when(assignmentService.getAssignmentResultsForStudent(assignment, student)).thenReturn(new StudentQuizAssignment());
+
         mockMvc.perform(get("/assignments/"+assignment.getId()+"/quiz"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(view().name("quiz/answer"))
-                .andExpect(model().attributeExists("quiz"))
-                .andExpect(model().attributeDoesNotExist("previousSubmission"));
+                .andExpect(model().attributeExists("quiz"));
     }
 
     @Test
@@ -91,6 +94,7 @@ class QuizAnswerControllerMVCTest {
 
         var student = classroomUserService.getClassroomUser("luke.skywalker");
         var studentAssignment = new StudentQuizAssignment();
+        studentAssignment.setSubmissionDate(ZonedDateTime.now());
 
         when(assignmentService.getAssignmentResultsForStudent(assignment, student)).thenReturn(studentAssignment);
 
