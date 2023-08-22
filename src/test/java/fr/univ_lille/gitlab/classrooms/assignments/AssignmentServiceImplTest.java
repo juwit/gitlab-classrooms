@@ -14,6 +14,7 @@ import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
+import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -37,7 +38,16 @@ class AssignmentServiceImplTest {
     private Gitlab gitlab;
 
     @Mock
-    private StudentAssignmentRepository studentExerciseRepository;
+    private StudentAssignmentRepository studentAssignmentRepository;
+
+    @Test
+    void getAssignment_shouldReturnTheAssignment() {
+        var uuid = UUID.randomUUID();
+
+        this.assignmentService.getAssignment(uuid);
+
+        verify(this.assignmentRepository).findById(uuid);
+    }
 
     @Test
     void acceptAssignment_shouldAssociateTheStudentWithTheAssignment_andSave() throws GitLabApiException {
@@ -77,7 +87,7 @@ class AssignmentServiceImplTest {
         verify(gitlab).createProject(assignment, student);
 
         var studentExerciseCaptor = ArgumentCaptor.forClass(StudentExerciseAssignment.class);
-        verify(studentExerciseRepository).save(studentExerciseCaptor.capture());
+        verify(studentAssignmentRepository).save(studentExerciseCaptor.capture());
 
         var studentExercise = studentExerciseCaptor.getValue();
         assertThat(studentExercise).isNotNull();
@@ -126,6 +136,35 @@ class AssignmentServiceImplTest {
 
         verify(assignmentRepository).save(assignment);
         verify(classroomService).saveClassroom(classroom);
+    }
+
+    @Test
+    void getAssignmentResults_shouldReturnTheStudentAssignmentResults() {
+        var assignment = new QuizAssignment();
+
+        this.assignmentService.getAssignmentResults(assignment);
+
+        verify(this.studentAssignmentRepository).findAllByAssignment(assignment);
+    }
+
+    @Test
+    void getAssignmentResultsForStudent_shouldReturnTheStudentAssignmentResults() {
+        var assignment = new QuizAssignment();
+        var student = new ClassroomUser();
+
+        this.assignmentService.getAssignmentResultsForStudent(assignment, student);
+
+        verify(this.studentAssignmentRepository).findByAssignmentAndStudent(assignment, student);
+    }
+
+    @Test
+    void getAssignmentResultsForAClassroom_shouldReturnTheStudentAssignmentResults() {
+        var classroom = new Classroom();
+        var student = new ClassroomUser();
+
+        this.assignmentService.getAllStudentAssignmentsForAClassroom(classroom, student);
+
+        verify(this.studentAssignmentRepository).findByAssignmentClassroomAndStudent(classroom, student);
     }
 
 }

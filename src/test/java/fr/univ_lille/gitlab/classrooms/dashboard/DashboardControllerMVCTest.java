@@ -1,6 +1,11 @@
 package fr.univ_lille.gitlab.classrooms.dashboard;
 
+import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
+import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
+import fr.univ_lille.gitlab.classrooms.assignments.QuizAssignment;
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.quiz.QuizResult;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
 import org.junit.jupiter.api.Nested;
@@ -11,6 +16,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -28,6 +35,9 @@ class DashboardControllerMVCTest {
 
     @MockBean
     private ClassroomService classroomService;
+
+    @MockBean
+    private AssignmentService assignmentService;
 
     @Nested
     @WithMockTeacher
@@ -56,6 +66,23 @@ class DashboardControllerMVCTest {
                     .andExpect(view().name("dashboard/student-dashboard"));
 
             verify(classroomService).getAllJoinedClassrooms(any());
+        }
+
+        @Test
+        void shouldListJoinedClassroomAndAssignmentResults() throws Exception {
+            var classroom = new Classroom();
+            var assignment = new QuizAssignment();
+            classroom.addAssignment(assignment);
+
+            when(classroomService.getAllJoinedClassrooms(any())).thenReturn(List.of(classroom));
+
+            mockMvc.perform(get("/"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("dashboard/student-dashboard"));
+
+            verify(classroomService).getAllJoinedClassrooms(any());
+            verify(assignmentService).getAllStudentAssignmentsForAClassroom(eq(classroom), any());
         }
     }
 }
