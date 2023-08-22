@@ -45,13 +45,20 @@
                 <dl class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
                     <div class="flex justify-between gap-x-4 py-3">
                         <dt class="text-gray-800 inline-flex" th:if="${studentAssignment.submissionDate}">
-                            Submission date : <span th:text="${#temporals.format(studentAssignment.submissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</span>
+                            <span class="whitespace-pre">Submission date : </span>
+                            <span th:text="${#temporals.format(studentAssignment.submissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</span>
                         </dt>
                         <dt class="text-gray-800 inline-flex" th:unless="${studentAssignment.submissionDate}">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1.5">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
                             </svg>
                             No submission received yet.
+                        </dt>
+                    </div>
+                    <div class="flex justify-between gap-x-4 py-3" th:if="${studentAssignment.submissionDate}">
+                        <dt class="text-gray-800 inline-flex" >
+                            <span class="whitespace-pre">Score : </span>
+                            <div class="text-gray-900" th:text="${studentAssignment.score} + ' / ' + ${studentAssignment.maxScore}">8/10</div>
                         </dt>
                     </div>
                     <div th:if="${studentAssignment.assignment.type.name() == 'EXERCISE'}" class="flex justify-between gap-x-4 py-3">
