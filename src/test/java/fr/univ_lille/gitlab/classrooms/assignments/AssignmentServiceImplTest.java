@@ -37,7 +37,7 @@ class AssignmentServiceImplTest {
     private Gitlab gitlab;
 
     @Mock
-    private StudentExerciseRepository studentExerciseRepository;
+    private StudentAssignmentRepository studentExerciseRepository;
 
     @Test
     void acceptAssignment_shouldAssociateTheStudentWithTheAssignment_andSave() throws GitLabApiException {
@@ -76,7 +76,7 @@ class AssignmentServiceImplTest {
 
         verify(gitlab).createProject(assignment, student);
 
-        var studentExerciseCaptor = ArgumentCaptor.forClass(StudentExercise.class);
+        var studentExerciseCaptor = ArgumentCaptor.forClass(StudentExerciseAssignment.class);
         verify(studentExerciseRepository).save(studentExerciseCaptor.capture());
 
         var studentExercise = studentExerciseCaptor.getValue();

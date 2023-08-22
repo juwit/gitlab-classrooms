@@ -85,7 +85,7 @@ class AssignmentControllerMVCTest {
         when(quizScoreService.getQuizResultForClassroom(quiz, classroom)).thenReturn(new QuizResult(List.of()));
 
         when(assignmentService.getAssignmentResults(exerciseAssignment)).thenReturn(List.of());
-        when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExercise());
+        when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExerciseAssignment());
     }
 
     @Test
