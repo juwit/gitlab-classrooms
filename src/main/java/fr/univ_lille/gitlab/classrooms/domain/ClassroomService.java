@@ -11,6 +11,13 @@ public interface ClassroomService {
 
     List<Classroom> getAllClassrooms();
 
+    /**
+     * Returns all the classrooms the student has joined
+     * @param student the student
+     * @return a list of classrooms
+     */
+    List<Classroom> getAllJoinedClassrooms(ClassroomUser student);
+
     Optional<Classroom> getClassroom(UUID uuid);
 
     void joinClassroom(Classroom classroom, ClassroomUser student);

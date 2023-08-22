@@ -26,8 +26,11 @@ public class DashboardController {
             var classrooms = classroomService.getAllClassrooms();
             model.addAttribute("classrooms", classrooms);
             return "dashboard/teacher-dashboard";
+        } else {
+            var classrooms = classroomService.getAllJoinedClassrooms(classroomUser);
+            model.addAttribute("classrooms", classrooms);
+            return "dashboard/student-dashboard";
         }
-        return "forbidden";
     }
 
 }

@@ -28,6 +28,11 @@ class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
+    public List<Classroom> getAllJoinedClassrooms(ClassroomUser student) {
+        return this.classroomRepository.findClassroomByStudentsContains(student);
+    }
+
+    @Override
     public Optional<Classroom> getClassroom(UUID uuid) {
         return this.classroomRepository.findById(uuid);
     }
