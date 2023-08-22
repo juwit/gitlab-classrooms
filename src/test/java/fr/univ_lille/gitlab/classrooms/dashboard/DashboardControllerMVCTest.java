@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.ui;
+package fr.univ_lille.gitlab.classrooms.dashboard;
 
 import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
@@ -20,7 +20,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 @Sql(scripts = "/sql/init-test-users.sql")
-class HomeControllerMVCTest {
+class DashboardControllerMVCTest {
 
     @Autowired
     private MockMvc mockMvc;
