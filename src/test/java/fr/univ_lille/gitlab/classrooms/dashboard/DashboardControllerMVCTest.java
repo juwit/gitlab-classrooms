@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -33,11 +34,13 @@ class DashboardControllerMVCTest {
     class TeacherRole {
 
         @Test
-        void shouldAccessHomePage() throws Exception {
+        void shouldAccessTeacherDashboard() throws Exception {
             mockMvc.perform(get("/"))
                     .andDo(print())
                     .andExpect(status().isOk())
                     .andExpect(view().name("dashboard/teacher-dashboard"));
+
+            verify(classroomService).getAllClassrooms();
         }
     }
 
@@ -46,10 +49,13 @@ class DashboardControllerMVCTest {
     class StudentRole {
 
         @Test
-        void shouldNotAccessHomePage() throws Exception {
+        void shouldAccessStudentDashboard() throws Exception {
             mockMvc.perform(get("/"))
                     .andDo(print())
-                    .andExpect(status().isForbidden());
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("dashboard/student-dashboard"));
+
+            verify(classroomService).getAllJoinedClassrooms(any());
         }
     }
 }
