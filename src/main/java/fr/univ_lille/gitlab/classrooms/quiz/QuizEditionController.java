@@ -44,6 +44,14 @@ class QuizEditionController {
         return QUIZ_EDIT_PAGE;
     }
 
+    @GetMapping("/{quizId}/preview")
+    public String previewQuiz(Model model, @PathVariable String quizId) {
+        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizEntity.getName());
+        model.addAttribute("quiz", quiz);
+        return "quiz/preview";
+    }
+
     @PostMapping("/{quizId}/edit")
     public String saveQuiz(@ModelAttribute QuizEntity quiz, Model model, @PathVariable String quizId) {
         this.quizRepository.save(quiz);

@@ -71,6 +71,24 @@ class QuizEditionControllerMVCTest {
         }
 
         @Test
+        void shouldAccessQuizEPreviewPage() throws Exception {
+            var quiz = new QuizEntity();
+            quiz.setName("death-star-quiz");
+            quiz.setMarkdownContent("""
+                # who build the Death Star ?
+                (x) the Galactic Empire
+                ( ) Sauron
+                """);
+            when(quizRepository.findById("death-star-quiz")).thenReturn(Optional.of(quiz));
+
+            mockMvc.perform(get("/quiz/death-star-quiz/preview"))
+                    .andDo(print())
+                    .andExpect(status().isOk())
+                    .andExpect(view().name("quiz/preview"))
+                    .andExpect(model().attributeExists("quiz"));
+        }
+
+        @Test
         void shouldSaveQuiz() throws Exception {
             var quiz = new QuizEntity();
             quiz.setName("death-star-quiz");
