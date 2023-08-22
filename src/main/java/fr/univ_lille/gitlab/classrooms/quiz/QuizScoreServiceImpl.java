@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.quiz;
 
+import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.springframework.stereotype.Service;
@@ -11,8 +12,11 @@ class QuizScoreServiceImpl implements QuizScoreService {
 
     private final QuizScoreRepository quizScoreRepository;
 
-    QuizScoreServiceImpl(QuizScoreRepository quizScoreRepository) {
+    private final AssignmentService assignmentService;
+
+    QuizScoreServiceImpl(QuizScoreRepository quizScoreRepository, AssignmentService assignmentService) {
         this.quizScoreRepository = quizScoreRepository;
+        this.assignmentService = assignmentService;
     }
 
     @Override
