@@ -1,5 +1,53 @@
 # Changelog
 
+<a name="0.0.2"></a>
+## 0.0.2 (2023-08-22)
+
+### Added
+
+- ✨ : add score on student dashboard [ccbb8bc]
+    * ✨ : add empty student dashboard (7226b2c)
+- ✨ : submit quiz answer with assignment ids [b0978c0]
+- ✨ : add quiz preview [17eef5f]
+- ➕ : add spring-boot-starter-actuator [c80558b]
+- ✨ : add AssignmentScoreService [aae182b]
+- ✅ : add more tests [d655717]
+- ✨ : student dashboard [259425a]
+- ✨ : findAllJoinedClassrooms [0d1f4ca]
+- ✨ : create gitlab project [fa096e0]
+- ✨ : save gitlab user id for classroom users [d399f14]
+- ✨ : create gitlab group for exercise assignment [817b429]
+- ✨ : create group for a classroom [1b8418f]
+- ✨ : get group uri [de75359]
+- ✨ : list groups of connected user [1dfd70c]
+
+### Changed
+
+- 🗃️ : add student assignment tables [5694542]
+- 💄 : use layout without menu for quiz submission pages [d45f39a]
+- ♻️ : delete old quizScore implementation [1bdc080]
+- ♻️ : extract model attribute name [59c1d3f]
+- ♻️ : introduce common ancestor for student quiz &amp; exercise assignments [cffc93e]
+- 💄 : make logout button full width [ebd8f23]
+- 🚚 : rename domain package to classrooms [e403812]
+- 🚚 : move to security package [4d5c5ac]
+- 🚚 : rename HomeController [aef9d96]
+- 🚚 : rename &#x27;home&#x27; to &#x27;teacher-dashboard&#x27; [b6d96b5]
+- 🗃️ : add missing database script [bba7206]
+- ♻️ : set visibility to package-private [97af73c]
+- ♻️ : get projects of connected user [bf73e55]
+
+### Removed
+
+- 🔥 : remove unused exception [f474e83]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;feature/student-dashboard&#x27; into develop [4aa4042]
+- 🔀 : merge branch &#x27;feature/gitlab-service&#x27; into develop [0b61d10]
+- 🔀 : merge tag &#x27;0.0.1&#x27; into develop [360fa2e]
+
+
 <a name="0.0.1"></a>
 ## 0.0.1 (2023-08-18)
 

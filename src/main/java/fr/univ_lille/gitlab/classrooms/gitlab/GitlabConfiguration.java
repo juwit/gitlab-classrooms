@@ -9,7 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 
 @Configuration
-public class GitlabConfiguration {
+class GitlabConfiguration {
 
     private GitlabProperties gitlabProperties;
 

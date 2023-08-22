@@ -3,7 +3,7 @@
         xmlns:th="http://www.thymeleaf.org"
         lang="en"
         class="h-full bg-gray-100"
-        th:fragment="layout (pageTitle, content, activeMenu)">
+        th:fragment="layout-without-menu (pageTitle, content)">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,19 +49,6 @@
                                     </g>
                                 </svg>
                             </div>
-                            <div class="hidden md:block">
-                                <div class="ml-10 flex items-baseline space-x-4">
-                                    <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                                    <a th:href="@{/}"
-                                       class="rounded-md px-3 py-2 text-sm font-medium"
-                                       th:classappend="${ activeMenu == 'Dashboard' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }"
-                                       aria-current="page">Dashboard</a>
-                                    <a th:href="@{/quiz}"
-                                       class="rounded-md px-3 py-2 text-sm font-medium"
-                                       th:classappend="${ activeMenu == 'Quiz' ? 'bg-gray-900 text-white' : 'text-gray-300 hover:bg-gray-700 hover:text-white' }"
-                                       aria-current="page">Quiz</a>
-                                </div>
-                            </div>
                         </div>
 
                         <!-- profile icon -->
@@ -89,7 +76,7 @@
                                             tabindex="-1">
                                         <!-- Active: "bg-gray-100", Not Active: "" -->
                                         <form th:action="@{/logout}" method="post">
-                                            <button type="submit" class="block px-4 py-2 text-sm text-gray-700 w-full text-left"
+                                            <button type="submit" class="block px-4 py-2 text-sm text-gray-700  w-full text-left"
                                                role="menuitem" tabindex="-1" id="user-menu-item-2">Sign out</button>
                                         </form>
 
@@ -97,16 +84,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <!-- Mobile menu, show/hide based on menu state. -->
-                <div class="border-b border-gray-700 md:hidden" id="mobile-menu">
-                    <div class="space-y-1 px-2 py-3 sm:px-3">
-                        <!-- Current: "bg-gray-900 text-white", Default: "text-gray-300 hover:bg-gray-700 hover:text-white" -->
-                        <a th:href="@{/}"
-                           class="bg-gray-900 text-white block rounded-md px-3 py-2 text-base font-medium"
-                           aria-current="page">Dashboard</a>
                     </div>
                 </div>
         </nav>

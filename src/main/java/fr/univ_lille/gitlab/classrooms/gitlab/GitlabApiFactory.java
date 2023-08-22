@@ -8,7 +8,7 @@ import org.springframework.security.oauth2.client.OAuth2AuthorizedClientManager;
 import org.springframework.stereotype.Component;
 
 @Component
-public class GitlabApiFactory {
+class GitlabApiFactory {
 
     private final GitlabProperties gitlabProperties;
 

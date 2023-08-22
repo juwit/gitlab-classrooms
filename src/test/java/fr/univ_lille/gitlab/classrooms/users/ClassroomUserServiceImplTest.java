@@ -36,7 +36,7 @@ class ClassroomUserServiceImplTest {
         var luke = new ClassroomUser("Luke", List.of(ClassroomRole.TEACHER));
         when(classroomUserRepository.findById("luke-skywalker")).thenReturn(Optional.of(luke));
 
-        var oauth2User = new DefaultOAuth2User(null, Map.of("name", "luke-skywalker"), "name");
+        var oauth2User = new DefaultOAuth2User(null, Map.of("name", "luke-skywalker", "id", 12), "name");
 
         var user = classroomUserService.loadOrCreateClassroomUser(oauth2User);
 
@@ -48,7 +48,7 @@ class ClassroomUserServiceImplTest {
         when(classroomUserRepository.findById("luke-skywalker")).thenReturn(Optional.empty());
         when(classroomUserRepository.save(any())).thenAnswer(it -> it.getArgument(0));
 
-        var oauth2User = new DefaultOAuth2User(null, Map.of("name", "luke-skywalker"), "name");
+        var oauth2User = new DefaultOAuth2User(null, Map.of("name", "luke-skywalker", "id", 12), "name");
 
         var user = classroomUserService.loadOrCreateClassroomUser(oauth2User);
 
@@ -60,12 +60,13 @@ class ClassroomUserServiceImplTest {
     }
 
     @Test
-    void loadOrCreateUser_shouldUpdateAvatarURIAndEmail() throws MalformedURLException {
+    void loadOrCreateUser_shouldUpdateGitlabIdAndAvatarURIAndEmail() throws MalformedURLException {
         var luke = new ClassroomUser("luke-skywalker", List.of(ClassroomRole.TEACHER));
         when(classroomUserRepository.findById("luke-skywalker")).thenReturn(Optional.of(luke));
 
         Map<String, Object> attributes = Map.of(
                 "name", "luke-skywalker",
+                "id", 5,
                 "avatar_url", "https://gravatar.com/luke",
                 "email", "luke@rebels.com"
         );
@@ -75,6 +76,7 @@ class ClassroomUserServiceImplTest {
 
         assertThat(user).isNotNull();
         assertThat(user.getName()).isEqualTo("luke-skywalker");
+        assertThat(user.getGitlabUserId()).isEqualTo(5L);
         assertThat(user.getRoles()).isEqualTo(List.of(ClassroomRole.TEACHER));
         assertThat(user.getAvatarUrl()).isEqualTo(new URL("https://gravatar.com/luke"));
         assertThat(user.getEmail()).isEqualTo("luke@rebels.com");

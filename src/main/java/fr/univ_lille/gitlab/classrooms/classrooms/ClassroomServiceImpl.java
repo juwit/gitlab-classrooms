@@ -1,10 +1,9 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.classrooms;
 
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
-import org.gitlab4j.api.models.GroupParams;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,16 +15,21 @@ class ClassroomServiceImpl implements ClassroomService {
 
     private final ClassroomRepository classroomRepository;
 
-    private final GitLabApi gitLabApi;
+    private final Gitlab gitlab;
 
-    ClassroomServiceImpl(ClassroomRepository classroomRepository, GitLabApi gitLabApi) {
+    ClassroomServiceImpl(ClassroomRepository classroomRepository, Gitlab gitlab) {
         this.classroomRepository = classroomRepository;
-        this.gitLabApi = gitLabApi;
+        this.gitlab = gitlab;
     }
 
     @Override
     public List<Classroom> getAllClassrooms() {
         return this.classroomRepository.findAll();
+    }
+
+    @Override
+    public List<Classroom> getAllJoinedClassrooms(ClassroomUser student) {
+        return this.classroomRepository.findClassroomByStudentsContains(student);
     }
 
     @Override
@@ -35,7 +39,7 @@ class ClassroomServiceImpl implements ClassroomService {
 
     @Transactional
     @Override
-    public void joinClassroom(Classroom classroom, ClassroomUser student) throws GitLabApiException {
+    public void joinClassroom(Classroom classroom, ClassroomUser student) {
         classroom.join(student);
 
         this.classroomRepository.save(classroom);
@@ -48,18 +52,7 @@ class ClassroomServiceImpl implements ClassroomService {
         classroom.setName(classroomName);
         classroom.setTeacher(teacher);
 
-        var groupPath = classroomName.trim().replaceAll("[^\\w\\-.]", "_");
-
-        var groupParams = new GroupParams()
-                .withName(classroomName)
-                .withPath(groupPath)
-                .withDescription("Gitlab group for the Classroom " + classroomName);
-        if(parentGitlabGroupId != null){
-            groupParams.withParentId(parentGitlabGroupId);
-        }
-        var group = this.gitLabApi.getGroupApi().createGroup(groupParams);
-
-        classroom.setGitlabGroupId(group.getId());
+        this.gitlab.createGroup(classroom, Optional.ofNullable(parentGitlabGroupId));
 
         this.classroomRepository.save(classroom);
     }

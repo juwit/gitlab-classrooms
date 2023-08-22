@@ -1,15 +1,14 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
-import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
+import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.*;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
-import org.gitlab4j.api.GitLabApi;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Answers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
@@ -43,16 +41,13 @@ class AssignmentControllerMVCTest {
     private AssignmentService assignmentService;
 
     @MockBean
-    private QuizScoreService quizScoreService;
-
-    @MockBean
     private ClassroomService classroomService;
 
     @Autowired
     private ClassroomUserService classroomUserService;
 
-    @MockBean(answer = Answers.RETURNS_DEEP_STUBS)
-    private GitLabApi gitLabApi;
+    @MockBean
+    private Gitlab gitlab;
 
     private final UUID quizAssignmentId = UUID.randomUUID();
 
@@ -84,10 +79,8 @@ class AssignmentControllerMVCTest {
         when(assignmentService.getAssignment(quizAssignmentId)).thenReturn(Optional.of(quizAssignment));
         when(assignmentService.getAssignment(exerciseAssignmentId)).thenReturn(Optional.of(exerciseAssignment));
 
-        when(quizScoreService.getQuizResultForClassroom(quiz, classroom)).thenReturn(new QuizResult(List.of()));
-
         when(assignmentService.getAssignmentResults(exerciseAssignment)).thenReturn(List.of());
-        when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExercise());
+        when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExerciseAssignment());
     }
 
     @Test
@@ -145,7 +138,7 @@ class AssignmentControllerMVCTest {
         mockMvc.perform(get("/assignments/"+ quizAssignmentId))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("quiz"))
-                .andExpect(model().attributeExists("quizResult"))
+                .andExpect(model().attributeExists("quizResults"))
                 .andExpect(view().name("quiz/all-submissions"));
     }
 
@@ -169,7 +162,7 @@ class AssignmentControllerMVCTest {
                 .andExpect(model().attributeExists("quizzes"))
                 .andExpect(model().attributeExists("repositories"));
 
-        verify(this.gitLabApi.getProjectApi()).getMemberProjects();
+        verify(this.gitlab).getProjectsOfConnectedUser();
     }
 
     @Test

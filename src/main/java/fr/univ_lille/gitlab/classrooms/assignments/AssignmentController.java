@@ -1,12 +1,11 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
-import fr.univ_lille.gitlab.classrooms.quiz.QuizScoreService;
+import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpSession;
-import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
@@ -24,36 +23,32 @@ class AssignmentController {
 
     private final AssignmentService assignmentService;
 
-    private final QuizScoreService quizScoreService;
-
     private final QuizService quizService;
 
     private final ClassroomService classroomService;
 
-    private final GitLabApi gitLabApi;
+    private final Gitlab gitlab;
 
     private static final System.Logger LOGGER = System.getLogger(AssignmentController.class.getName());
 
-    public AssignmentController(AssignmentService assignmentService, QuizScoreService quizScoreService, QuizService quizService, ClassroomService classroomService, GitLabApi gitLabApi) {
+    public AssignmentController(AssignmentService assignmentService, QuizService quizService, ClassroomService classroomService, Gitlab gitlab) {
         this.assignmentService = assignmentService;
-        this.quizScoreService = quizScoreService;
         this.quizService = quizService;
         this.classroomService = classroomService;
-        this.gitLabApi = gitLabApi;
+        this.gitlab = gitlab;
     }
 
     @GetMapping("/assignments/{assignmentId}")
     @RolesAllowed("TEACHER")
     String viewAssignment(@PathVariable UUID assignmentId, Model model) {
         var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var assignmentResults = this.assignmentService.getAssignmentResults(assignment);
 
         if (assignment.getType() == AssignmentType.QUIZ) {
             var quizAssignment = (QuizAssignment) assignment;
-            // view quiz results for the classroom
             model.addAttribute("quiz", quizAssignment.getQuiz());
 
-            var quizResult = this.quizScoreService.getQuizResultForClassroom(quizAssignment.getQuiz(), assignment.getClassroom());
-            model.addAttribute("quizResult", quizResult);
+            model.addAttribute("quizResults", assignmentResults);
 
             return "quiz/all-submissions";
         }
@@ -61,8 +56,7 @@ class AssignmentController {
             var exerciseAssignment = (ExerciseAssignment) assignment;
             model.addAttribute("exercise", exerciseAssignment);
 
-            var exerciseResults = this.assignmentService.getAssignmentResults(assignment);
-            model.addAttribute("exerciseResults", exerciseResults);
+            model.addAttribute("exerciseResults", assignmentResults);
             return "exercise/all-submissions";
         }
 
@@ -115,7 +109,7 @@ class AssignmentController {
 
         model.addAttribute("quizzes", this.quizService.getAllQuizzes());
 
-        model.addAttribute("repositories", this.gitLabApi.getProjectApi().getMemberProjects());
+        model.addAttribute("repositories", this.gitlab.getProjectsOfConnectedUser());
         return "assignments/new";
     }
 

@@ -19,6 +19,8 @@ public class ClassroomUser implements Serializable {
     @Enumerated(EnumType.STRING)
     private Collection<ClassroomRole> roles;
 
+    private Long gitlabUserId;
+
     private URL avatarUrl;
 
     private String email;
@@ -45,6 +47,14 @@ public class ClassroomUser implements Serializable {
 
     public void setRoles(Collection<ClassroomRole> roles) {
         this.roles = roles;
+    }
+
+    public Long getGitlabUserId() {
+        return gitlabUserId;
+    }
+
+    public void setGitlabUserId(Long gitlabUserId) {
+        this.gitlabUserId = gitlabUserId;
     }
 
     public URL getAvatarUrl() {
@@ -76,5 +86,9 @@ public class ClassroomUser implements Serializable {
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
+    }
+
+    public boolean isTeacher() {
+        return this.roles.contains(ClassroomRole.TEACHER);
     }
 }
