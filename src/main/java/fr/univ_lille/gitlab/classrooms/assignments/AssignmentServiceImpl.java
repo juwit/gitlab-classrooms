@@ -111,4 +111,9 @@ class AssignmentServiceImpl implements AssignmentService {
     public StudentAssignment getAssignmentResultsForStudent(Assignment assignment, ClassroomUser student) {
         return this.studentAssignmentRepository.findByAssignmentAndStudent(assignment, student);
     }
+
+    @Override
+    public List<StudentAssignment> getAllStudentAssignmentsForAClassroom(Classroom classroom, ClassroomUser student) {
+        return this.studentAssignmentRepository.findByAssignmentClassroomAndStudent(classroom, student);
+    }
 }

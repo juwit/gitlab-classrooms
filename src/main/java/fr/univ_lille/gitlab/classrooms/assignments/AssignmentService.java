@@ -24,4 +24,6 @@ public interface AssignmentService {
     Assignment createExerciseAssignment(Classroom classroom, String assignmentName, String repositoryId) throws GitLabApiException;
 
     StudentAssignment getAssignmentResultsForStudent(Assignment assignment, ClassroomUser student);
+
+    List<StudentAssignment> getAllStudentAssignmentsForAClassroom(Classroom classroom, ClassroomUser student);
 }
