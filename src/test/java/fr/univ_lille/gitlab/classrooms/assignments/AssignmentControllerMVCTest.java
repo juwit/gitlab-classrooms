@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
-import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
+import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.*;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
@@ -39,9 +39,6 @@ class AssignmentControllerMVCTest {
 
     @MockBean
     private AssignmentService assignmentService;
-
-    @MockBean
-    private QuizScoreService quizScoreService;
 
     @MockBean
     private ClassroomService classroomService;
@@ -82,10 +79,8 @@ class AssignmentControllerMVCTest {
         when(assignmentService.getAssignment(quizAssignmentId)).thenReturn(Optional.of(quizAssignment));
         when(assignmentService.getAssignment(exerciseAssignmentId)).thenReturn(Optional.of(exerciseAssignment));
 
-        when(quizScoreService.getQuizResultForClassroom(quiz, classroom)).thenReturn(new QuizResult(List.of()));
-
         when(assignmentService.getAssignmentResults(exerciseAssignment)).thenReturn(List.of());
-        when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExercise());
+        when(assignmentService.getAssignmentResultsForStudent(eq(exerciseAssignment), any())).thenReturn(new StudentExerciseAssignment());
     }
 
     @Test
@@ -143,7 +138,7 @@ class AssignmentControllerMVCTest {
         mockMvc.perform(get("/assignments/"+ quizAssignmentId))
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("quiz"))
-                .andExpect(model().attributeExists("quizResult"))
+                .andExpect(model().attributeExists("quizResults"))
                 .andExpect(view().name("quiz/all-submissions"));
     }
 

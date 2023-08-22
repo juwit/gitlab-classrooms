@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.classrooms;
 
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
@@ -17,6 +17,8 @@ import java.util.UUID;
 @RequestMapping("/classrooms")
 @RolesAllowed("TEACHER")
 class ClassroomController {
+
+    private static final String CLASSROOM_MODEL_ATTRIBUTE = "classroom";
 
     private final ClassroomService classroomService;
 
@@ -44,6 +46,7 @@ class ClassroomController {
     @GetMapping("/{classroomId}")
     String showClassroom(@PathVariable UUID classroomId, Model model) {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute(CLASSROOM_MODEL_ATTRIBUTE, classroom);
 
         try {
             model.addAttribute("gitlabGroupUrl", gitlab.getGroupURI(classroom));
@@ -52,8 +55,6 @@ class ClassroomController {
             LOGGER.log(System.Logger.Level.ERROR, e.getMessage());
         }
 
-        model.addAttribute("classroom", classroom);
-
         return "classrooms/view";
     }
 
@@ -61,8 +62,8 @@ class ClassroomController {
     @RolesAllowed({"TEACHER", "STUDENT"})
     String showJoinClassroom(@PathVariable UUID classroomId, Model model) {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute(CLASSROOM_MODEL_ATTRIBUTE, classroom);
 
-        model.addAttribute("classroom", classroom);
         return "classrooms/join";
     }
 
@@ -70,6 +71,7 @@ class ClassroomController {
     @RolesAllowed({"TEACHER", "STUDENT"})
     String joinClassroom(@PathVariable UUID classroomId, @ModelAttribute("user") ClassroomUser student, Model model, HttpSession session) {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        model.addAttribute(CLASSROOM_MODEL_ATTRIBUTE, classroom);
 
         this.classroomService.joinClassroom(classroom, student);
 
@@ -79,7 +81,6 @@ class ClassroomController {
             return "redirect:" + redirect;
         }
 
-        model.addAttribute("classroom", classroom);
         return "classrooms/joined";
     }
 

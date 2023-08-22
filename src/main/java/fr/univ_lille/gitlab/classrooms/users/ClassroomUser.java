@@ -87,4 +87,8 @@ public class ClassroomUser implements Serializable {
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
     }
+
+    public boolean isTeacher() {
+        return this.roles.contains(ClassroomRole.TEACHER);
+    }
 }

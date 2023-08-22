@@ -18,10 +18,7 @@ class QuizEditionController {
 
     QuizRepository quizRepository;
 
-    QuizScoreService quizScoreService;
-
-    public QuizEditionController(QuizScoreService quizScoreService, QuizRepository quizRepository) {
-        this.quizScoreService = quizScoreService;
+    public QuizEditionController(QuizRepository quizRepository) {
         this.quizRepository = quizRepository;
     }
 
@@ -44,6 +41,14 @@ class QuizEditionController {
         return QUIZ_EDIT_PAGE;
     }
 
+    @GetMapping("/{quizId}/preview")
+    public String previewQuiz(Model model, @PathVariable String quizId) {
+        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizEntity.getName());
+        model.addAttribute("quiz", quiz);
+        return "quiz/preview";
+    }
+
     @PostMapping("/{quizId}/edit")
     public String saveQuiz(@ModelAttribute QuizEntity quiz, Model model, @PathVariable String quizId) {
         this.quizRepository.save(quiz);
@@ -52,14 +57,4 @@ class QuizEditionController {
         return QUIZ_EDIT_PAGE;
     }
 
-    @GetMapping("/{quizId}/results")
-    public String viewQuizResults(Model model, @PathVariable String quizId) {
-        var quizEntity = this.quizRepository.findById(quizId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        model.addAttribute("quiz", quizEntity);
-
-        var quizResult = this.quizScoreService.getQuizResult(quizId);
-        model.addAttribute("quizResult", quizResult);
-
-        return "quiz/all-submissions";
-    }
 }

@@ -1,28 +1,24 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
+
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @Entity
-public class StudentExercise {
+@Inheritance(strategy = InheritanceType.JOINED)
+public abstract class StudentAssignment {
 
     @Id
     private UUID id = UUID.randomUUID();
 
     @ManyToOne
-    private ExerciseAssignment assignment;
+    private Assignment assignment;
 
     @ManyToOne
     private ClassroomUser student;
-
-    private Long gitlabProjectId;
-
-    private String gitlabProjectUrl;
 
     private ZonedDateTime submissionDate;
 
@@ -38,11 +34,11 @@ public class StudentExercise {
         this.id = id;
     }
 
-    public ExerciseAssignment getAssignment() {
+    public Assignment getAssignment() {
         return assignment;
     }
 
-    public void setAssignment(ExerciseAssignment assignment) {
+    public void setAssignment(Assignment assignment) {
         this.assignment = assignment;
     }
 
@@ -60,22 +56,6 @@ public class StudentExercise {
 
     public void setSubmissionDate(ZonedDateTime submissionDate) {
         this.submissionDate = submissionDate;
-    }
-
-    public Long getGitlabProjectId() {
-        return gitlabProjectId;
-    }
-
-    public void setGitlabProjectId(Long gitlabProjectId) {
-        this.gitlabProjectId = gitlabProjectId;
-    }
-
-    public String getGitlabProjectUrl() {
-        return gitlabProjectUrl;
-    }
-
-    public void setGitlabProjectUrl(String gitlabProjectUrl) {
-        this.gitlabProjectUrl = gitlabProjectUrl;
     }
 
     public Long getScore() {

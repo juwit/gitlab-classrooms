@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.classrooms;
 
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
@@ -41,7 +41,7 @@ class ClassroomControllerMVCTest {
     @MockBean
     private Gitlab gitlab;
 
-    private UUID classroomId = UUID.randomUUID();
+    private final UUID classroomId = UUID.randomUUID();
 
     @BeforeEach
     void setUp() {
@@ -90,6 +90,17 @@ class ClassroomControllerMVCTest {
                 .andExpect(status().isOk());
 
         verify(this.gitlab).getGroupsOfConnectedUser();
+    }
+
+    @Test
+    @WithMockTeacher
+    void showClassroom_shouldListClassroomAssignments() throws Exception {
+        mockMvc.perform(get("/classrooms/"+classroomId))
+                .andDo(print())
+                .andExpect(status().isOk());
+
+        verify(this.classroomService).getClassroom(classroomId);
+        verify(this.gitlab).getGroupURI(any());
     }
 
     @Test

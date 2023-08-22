@@ -1,9 +1,8 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.classrooms;
 
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.gitlab4j.api.GitLabApiException;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -35,6 +34,16 @@ class ClassroomServiceImplTest {
         assertThat(classrooms).isNotNull();
 
         verify(classroomRepository).findAll();
+    }
+
+    @Test
+    void getAllJoinedClassrooms_shouldReturnAllJoinedClassrooms() {
+        var student = new ClassroomUser();
+        var classrooms = classroomService.getAllJoinedClassrooms(student);
+
+        assertThat(classrooms).isNotNull();
+
+        verify(classroomRepository).findClassroomByStudentsContains(student);
     }
 
     @Test

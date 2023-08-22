@@ -1,7 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
-import fr.univ_lille.gitlab.classrooms.domain.Classroom;
-import fr.univ_lille.gitlab.classrooms.domain.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
+import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
@@ -26,14 +26,14 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final AssignmentRepository assignmentRepository;
 
-    private final StudentExerciseRepository studentExerciseRepository;
+    private final StudentAssignmentRepository studentAssignmentRepository;
 
-    AssignmentServiceImpl(QuizService quizService, Gitlab gitlab, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentExerciseRepository studentExerciseRepository) {
+    AssignmentServiceImpl(QuizService quizService, Gitlab gitlab, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentAssignmentRepository studentAssignmentRepository) {
         this.quizService = quizService;
         this.gitlab = gitlab;
         this.classroomService = classroomService;
         this.assignmentRepository = assignmentRepository;
-        this.studentExerciseRepository = studentExerciseRepository;
+        this.studentAssignmentRepository = studentAssignmentRepository;
     }
 
     @Override
@@ -51,19 +51,26 @@ class AssignmentServiceImpl implements AssignmentService {
             // create the project in gitlab
             var project = gitlab.createProject(exerciseAssignment, student);
 
-            // create the student exercise in the database
-            var studentExercise = new StudentExercise();
+            // create the student exercise assignment
+            var studentExercise = new StudentExerciseAssignment();
             studentExercise.setAssignment(exerciseAssignment);
             studentExercise.setStudent(student);
             studentExercise.setGitlabProjectId(project.getId());
             studentExercise.setGitlabProjectUrl(project.getWebUrl());
-            this.studentExerciseRepository.save(studentExercise);
+            this.studentAssignmentRepository.save(studentExercise);
+        }
+        else if (assignment instanceof QuizAssignment quizAssignment) {
+            // create the student quiz assignment
+            var studentExercise = new StudentQuizAssignment();
+            studentExercise.setAssignment(quizAssignment);
+            studentExercise.setStudent(student);
+            this.studentAssignmentRepository.save(studentExercise);
         }
     }
 
     @Override
-    public List<StudentExercise> getAssignmentResults(Assignment assignment) {
-        return this.studentExerciseRepository.findAllByAssignment(assignment);
+    public List<StudentAssignment> getAssignmentResults(Assignment assignment) {
+        return this.studentAssignmentRepository.findAllByAssignment(assignment);
     }
 
     @Override
@@ -101,7 +108,12 @@ class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
-    public StudentExercise getAssignmentResultsForStudent(Assignment assignment, ClassroomUser student) {
-        return this.studentExerciseRepository.findByAssignmentAndStudent(assignment, student);
+    public StudentAssignment getAssignmentResultsForStudent(Assignment assignment, ClassroomUser student) {
+        return this.studentAssignmentRepository.findByAssignmentAndStudent(assignment, student);
+    }
+
+    @Override
+    public List<StudentAssignment> getAllStudentAssignmentsForAClassroom(Classroom classroom, ClassroomUser student) {
+        return this.studentAssignmentRepository.findByAssignmentClassroomAndStudent(classroom, student);
     }
 }

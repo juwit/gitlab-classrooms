@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.domain;
+package fr.univ_lille.gitlab.classrooms.classrooms;
 
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
@@ -25,6 +25,11 @@ class ClassroomServiceImpl implements ClassroomService {
     @Override
     public List<Classroom> getAllClassrooms() {
         return this.classroomRepository.findAll();
+    }
+
+    @Override
+    public List<Classroom> getAllJoinedClassrooms(ClassroomUser student) {
+        return this.classroomRepository.findClassroomByStudentsContains(student);
     }
 
     @Override

@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToOne;
 
 @Entity
-class QuizAssignment extends Assignment {
+public class QuizAssignment extends Assignment {
 
     @OneToOne
     private QuizEntity quiz;
