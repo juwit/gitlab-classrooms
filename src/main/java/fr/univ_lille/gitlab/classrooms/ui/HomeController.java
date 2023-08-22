@@ -22,7 +22,7 @@ public class HomeController {
     public String getHomePage(Model model) {
         var classrooms = classroomService.getAllClassrooms();
         model.addAttribute("classrooms", classrooms);
-        return "home";
+        return "dashboard/teacher-dashboard";
     }
 
 }
