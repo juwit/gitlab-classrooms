@@ -38,11 +38,13 @@ class QuizAnswerController {
         var quizEntity = quizAssignment.getQuiz();
         var quiz = Quiz.fromMarkdown(quizEntity.getMarkdownContent(), quizEntity.getName());
 
-        var previousSubmission = this.assignmentService.getAssignmentResultsForStudent(assignment, student);
-
         model.addAttribute("quiz", quiz);
         model.addAttribute("assignment", assignment);
-        model.addAttribute("previousSubmission", previousSubmission);
+
+        var studentAssignment = this.assignmentService.getAssignmentResultsForStudent(assignment, student);
+        if(studentAssignment.hasBeenSubmitted()){
+            model.addAttribute("previousSubmission", studentAssignment);
+        }
 
         return "quiz/answer";
     }

@@ -73,4 +73,8 @@ public abstract class StudentAssignment {
     public void setMaxScore(Long maxScore) {
         this.maxScore = maxScore;
     }
+
+    public boolean hasBeenSubmitted() {
+        return this.submissionDate != null;
+    }
 }
