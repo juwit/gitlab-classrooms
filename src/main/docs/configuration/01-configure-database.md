@@ -1,12 +1,12 @@
-# database configuration
+# Database configuration
 
 The following properties are used to configure database access.
 
-Gitlab-Classroom initializes the database when it starts, so there's no need to create anything upfront.
+_GitLab Classroom_ initializes the database schema when it starts, so there's no need to create anything upfront.
 
-Gitlab-Classroom only supports PostgreSQL 14. 
+_GitLab Classroom_ only supports PostgreSQL 14. 
 
-## Using env vars
+## Configure database connectivity using env vars
 
 | env var                     | usage               | default value |
 |-----------------------------|---------------------|---------------|
