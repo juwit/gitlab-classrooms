@@ -11,3 +11,7 @@ theme:
   logo: logo.png
   icon:
     repo: fontawesome/brands/gitlab
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
