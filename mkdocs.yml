@@ -12,6 +12,8 @@ theme:
   favicon: logo.png
   icon:
     repo: fontawesome/brands/gitlab
+  features:
+    - navigation.instant
 
 markdown_extensions:
   - attr_list
