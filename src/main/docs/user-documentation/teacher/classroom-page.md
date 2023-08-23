@@ -7,7 +7,7 @@ The _Classroom_ page lists:
 * The _Students_ who joined the _Classroom_.
 * The _Assignments_ of the _Classroom_.
 
-It also provides a link to access the GitLab Group of the _Classroom_ on your GitLab instance and a [_Join Link_](../student/joining-classroom.md)
+It also provides a link to access the GitLab Group of the _Classroom_ on your GitLab instance and a [_Join Link_](../student/02-joining-classroom.md)
 and a button to [create an _Assignment_](./creating-assignment.md).
 
 When the _Classroom_ is just created, it displays an empty view.
@@ -26,7 +26,7 @@ When the _Classroom_ has _Students_ and _Assignments_, it will show them as card
 
 ## The _Join Link_
 
-The _Join Link_ is a magic link you can give to your _Students_ to [join your _Classroom_](../student/joining-classroom.md).
+The _Join Link_ is a magic link you can give to your _Students_ to [join your _Classroom_](../student/02-joining-classroom.md).
 
 After joining the _Classroom_, the _Students_ will be listed in the _Student_ list, and will be able to accept _Assignments_.
 
@@ -57,4 +57,4 @@ Each card show the _Assignment_ type (Exercise or Quiz) with an icon, the _Assig
 Clicking on the Assignment name will open the _Assignment Details_ page.
 
 Clicking on the _Copy Accept Link_ button copies the link to your clipboard, so you can paste it using <kbd>Ctrl</kbd> + <kbd>V</kbd>, or <kbd>Shift</kbd> + <kbd>Insert</kbd>.
-The _Accept Link_ is a magic link you can give to your _Students_ to [accept your _Assignments_](../student/accepting-assignment.md).
+The _Accept Link_ is a magic link you can give to your _Students_ to [accept your _Assignments_](../student/03-accepting-assignment.md).
