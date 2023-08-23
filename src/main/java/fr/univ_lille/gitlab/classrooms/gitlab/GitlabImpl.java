@@ -82,13 +82,11 @@ class GitlabImpl implements Gitlab {
         // get a gitlab api client ith the teacher's rights
         var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher);
 
-
-
         Project project;
 
         var projectName = exerciseAssignment.getName() + "-" + student.getName();
 
-        if (exerciseAssignment.getGitlabRepositoryTemplateId() != null) {
+        if (exerciseAssignment.getGitlabRepositoryTemplateId() != null && !exerciseAssignment.getGitlabRepositoryTemplateId().isBlank()) {
             // get gitlab group info
             var group = teacherGitlabApi.getGroupApi().getGroup(exerciseAssignment.getGitlabGroupId());
 
