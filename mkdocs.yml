@@ -1,4 +1,4 @@
-site_name: Gitlab Classrooms Docs
+site_name: GitLab Classrooms Docs
 
 docs_dir: src/main/docs
 exclude_docs: |
@@ -9,6 +9,7 @@ repo_url: https://gitlab.univ-lille.fr/julien.wittouck/gitlab-classrooms
 theme:
   name: material
   logo: logo.png
+  favicon: logo.png
   icon:
     repo: fontawesome/brands/gitlab
 
