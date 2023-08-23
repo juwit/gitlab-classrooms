@@ -1,6 +1,8 @@
 site_name: Gitlab Classrooms Docs
 
 docs_dir: src/main/docs
+exclude_docs: |
+  decisions/
 
 repo_url: https://gitlab.univ-lille.fr/julien.wittouck/gitlab-classrooms
 
