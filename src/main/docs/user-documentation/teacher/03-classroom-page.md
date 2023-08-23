@@ -1,6 +1,6 @@
 # The _Classroom_ page
 
-The _Classroom_ page is accessed when clicking a _Classroom_ card in the [_Teacher Dashboard_](./teacher-dashboard.md).
+The _Classroom_ page is accessed when clicking a _Classroom_ card in the [_Teacher Dashboard_](./01-teacher-dashboard.md).
 
 The _Classroom_ page lists:
 
@@ -8,19 +8,19 @@ The _Classroom_ page lists:
 * The _Assignments_ of the _Classroom_.
 
 It also provides a link to access the GitLab Group of the _Classroom_ on your GitLab instance and a [_Join Link_](../student/02-joining-classroom.md)
-and a button to [create an _Assignment_](./creating-assignment.md).
+and a button to [create an _Assignment_](./04-creating-assignment.md).
 
 When the _Classroom_ is just created, it displays an empty view.
 
 <figure markdown>
-  ![Empty Classroom](classroom-view-empty.png){ style="border: solid 1px black" }
+  ![Empty Classroom](03-classroom-view-empty.png){ style="border: solid 1px black" }
   <figcaption>Empty Classroom</figcaption>
 </figure>
 
 When the _Classroom_ has _Students_ and _Assignments_, it will show them as cards.
 
 <figure markdown>
-  ![Classroom with 2 Students and 2 Assignments](classroom-view-assignments.png){ style="border: solid 1px black" }
+  ![Classroom with 2 Students and 2 Assignments](03-classroom-view-assignments.png){ style="border: solid 1px black" }
   <figcaption>Classroom with 2 Students and 2 Assignments</figcaption>
 </figure>
 
@@ -39,7 +39,7 @@ This section lists all the _Students_ that joined the _Classroom_ by using the _
 Each card show the _Student_ GitLab avatar, the _Student_ GitLab user name, and the _Student_ email. 
 
 <figure markdown>
-  ![The Student list for a Classroom](student-list.png){ style="border: solid 1px black" }
+  ![The Student list for a Classroom](03-student-list.png){ style="border: solid 1px black" }
   <figcaption>The Student list for a Classroom</figcaption>
 </figure>
 
@@ -50,7 +50,7 @@ This section lists all the _Assignments_ of the _Classroom_.
 Each card show the _Assignment_ type (Exercise or Quiz) with an icon, the _Assignment_ name, and the _Accept Link_ button.
 
 <figure markdown>
-  ![The Assignment list for a Classroom](assignment-list.png){ style="border: solid 1px black" }
+  ![The Assignment list for a Classroom](03-assignment-list.png){ style="border: solid 1px black" }
   <figcaption>The Assignment list for a Classroom</figcaption>
 </figure>
 

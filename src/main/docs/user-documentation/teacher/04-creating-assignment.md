@@ -16,15 +16,15 @@ If a template is selected, _GitLab Classroom_ will **fork** the selected reposit
 This contains the GitLab projects the connected user has access to.
 
 <figure markdown>
-  ![Create Assigment Page](creating-assignment.png){ style="border: solid 1px black" }
+  ![Create Assigment Page](04-creating-assignment.png){ style="border: solid 1px black" }
   <figcaption>Create Assigment Page</figcaption>
 </figure>
 
-After creation, the _Exercise Assignment_ will appear as a card in the [_Teacher Dashboard_](./teacher-dashboard.md) page.
+After creation, the _Exercise Assignment_ will appear as a card in the [_Teacher Dashboard_](./01-teacher-dashboard.md) page.
 Clicking on the _Exercise Assignment_ card will open the _Assignment Details_ page.
 
 <figure markdown>
-  ![The created Assignment on the Teacher Dashboard](teacher-dashboard-first-assignment.png){ style="border: solid 1px black" }
+  ![The created Assignment on the Teacher Dashboard](04-teacher-dashboard-first-assignment.png){ style="border: solid 1px black" }
   <figcaption>The created Assignment on the Teacher Dashboard</figcaption>
 </figure>
 
@@ -33,9 +33,9 @@ Clicking on the _Exercise Assignment_ card will open the _Assignment Details_ pa
 To create an _Exercise Assignment_, the _Teacher_ **MUST** input a name, and select an existing _Quiz_ in the list.
 
 <figure markdown>
-  ![Create Quiz Assignment Page](creating-quiz-assignment.png){ style="border: solid 1px black" }
+  ![Create Quiz Assignment Page](04-creating-quiz-assignment.png){ style="border: solid 1px black" }
   <figcaption>Create Quiz Assignment Page</figcaption>
 </figure>
 
-After creation, the _Quiz Assignment_ will appear as a card in the [_Teacher Dashboard_](./teacher-dashboard.md) page.
+After creation, the _Quiz Assignment_ will appear as a card in the [_Teacher Dashboard_](./01-teacher-dashboard.md) page.
 Clicking on the _Quiz Assignment_ card will open the _Assignment Details_ page.
