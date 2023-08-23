@@ -1,10 +1,10 @@
-# Using the _Teacher_ dashboard
+# Using the _Teacher Dashboard_
 
 From this dashboard, a _Teacher_ can:
 
 * view all the _Classrooms_
 * [create a new _Classroom_](./creating-classroom.md)
-* access details of an existing _Classroom_ by clicking its card.
+* access details of an [existing _Classroom_](./classroom-page.md) by clicking its card.
 
 ## Empty dashboard
 
@@ -28,4 +28,4 @@ Each _Classroom_ is represented by a card.
 
 ### Accessing a _Classroom_
 
-Clicking on a _Classroom_ card name in the _Teacher_ dashboard opens the _Classroom_ page.
+Clicking on a _Classroom_ card name in the _Teacher_ dashboard opens the [_Classroom_ page](./classroom-page.md).
