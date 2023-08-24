@@ -90,11 +90,12 @@ class GitlabImpl implements Gitlab {
             // get gitlab group info
             var group = teacherGitlabApi.getGroupApi().getGroup(exerciseAssignment.getGitlabGroupId());
 
+            var path = projectName.replaceAll("[^\\w\\-.]", "_");
             // fork the template project
             project = teacherGitlabApi.getProjectApi().forkProject(
                     exerciseAssignment.getGitlabRepositoryTemplateId(),
                     group.getFullPath(),
-                    null,
+                    path,
                     projectName);
             // remove the fork link
             teacherGitlabApi.getProjectApi().deleteForkedFromRelationship(project.getId());

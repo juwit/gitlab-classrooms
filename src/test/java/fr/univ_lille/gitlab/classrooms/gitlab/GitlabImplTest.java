@@ -170,11 +170,11 @@ class GitlabImplTest {
 
         var projectMock = new Project();
         projectMock.setId(125L);
-        when(gitLabApi.getProjectApi().forkProject("12", null, null, "Exercice 2 - Template-luke.skywalker")).thenReturn(projectMock);
+        when(gitLabApi.getProjectApi().forkProject("12", null, "Exercice_2_-_Template-luke.skywalker", "Exercice 2 - Template-luke.skywalker")).thenReturn(projectMock);
 
         gitlab.createProject(assignment, student);
 
-        verify(gitLabApi.getProjectApi()).forkProject("12", null, null, "Exercice 2 - Template-luke.skywalker");
+        verify(gitLabApi.getProjectApi()).forkProject("12", null, "Exercice_2_-_Template-luke.skywalker", "Exercice 2 - Template-luke.skywalker");
         verify(gitLabApi.getProjectApi()).deleteForkedFromRelationship(125L);
         verify(gitLabApi.getProjectApi()).addMember(125L, 8L, AccessLevel.MAINTAINER);
 
