@@ -77,6 +77,11 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
