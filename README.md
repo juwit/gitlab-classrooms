@@ -1,4 +1,4 @@
-![Gitlab Classrooms](logo-with-text.png)
+![Gitlab Classrooms](src/main/docs/logo-with-text.png)
 
 **Gitlab Classroom** is a modest clone of [Github Classroom](https://classroom.github.com/), aimed at Gitlab.
 

@@ -1,10 +1,15 @@
-# gitlab configuration
+# GitLab configuration
 
-Here is the procedure to register _Gitlab Classroom_ as a Gitlab application on any Gitlab instance.
+## Create an Application in your GitLab instance
 
-Login to your Gitlab instance, and open the `/-/profile/applications` page.
+Here is the procedure to register _GitLab Classroom_ as a _GitLab Application_ on any GitLab instance.
 
-![](gitlab-create-new-application.png)
+Login to your GitLab instance, and open the `/-/profile/applications` page.
+
+<figure markdown>
+  ![GitLab Create Application page](02-gitlab-create-new-application.png){ style="border: solid 1px black" }
+  <figcaption>GitLab Create Application page</figcaption>
+</figure>
 
 Input a name, the `URI` at which _Gitlab CLassroom_ is deployed, and select the `api` scope.
 
@@ -14,9 +19,12 @@ Gitlab will then return with an _Application Id_, and a _Secret_.
 
 Save these for later.
 
-![](gitlab-create-application-secret.png)
+<figure markdown>
+  ![GitLab Created Application page with Application ID and Secret](02-gitlab-create-application-secret.png){ style="border: solid 1px black" }
+  <figcaption>GitLab Created Application page with Application ID and Secret</figcaption>
+</figure>
 
-## Configure Gitlab connectivity using env vars
+## Configure GitLab connectivity using env vars
 
 | env var                | usage                                                               | default value |
 |------------------------|---------------------------------------------------------------------|---------------|

@@ -1,5 +1,55 @@
 # Changelog
 
+<a name="0.0.4"></a>
+## 0.0.4 (2023-08-24)
+
+### Added
+
+- ✨ : only show submission date &amp; score for quiz exercises [7b50b0f]
+- ✨ : set EXERCISE type as the default when creating an Assignment [faacefb]
+- ✨ : use layout-without-menu template [63bb7e3]
+
+### Changed
+
+- 🚚 : reorder configuration section [807f0e0]
+- 🔧 : enable index pages for navigation folders [0908c44]
+- 🚚 : reorder user-documentation section [3ee5587]
+- 🚚 : reorder teacher sections [0cfe5c9]
+- 🚚 : reorder sections [2025a40]
+- 🔧 : configure admonitions [3f98734]
+- 🔧 : add def_list plugin for glossary [a7caf0a]
+- 🔧 : use instant navigation [c5b86ac]
+- 💄 : add favicon to docs [51766f8]
+- 🔧 : configure markdown extensions [7ebef0e]
+- 🔧 : exclude decisions docs [f387288]
+
+### Fixed
+
+- 🐛 : add !isBlank condition [673cc8d]
+- ✏️ : rename to Copy Accept Link [ea78f29]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;feature/user-docs&#x27; into develop [0c05333]
+- 📝 : add quiz creation section [461257a]
+- 📝 : add view assignment submissions section [ef3e75b]
+- 📝 : add take quiz section [af0aa42]
+- 📝 : add index for configuration section [f0ec6b0]
+- 📝 : add index page for user documentation [a1fceb7]
+- 📝 : add student dashboard section [44f9f37]
+- 📝 : add links to classroom page section [9962729]
+- 📝 : add create assignment section [c32c8f5]
+- 📝 : add create classroom section [850ee91]
+    * 📝 : add join classroom section (6697cdc)
+- 📝 : add accept assignment section [2ba02c6]
+- 📝 : add dashboard &amp; classroom creation doc [c6a2dfe]
+- 📝 : add glossary [8a4bbfc]
+- 📝 : add login documentation [0e1a865]
+- 📝 : add README.md [ebdab6d]
+- 📝 : add docs index page [12148a4]
+- 🔀 : merge tag &#x27;0.0.3&#x27; into develop [8ac5ced]
+
+
 <a name="0.0.3"></a>
 ## 0.0.3 (2023-08-22)
 

@@ -1,11 +1,25 @@
-site_name: Gitlab Classrooms Docs
+site_name: GitLab Classrooms Docs
 
 docs_dir: src/main/docs
+exclude_docs: |
+  decisions/
 
 repo_url: https://gitlab.univ-lille.fr/julien.wittouck/gitlab-classrooms
 
 theme:
   name: material
   logo: logo.png
+  favicon: logo.png
   icon:
     repo: fontawesome/brands/gitlab
+  features:
+    - navigation.instant
+    - navigation.indexes
+
+markdown_extensions:
+  - attr_list
+  - md_in_html
+  - def_list
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
