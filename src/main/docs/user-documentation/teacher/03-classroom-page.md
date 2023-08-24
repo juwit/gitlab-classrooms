@@ -54,7 +54,7 @@ Each card show the _Assignment_ type (Exercise or Quiz) with an icon, the _Assig
   <figcaption>The Assignment list for a Classroom</figcaption>
 </figure>
 
-Clicking on the Assignment name will open the _Assignment Details_ page.
+Clicking on the Assignment name will open the [_Assignment submissions_](./05-view-assignment-results.md) page.
 
 Clicking on the _Copy Accept Link_ button copies the link to your clipboard, so you can paste it using <kbd>Ctrl</kbd> + <kbd>V</kbd>, or <kbd>Shift</kbd> + <kbd>Insert</kbd>.
 The _Accept Link_ is a magic link you can give to your _Students_ to [accept your _Assignments_](../student/03-accepting-assignment.md).
