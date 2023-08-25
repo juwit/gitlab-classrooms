@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class DashboardController {
+class DashboardController {
 
     private final ClassroomService classroomService;
 

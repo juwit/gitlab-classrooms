@@ -4,6 +4,7 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import org.springframework.data.repository.Repository;
+import org.springframework.stereotype.Controller;
 
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
 
@@ -25,4 +26,13 @@ class ArchitectureTest {
             .beInterfaces()
             .andShould()
             .bePublic();
+
+    @ArchTest
+    final ArchRule controllersAreNotExposedOutsidePackages = classes()
+            .that()
+            .haveNameMatching(".*Controller")
+            .or()
+            .areAnnotatedWith(Controller.class)
+            .should()
+            .bePackagePrivate();
 }
