@@ -22,7 +22,7 @@ class QuizAnswerController {
 
     private final AssignmentScoreService assignmentScoreService;
 
-    public QuizAnswerController(AssignmentService assignmentService, AssignmentScoreService assignmentScoreService) {
+    QuizAnswerController(AssignmentService assignmentService, AssignmentScoreService assignmentScoreService) {
         this.assignmentService = assignmentService;
         this.assignmentScoreService = assignmentScoreService;
     }

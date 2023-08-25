@@ -31,7 +31,7 @@ class AssignmentController {
 
     private static final System.Logger LOGGER = System.getLogger(AssignmentController.class.getName());
 
-    public AssignmentController(AssignmentService assignmentService, QuizService quizService, ClassroomService classroomService, Gitlab gitlab) {
+    AssignmentController(AssignmentService assignmentService, QuizService quizService, ClassroomService classroomService, Gitlab gitlab) {
         this.assignmentService = assignmentService;
         this.quizService = quizService;
         this.classroomService = classroomService;

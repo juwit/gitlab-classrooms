@@ -7,8 +7,7 @@ import org.springframework.data.repository.Repository;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.classes;
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.fields;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 @AnalyzeClasses(packages = "fr.univ_lille.gitlab.classrooms")
 class ArchitectureTest {
@@ -64,4 +63,18 @@ class ArchitectureTest {
             .beFinal()
             .andShould()
             .bePrivate();
+
+    @ArchTest
+    final ArchRule controllersAndServicesOnlyHavePackagePrivateConstructors = constructors()
+            .that()
+            .areDeclaredInClassesThat()
+            .haveNameMatching(".*Controller")
+            .or()
+            .areAnnotatedWith(Controller.class)
+            .or()
+            .haveNameMatching(".*ServiceImpl")
+            .or()
+            .areAnnotatedWith(Service.class)
+            .should()
+            .bePackagePrivate();
 }

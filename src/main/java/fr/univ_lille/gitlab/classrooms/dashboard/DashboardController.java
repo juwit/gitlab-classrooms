@@ -21,7 +21,7 @@ class DashboardController {
 
     private final AssignmentService assignmentService;
 
-    public DashboardController(ClassroomService classroomService, AssignmentService assignmentService) {
+    DashboardController(ClassroomService classroomService, AssignmentService assignmentService) {
         this.classroomService = classroomService;
         this.assignmentService = assignmentService;
     }

@@ -18,7 +18,7 @@ class QuizEditionController {
 
     private final QuizRepository quizRepository;
 
-    public QuizEditionController(QuizRepository quizRepository) {
+    QuizEditionController(QuizRepository quizRepository) {
         this.quizRepository = quizRepository;
     }
 
