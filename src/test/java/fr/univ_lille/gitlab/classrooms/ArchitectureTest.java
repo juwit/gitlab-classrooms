@@ -13,14 +13,14 @@ import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 class ArchitectureTest {
 
     @ArchTest
-    final ArchRule repositoriesAreNotExposedOutsidePackages = classes()
+    final ArchRule repositories_are_not_exposed_outside_packages = classes()
             .that()
             .areAssignableTo(Repository.class)
             .should()
             .bePackagePrivate();
 
     @ArchTest
-    final ArchRule serviceInterfacesAreExposedAsPublic = classes()
+    final ArchRule service_interfaces_are_exposed_as_public = classes()
             .that()
             .haveNameMatching(".*Service")
             .should()
@@ -29,7 +29,7 @@ class ArchitectureTest {
             .bePublic();
 
     @ArchTest
-    final ArchRule serviceImplementationsAreNotExposedOutsidePackages = classes()
+    final ArchRule service_implementations_are_not_exposed_outside_packages = classes()
             .that()
             .haveNameMatching(".*ServiceImpl")
             .or()
@@ -40,7 +40,7 @@ class ArchitectureTest {
             .bePackagePrivate();
 
     @ArchTest
-    final ArchRule controllersAreNotExposedOutsidePackages = classes()
+    final ArchRule controllers_are_not_exposed_outside_packages = classes()
             .that()
             .haveNameMatching(".*Controller")
             .or()
@@ -49,7 +49,7 @@ class ArchitectureTest {
             .bePackagePrivate();
 
     @ArchTest
-    final ArchRule controllersAndServicesOnlyHaveFinalPrivateFields = fields()
+    final ArchRule controllers_and_services_only_have_private_final_fields = fields()
             .that()
             .areDeclaredInClassesThat()
             .haveNameMatching(".*Controller")
@@ -65,7 +65,7 @@ class ArchitectureTest {
             .bePrivate();
 
     @ArchTest
-    final ArchRule controllersAndServicesOnlyHavePackagePrivateConstructors = constructors()
+    final ArchRule controllers_and_services_only_have_package_private_constructors = constructors()
             .that()
             .areDeclaredInClassesThat()
             .haveNameMatching(".*Controller")
