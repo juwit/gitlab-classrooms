@@ -18,9 +18,9 @@ import java.util.UUID;
 @RequestMapping("/assignments/{assignmentId}/quiz")
 class QuizAnswerController {
 
-    final AssignmentService assignmentService;
+    private final AssignmentService assignmentService;
 
-    final AssignmentScoreService assignmentScoreService;
+    private final AssignmentScoreService assignmentScoreService;
 
     public QuizAnswerController(AssignmentService assignmentService, AssignmentScoreService assignmentScoreService) {
         this.assignmentService = assignmentService;

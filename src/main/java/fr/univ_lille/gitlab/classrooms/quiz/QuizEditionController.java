@@ -16,7 +16,7 @@ class QuizEditionController {
     private static final String QUIZ_LIST_PAGE = "quiz/list";
     private static final String QUIZ_EDIT_PAGE = "quiz/edit";
 
-    QuizRepository quizRepository;
+    private final QuizRepository quizRepository;
 
     public QuizEditionController(QuizRepository quizRepository) {
         this.quizRepository = quizRepository;
