@@ -21,4 +21,20 @@ class ArchitectureTest {
 
         rule.check(importedClasses);
     }
+
+    @Test
+    void serviceInterfacesAreExposedAsPublic() {
+        var importedClasses = new ClassFileImporter()
+                .importPackages("fr.univ_lille.gitlab.classrooms");
+
+        var rule = classes()
+                .that()
+                .haveNameMatching(".*Service")
+                .should()
+                .beInterfaces()
+                .andShould()
+                .bePublic();
+
+        rule.check(importedClasses);
+    }
 }
