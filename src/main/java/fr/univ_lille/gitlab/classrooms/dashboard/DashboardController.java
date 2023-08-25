@@ -15,13 +15,13 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
-public class DashboardController {
+class DashboardController {
 
     private final ClassroomService classroomService;
 
     private final AssignmentService assignmentService;
 
-    public DashboardController(ClassroomService classroomService, AssignmentService assignmentService) {
+    DashboardController(ClassroomService classroomService, AssignmentService assignmentService) {
         this.classroomService = classroomService;
         this.assignmentService = assignmentService;
     }

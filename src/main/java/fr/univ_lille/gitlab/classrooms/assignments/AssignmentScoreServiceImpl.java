@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.time.ZonedDateTime;
 
 @Service
-public class AssignmentScoreServiceImpl implements AssignmentScoreService{
+class AssignmentScoreServiceImpl implements AssignmentScoreService{
 
     private final StudentAssignmentRepository studentAssignmentRepository;
 

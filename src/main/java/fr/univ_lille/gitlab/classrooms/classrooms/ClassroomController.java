@@ -26,7 +26,7 @@ class ClassroomController {
 
     private static final System.Logger LOGGER = System.getLogger(ClassroomController.class.getName());
 
-    public ClassroomController(ClassroomService classroomService, Gitlab gitlab) {
+    ClassroomController(ClassroomService classroomService, Gitlab gitlab) {
         this.classroomService = classroomService;
         this.gitlab = gitlab;
     }
