@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.assignments.testReports;
+package fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports;
 
 import jakarta.xml.bind.JAXBElement;
 import jakarta.xml.bind.annotation.XmlElementDecl;

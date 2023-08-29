@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.assignments.testReports;
+package fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package fr.univ_lille.gitlab.classrooms.assignments.testReports;
+package fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports;
 
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
@@ -46,7 +46,7 @@ class TestSuiteParsingTest {
     void testReadSurefireOutput() throws IOException, JAXBException {
         var unmarshaller = JAXBContext.newInstance(TestSuite.class).createUnmarshaller();
 
-        var file = new ClassPathResource("/TEST-test.dao.CatalogDaoTest.xml");
+        var file = new ClassPathResource("/junit-reports/TEST-test.dao.CatalogDaoTest.xml");
 
         var root = unmarshaller.unmarshal(new StreamSource(file.getInputStream()), TestSuite.class);
         var testSuite = root.getValue();
@@ -69,5 +69,5 @@ class TestSuiteParsingTest {
         assertThat(secondTest.getName()).isEqualTo("test_getCategories");
         assertThat(secondTest.getFailure()).isNullOrEmpty();
     }
-    
+
 }
