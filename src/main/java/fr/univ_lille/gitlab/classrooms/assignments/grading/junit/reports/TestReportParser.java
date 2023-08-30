@@ -10,9 +10,9 @@ import java.io.InputStream;
 @Component
 public class TestReportParser {
 
-    public TestSuite parseTestReport(InputStream inputStream) throws JAXBException {
-        var unmarshaller = JAXBContext.newInstance(TestSuite.class).createUnmarshaller();
-        var root = unmarshaller.unmarshal(new StreamSource(inputStream), TestSuite.class);
+    public Testsuite parseTestReport(InputStream inputStream) throws JAXBException {
+        var unmarshaller = JAXBContext.newInstance(Testsuite.class).createUnmarshaller();
+        var root = unmarshaller.unmarshal(new StreamSource(inputStream), Testsuite.class);
         return root.getValue();
     }
 

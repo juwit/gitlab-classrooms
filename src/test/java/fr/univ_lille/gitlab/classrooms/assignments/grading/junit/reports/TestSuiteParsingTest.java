@@ -14,11 +14,11 @@ class TestSuiteParsingTest {
 
     @Test
     void testReadCucumberOuptut() throws IOException, JAXBException {
-        var unmarshaller = JAXBContext.newInstance(TestSuite.class).createUnmarshaller();
+        var unmarshaller = JAXBContext.newInstance(Testsuite.class).createUnmarshaller();
 
         var file = new ClassPathResource("/cucumber-junit-output.xml");
 
-        var root = unmarshaller.unmarshal(new StreamSource(file.getInputStream()), TestSuite.class);
+        var root = unmarshaller.unmarshal(new StreamSource(file.getInputStream()), Testsuite.class);
         var testSuite = root.getValue();
 
         assertThat(testSuite.getName()).isEqualTo("Cucumber");
@@ -44,11 +44,11 @@ class TestSuiteParsingTest {
 
     @Test
     void testReadSurefireOutput() throws IOException, JAXBException {
-        var unmarshaller = JAXBContext.newInstance(TestSuite.class).createUnmarshaller();
+        var unmarshaller = JAXBContext.newInstance(Testsuite.class).createUnmarshaller();
 
         var file = new ClassPathResource("/junit-reports/TEST-test.dao.CatalogDaoTest.xml");
 
-        var root = unmarshaller.unmarshal(new StreamSource(file.getInputStream()), TestSuite.class);
+        var root = unmarshaller.unmarshal(new StreamSource(file.getInputStream()), Testsuite.class);
         var testSuite = root.getValue();
 
         assertThat(testSuite.getName()).isEqualTo("test.dao.CatalogDaoTest");

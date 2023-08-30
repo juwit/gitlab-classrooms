@@ -1,6 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.assignments.grading.junit;
 
-import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports.TestSuite;
+import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports.Testsuite;
 import jakarta.persistence.Embeddable;
 
 import java.util.Objects;
@@ -24,7 +24,7 @@ public class JUnitTestSuite {
      * @param testSuiteReport
      * @return
      */
-    public static JUnitTestSuite fromTestSuiteReport(TestSuite testSuiteReport) {
+    public static JUnitTestSuite fromTestSuiteReport(Testsuite testSuiteReport) {
         var junitTestSuite = new JUnitTestSuite();
         junitTestSuite.name = testSuiteReport.getName();
         if (testSuiteReport.getTests() != null) {
