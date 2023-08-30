@@ -4,7 +4,7 @@ When clicking an _Assignment_ on the _Teacher Dashboard_, the _Teacher_ is redir
 
 The views are similar for the 2 types of _Assignments_, _Exercise_ or _Quiz_.
 
-## Exercise _Assignment_ submissions
+## _Exercise Assignment_ submissions
 
 <figure markdown>
   ![A Exercise Assignment submissions view](05-view-exercise-assignment.png){ style="border: solid 1px black" }
@@ -15,9 +15,11 @@ The view shows:
 
 * the total count of submissions by the _Students_
 * for each _Student_:
+    * the score of the _Student_ for the assignment
+    * the submission date of the assignment
     * the link to the GitLab project
 
-## Quiz _Assignment_ submissions
+## _Quiz Assignment_ submissions
 
 <figure markdown>
   ![A Quiz Assignment submissions view](05-view-quiz-assignment.png){ style="border: solid 1px black" }
