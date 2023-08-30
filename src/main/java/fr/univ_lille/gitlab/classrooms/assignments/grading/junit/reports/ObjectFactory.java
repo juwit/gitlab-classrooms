@@ -23,103 +23,8 @@ import javax.xml.namespace.QName;
 @XmlRegistry
 public class ObjectFactory {
 
-    private final static QName _TestSuiteTestcaseSkipped_QNAME = new QName("", "skipped");
-    private final static QName _TestSuiteTestcaseError_QNAME = new QName("", "error");
-
-    /**
-     * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: generated
-     *
-     */
-    public ObjectFactory() {
-    }
-
-    /**
-     * Create an instance of {@link TestSuite }
-     *
-     */
-    public TestSuite createTestSuite() {
-        return new TestSuite();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase }
-     *
-     */
-    public TestSuite.Testcase createTestSuiteTestcase() {
-        return new TestSuite.Testcase();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Properties }
-     *
-     */
-    public TestSuite.Properties createTestSuiteProperties() {
-        return new TestSuite.Properties();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase.Failure }
-     *
-     */
-    public TestSuite.Testcase.Failure createTestSuiteTestcaseFailure() {
-        return new TestSuite.Testcase.Failure();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase.RerunFailure }
-     *
-     */
-    public TestSuite.Testcase.RerunFailure createTestSuiteTestcaseRerunFailure() {
-        return new TestSuite.Testcase.RerunFailure();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase.FlakyFailure }
-     *
-     */
-    public TestSuite.Testcase.FlakyFailure createTestSuiteTestcaseFlakyFailure() {
-        return new TestSuite.Testcase.FlakyFailure();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase.Skipped }
-     *
-     */
-    public TestSuite.Testcase.Skipped createTestSuiteTestcaseSkipped() {
-        return new TestSuite.Testcase.Skipped();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase.Error }
-     *
-     */
-    public TestSuite.Testcase.Error createTestSuiteTestcaseError() {
-        return new TestSuite.Testcase.Error();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase.RerunError }
-     *
-     */
-    public TestSuite.Testcase.RerunError createTestSuiteTestcaseRerunError() {
-        return new TestSuite.Testcase.RerunError();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Testcase.FlakyError }
-     *
-     */
-    public TestSuite.Testcase.FlakyError createTestSuiteTestcaseFlakyError() {
-        return new TestSuite.Testcase.FlakyError();
-    }
-
-    /**
-     * Create an instance of {@link TestSuite.Properties.Property }
-     *
-     */
-    public TestSuite.Properties.Property createTestSuitePropertiesProperty() {
-        return new TestSuite.Properties.Property();
-    }
+    private static final QName _TestSuiteTestcaseSkipped_QNAME = new QName("", "skipped");
+    private static final QName _TestSuiteTestcaseError_QNAME = new QName("", "error");
 
     /**
      * Create an instance of {@link JAXBElement }{@code <}{@link TestSuite.Testcase.Skipped }{@code >}
@@ -131,7 +36,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "skipped", scope = TestSuite.Testcase.class)
     public JAXBElement<TestSuite.Testcase.Skipped> createTestSuiteTestcaseSkipped(TestSuite.Testcase.Skipped value) {
-        return new JAXBElement<TestSuite.Testcase.Skipped>(_TestSuiteTestcaseSkipped_QNAME, TestSuite.Testcase.Skipped.class, TestSuite.Testcase.class, value);
+        return new JAXBElement<>(_TestSuiteTestcaseSkipped_QNAME, TestSuite.Testcase.Skipped.class, TestSuite.Testcase.class, value);
     }
 
     /**
@@ -144,7 +49,7 @@ public class ObjectFactory {
      */
     @XmlElementDecl(namespace = "", name = "error", scope = TestSuite.Testcase.class)
     public JAXBElement<TestSuite.Testcase.Error> createTestSuiteTestcaseError(TestSuite.Testcase.Error value) {
-        return new JAXBElement<TestSuite.Testcase.Error>(_TestSuiteTestcaseError_QNAME, TestSuite.Testcase.Error.class, TestSuite.Testcase.class, value);
+        return new JAXBElement<>(_TestSuiteTestcaseError_QNAME, TestSuite.Testcase.Error.class, TestSuite.Testcase.class, value);
     }
 
 }
