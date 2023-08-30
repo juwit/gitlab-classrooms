@@ -6,6 +6,6 @@ import java.io.InputStream;
 
 public interface AssignmentGradeService {
 
-    void gradeAssignmentWithJUnitReport(StudentExerciseAssignment studentExerciseAssignment, InputStream inputStream);
+    void gradeAssignmentWithJUnitReport(StudentExerciseAssignment studentExerciseAssignment, InputStream inputStream) throws AssignmentGradingException;
 
 }

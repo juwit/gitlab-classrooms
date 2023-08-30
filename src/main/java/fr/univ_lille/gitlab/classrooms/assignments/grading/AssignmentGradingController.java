@@ -51,7 +51,11 @@ class AssignmentGradingController {
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         // grade using the test report
-        this.assignmentGradeService.gradeAssignmentWithJUnitReport(exerciseAssignment, testResultsFile.getInputStream());
+        try {
+            this.assignmentGradeService.gradeAssignmentWithJUnitReport(exerciseAssignment, testResultsFile.getInputStream());
+        } catch (AssignmentGradingException e) {
+            throw new ResponseStatusException(500, e.getMessage(), e);
+        }
 
         this.studentAssignmentService.save(exerciseAssignment);
     }

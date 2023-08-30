@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.io.ClassPathResource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.*;
@@ -25,7 +26,17 @@ class AssignmentGradeServiceImplTest {
     private TestReportParser testReportParser = new TestReportParser();
 
     @Test
-    void testGradeAssignmentWithJUnitReport() throws IOException {
+    void testShouldThrowExceptionForIncorrectContent() {
+        var studentExerciseAssignment = new StudentExerciseAssignment();
+
+        var reportInputStream = InputStream.nullInputStream();
+
+        assertThatExceptionOfType(AssignmentGradingException.class)
+                .isThrownBy(() -> assignmentGradeService.gradeAssignmentWithJUnitReport(studentExerciseAssignment, reportInputStream));
+    }
+
+    @Test
+    void testGradeAssignmentWithJUnitReport() throws IOException, AssignmentGradingException {
         var studentExerciseAssignment = new StudentExerciseAssignment();
 
         var reportInputStream = new ClassPathResource("/junit-reports/TEST-test.dao.CatalogDaoTest.xml").getInputStream();
@@ -59,7 +70,7 @@ class AssignmentGradeServiceImplTest {
     }
 
     @Test
-    void testGradeAssignmentWithMultipleJUnitReports() throws IOException {
+    void testGradeAssignmentWithMultipleJUnitReports() throws IOException, AssignmentGradingException {
         var studentExerciseAssignment = new StudentExerciseAssignment();
 
         var firstReportInputStream = new ClassPathResource("/junit-reports/TEST-test.dao.CatalogDaoTest.xml").getInputStream();
@@ -74,7 +85,7 @@ class AssignmentGradeServiceImplTest {
     }
 
     @Test
-    void testGradeAssignmentWithJUnitCucumberReport() throws IOException {
+    void testGradeAssignmentWithJUnitCucumberReport() throws IOException, AssignmentGradingException {
         var studentExerciseAssignment = new StudentExerciseAssignment();
 
         var reportInputStream = new ClassPathResource("/cucumber-junit-output.xml").getInputStream();
