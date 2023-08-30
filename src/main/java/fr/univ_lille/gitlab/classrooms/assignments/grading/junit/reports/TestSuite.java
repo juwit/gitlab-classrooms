@@ -215,7 +215,7 @@ public class TestSuite {
      */
     public List<Properties> getProperties() {
         if (properties == null) {
-            properties = new ArrayList<Properties>();
+            properties = new ArrayList<>();
         }
         return this.properties;
     }
@@ -244,7 +244,7 @@ public class TestSuite {
      */
     public List<Testcase> getTestcase() {
         if (testcase == null) {
-            testcase = new ArrayList<Testcase>();
+            testcase = new ArrayList<>();
         }
         return this.testcase;
     }
@@ -502,7 +502,7 @@ public class TestSuite {
          */
         public List<Property> getProperty() {
             if (property == null) {
-                property = new ArrayList<Property>();
+                property = new ArrayList<>();
             }
             return this.property;
         }
@@ -762,7 +762,7 @@ public class TestSuite {
          */
         public List<Failure> getFailure() {
             if (failure == null) {
-                failure = new ArrayList<Failure>();
+                failure = new ArrayList<>();
             }
             return this.failure;
         }
@@ -791,7 +791,7 @@ public class TestSuite {
          */
         public List<RerunFailure> getRerunFailure() {
             if (rerunFailure == null) {
-                rerunFailure = new ArrayList<RerunFailure>();
+                rerunFailure = new ArrayList<>();
             }
             return this.rerunFailure;
         }
@@ -820,7 +820,7 @@ public class TestSuite {
          */
         public List<FlakyFailure> getFlakyFailure() {
             if (flakyFailure == null) {
-                flakyFailure = new ArrayList<FlakyFailure>();
+                flakyFailure = new ArrayList<>();
             }
             return this.flakyFailure;
         }
@@ -897,7 +897,7 @@ public class TestSuite {
          */
         public List<RerunError> getRerunError() {
             if (rerunError == null) {
-                rerunError = new ArrayList<RerunError>();
+                rerunError = new ArrayList<>();
             }
             return this.rerunError;
         }
@@ -926,7 +926,7 @@ public class TestSuite {
          */
         public List<FlakyError> getFlakyError() {
             if (flakyError == null) {
-                flakyError = new ArrayList<FlakyError>();
+                flakyError = new ArrayList<>();
             }
             return this.flakyError;
         }
