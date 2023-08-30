@@ -39,4 +39,14 @@ public class JUnitAssignmentGrade extends AssignmentGrade {
                 .mapToInt(JUnitTestSuite::getMaxScore)
                 .sum();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        return super.equals(o);
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
 }
