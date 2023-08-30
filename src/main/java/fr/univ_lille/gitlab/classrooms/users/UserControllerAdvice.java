@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.users;
 
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ModelAttribute;
 
@@ -23,6 +24,10 @@ public class UserControllerAdvice {
     @ModelAttribute("user")
     ClassroomUser classroomUser(Principal authenticationPrincipal){
         try{
+            // if user is a JWTAuthenticationToken, (gitlab id token), load the user using the "user_login" claim
+            if(authenticationPrincipal instanceof JwtAuthenticationToken jwtToken && (jwtToken.getTokenAttributes().containsKey("user_login"))){
+                return this.classroomUserService.getClassroomUser(jwtToken.getTokenAttributes().get("user_login").toString());
+            }
             return this.classroomUserService.getClassroomUser(authenticationPrincipal.getName());
         }
         catch(NoSuchElementException e){

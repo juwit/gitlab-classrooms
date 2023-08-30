@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Cucumber" time="10.772" tests="2" skipped="0" failures="1" errors="0">
+<testcase classname="Premier Contrôleur Spring" name="GET &quot;/&quot; returns &quot;Hello World&quot;" time="0.172">
+<system-out><![CDATA[
+Given L'application écoute sur le port 8080.................................passed
+When La requête HTTP "GET /" est envoyée....................................passed
+Then La réponse a un code HTTP 200..........................................passed
+And La réponse a un header HTTP "Content-Type: text/plain"..................passed
+And La réponse a un body "Hello World"......................................passed
+]]></system-out>
+</testcase>
+<testcase classname="Premier Contrôleur Spring" name="GET &quot;/signIn&quot; returns a form" time="10.502">
+<failure type="java.lang.AssertionError" message="Element with name 'password_verify' not present.">
+<![CDATA[java.lang.AssertionError: Element with name 'password_verify' not present.
+	at fr.univlille.gitlab.sra12023.cucumberrunner.selenium.AssertionMethods.checkElementPresence(AssertionMethods.java:206)
+	at fr.univlille.gitlab.sra12023.cucumberrunner.PredefinedStepDefinitions.check_element_presence(PredefinedStepDefinitions.java:236)
+	at ✽.element having name "password_verify" should be present(classpath:features/controler-101.feature:18)
+]]>
+</failure>
+<system-out><![CDATA[
+Given L'application écoute sur le port 8080.................................passed
+When I navigate to "http://localhost:8080/signIn"...........................passed
+Then element having name "email" should be present..........................passed
+Then element having name "name" should be present...........................passed
+Then element having name "password" should be present.......................passed
+Then element having name "password_verify" should be present................failed
+Then element having name "submit" should be present.........................skipped
+]]></system-out>
+</testcase>
+</testsuite>

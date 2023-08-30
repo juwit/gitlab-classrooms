@@ -5,18 +5,19 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.2</version>
+        <version>3.1.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>fr.univ-lille</groupId>
     <artifactId>gitlab-classrooms</artifactId>
-    <version>0.0.4</version>
+    <version>0.0.5</version>
     <name>gitlab-classrooms</name>
     <properties>
         <java.version>17</java.version>
 
         <gitlab4j-api.version>6.0.0-rc.1</gitlab4j-api.version>
         <jacoco-maven-plugin.version>0.8.10</jacoco-maven-plugin.version>
+        <archunit.version>1.1.0</archunit.version>
     </properties>
 
     <dependencies>
@@ -38,6 +39,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-oauth2-client</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-oauth2-resource-server</artifactId>
         </dependency>
 
         <dependency>
@@ -71,6 +77,11 @@
             <artifactId>commons-codec</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -90,6 +101,12 @@
             <scope>test</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.tngtech.archunit</groupId>
+            <artifactId>archunit-junit5</artifactId>
+            <version>${archunit.version}</version>
+        </dependency>
+
         <!-- tooling -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -103,6 +120,45 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- generation of surefire report classes -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <executions>
+                    <execution>
+                        <id>xjc</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sources>
+                        <source>src/main/resources/surefire-test-report.xsd</source>
+                    </sources>
+                    <packageName>fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports</packageName>
+                </configuration>
+            </plugin>
+            <!-- add generated sources to compilation -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>build-helper-maven-plugin</artifactId>
+                <version>3.4.0</version>
+                <executions>
+                    <execution>
+                        <id>add-jaxb-sources</id>
+                        <goals>
+                            <goal>add-source</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <sources>
+                        <source>target/generated-sources/jaxb</source>
+                    </sources>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jacoco</groupId>

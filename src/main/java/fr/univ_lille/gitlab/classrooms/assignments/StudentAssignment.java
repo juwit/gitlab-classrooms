@@ -3,6 +3,7 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.persistence.*;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import java.time.ZonedDateTime;
 import java.util.UUID;
@@ -52,6 +53,10 @@ public abstract class StudentAssignment {
 
     public ZonedDateTime getSubmissionDate() {
         return submissionDate;
+    }
+
+    public ZonedDateTime getLocalizedSubmissionDate(){
+        return submissionDate.withZoneSameInstant(LocaleContextHolder.getTimeZone().toZoneId());
     }
 
     public void setSubmissionDate(ZonedDateTime submissionDate) {

@@ -43,10 +43,20 @@ class GitlabImpl implements Gitlab {
         return URI.create(group.getWebUrl());
     }
 
+    /**
+     * Slugify a name by removing all chars that are not letters, numbers, underscore or hyphens, and replacing them by underscores.
+     *
+     * @param name value to slugify
+     * @return slugified value
+     */
+    private String slugify(String name) {
+        return name.trim().replaceAll("[^\\w\\-.]", "_");
+    }
+
     @Override
     public void createGroup(Classroom classroom, Optional<Long> parentGroupId) throws GitLabApiException {
         var classroomName = classroom.getName();
-        var groupPath = classroomName.trim().replaceAll("[^\\w\\-.]", "_");
+        var groupPath = slugify(classroomName);
 
         var groupParams = new GroupParams()
                 .withName(classroomName)
@@ -62,7 +72,7 @@ class GitlabImpl implements Gitlab {
     @Override
     public void createGroup(ExerciseAssignment exerciseAssignment, Classroom classroom) throws GitLabApiException {
         var assignmentName = exerciseAssignment.getName();
-        var groupPath = assignmentName.trim().replaceAll("[^\\w\\-.]", "_");
+        var groupPath = slugify(assignmentName);
 
         var groupParams = new GroupParams()
                 .withName(assignmentName)
@@ -90,11 +100,12 @@ class GitlabImpl implements Gitlab {
             // get gitlab group info
             var group = teacherGitlabApi.getGroupApi().getGroup(exerciseAssignment.getGitlabGroupId());
 
+            var path = slugify(projectName);
             // fork the template project
             project = teacherGitlabApi.getProjectApi().forkProject(
                     exerciseAssignment.getGitlabRepositoryTemplateId(),
                     group.getFullPath(),
-                    null,
+                    path,
                     projectName);
             // remove the fork link
             teacherGitlabApi.getProjectApi().deleteForkedFromRelationship(project.getId());
