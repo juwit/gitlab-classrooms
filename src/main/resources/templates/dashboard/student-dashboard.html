@@ -57,6 +57,14 @@
                             </dt>
                         </div>
                     </div>
+                    <div th:if="${studentAssignment.submissionDate!=null}" class="flex justify-between gap-x-4 py-3">
+                        <div class="flex justify-between gap-x-4 py-3">
+                            <dt class="text-gray-800 inline-flex" >
+                                <span class="whitespace-pre">Score : </span>
+                                <div class="text-gray-900" th:text="${studentAssignment.score} + ' / ' + ${studentAssignment.maxScore}">8/10</div>
+                            </dt>
+                        </div>
+                    </div>
                     <div th:if="${studentAssignment.assignment.type.name() == 'EXERCISE'}" class="flex justify-between gap-x-4 py-3">
                         <dt  class="text-gray-800">
                             <a th:href="${studentAssignment.gitlabProjectUrl}" target="_blank" class="inline-flex items-center">
@@ -69,14 +77,6 @@
                                 Open in Gitlab
                             </a>
                         </dt>
-                    </div>
-                    <div th:if="${studentAssignment.assignment.type.name() == 'QUIZ' && studentAssignment.submissionDate!=null}" class="flex justify-between gap-x-4 py-3">
-                        <div class="flex justify-between gap-x-4 py-3">
-                            <dt class="text-gray-800 inline-flex" >
-                                <span class="whitespace-pre">Score : </span>
-                                <div class="text-gray-900" th:text="${studentAssignment.score} + ' / ' + ${studentAssignment.maxScore}">8/10</div>
-                            </dt>
-                        </div>
                     </div>
                     <div th:if="${studentAssignment.assignment.type.name() == 'QUIZ'}" class="flex justify-between gap-x-4 py-3">
                         <dt  class="text-gray-800">
