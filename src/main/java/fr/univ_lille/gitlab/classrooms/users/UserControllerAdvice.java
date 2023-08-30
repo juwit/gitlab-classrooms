@@ -25,7 +25,7 @@ public class UserControllerAdvice {
     ClassroomUser classroomUser(Principal authenticationPrincipal){
         try{
             // if user is a JWTAuthenticationToken, (gitlab id token), load the user using the "user_login" claim
-            if(authenticationPrincipal instanceof JwtAuthenticationToken jwtToken){
+            if(authenticationPrincipal instanceof JwtAuthenticationToken jwtToken && (jwtToken.getTokenAttributes().containsKey("user_login"))){
                 return this.classroomUserService.getClassroomUser(jwtToken.getTokenAttributes().get("user_login").toString());
             }
             return this.classroomUserService.getClassroomUser(authenticationPrincipal.getName());
