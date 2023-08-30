@@ -1,5 +1,73 @@
 # Changelog
 
+<a name="0.0.5"></a>
+## 0.0.5 (2023-08-30)
+
+### Added
+
+- ✨ : use localizedSubmissionDate where possible [b121af6]
+- ✨ : add localizedSubmissionDate property [6223576]
+- ✨ : show exercise results for teacher [1151692]
+- ✨ : show submission score for exercise assignments [30b9f09]
+- ✨ : add submission date for exercise assignments [853895d]
+- ✨ : add AssignmentGradingException to manage JAXB exceptions [89c3fed]
+- ✅ : add some tests for junit assignment grades [3ad9814]
+- ✨ : generate JAXB classes on build [f3c53c2]
+- ✨ : expose submit junit report endpoint [5971f48]
+- ✨ : load student assignments using gitlab project id [99d99b1]
+- ✨ : grade assignements with JUnit reports [bb0b067]
+- ✨ : add JUnit assignment grade entity [263c70d]
+    * ✨ : add assignment grade entity (64ae64f)
+- ✅ : add a test with a surefire report [7f7fa08]
+- ✅ : test the JAXB binding with a real-world file [e9e95ab]
+- ✨ : generate JAXB bindings for surefire-test-report.xsd [7a7d889]
+- ✨ : add surefire-test-report.xsd [1851f0b]
+- ➕ : add jakarta.xml.bind-api dependency [897bfaa]
+- ✨ : add JWTAuthenticationToken support, for Gitlab ID Tokens [7bd69f8]
+- ➕ : add spring-boot-starter-oauth2-resource-server dependency [6813383]
+- ✅ : generate better display names [9975bc9]
+- ✅ : add constructors visibility rule [83cdc69]
+    * ✅ : add controller visibility rule (bff5c47)
+- ✅ : add only final fields rule [61a6581]
+- ✅ : add service implementations visibility rule [6cb7281]
+- ✅ : service interface visibility rule [0a70909]
+- ✅ : add repository visibility rule [5b0e01b]
+- ➕ : add archunit dependency [d60d4f6]
+
+### Changed
+
+- 🗃️ : add script for autograding assignments [b89792a]
+- 🔧 : use schema validation instead of update [fe99276]
+- ♻️ : use entities instead of embeddables for inheritance [3c2b5c1]
+- ♻️ : cleanup JAXB TestSuite [30611cc]
+- ♻️ : cleanup JAXB Object Factory [b378d95]
+- 🚚 : rename package to comply with java conventions [b2bca0f]
+- 🔧 : configure jwt decoder issuer uri [839fa51]
+- ♻️ : add slugify method [49922ea]
+- ♻️ : rewrite using @ArchTest [e78b7cb]
+- ⬆️ : bump spring-boot-starter-parent to 3.1.3 [42a6703]
+
+### Fixed
+
+- 🐛 : add cascade all to assignment grades [2107975]
+- 🐛 : prevent a NPE if the JWT token does not contains the claim [712499c]
+- 🐛 : add project path when forking [ee863cd]
+
+### Security
+
+- 🔒 : add id_token security configuration [b6e3ceb]
+
+### Miscellaneous
+
+- 📝 : update documentation for student scores [5cbb1b0]
+- 🔀 : merge branch &#x27;feature/view-exercise-grades&#x27; into develop [c1ee4e2]
+- 🔀 : merge branch &#x27;feature/surefire-reports-parsing&#x27; into develop [2ec7a55]
+- 📝 : document properties to help schema updates generation [cdbcd09]
+- 🔀 : merge branch &#x27;feature/gitlab-id-token-authentication&#x27; into develop [4497c68]
+- 🔀 : merge branch &#x27;feature/archunit-tests&#x27; into develop [0518483]
+- 🔀 : merge tag &#x27;0.0.4&#x27; into develop [97e604b]
+
+
 <a name="0.0.4"></a>
 ## 0.0.4 (2023-08-24)
 
