@@ -24,9 +24,9 @@ _Exercise Assignments_ show a link to open the associated GitLab project.
 
 _Quiz Assignments_ show a link to take the associated Quiz.
 
-When a Quiz score is present, it is also displayed on the Quiz card.
+When a Quiz, or Exercise has been submitted, the submission date and score is also displayed on the card.
 
 <figure markdown>
-  ![Student Dashboard with a Quiz Assignment Scored](01-student-dashboard-quiz-score.png){ style="border: solid 1px black" }
-  <figcaption>Student Dashboard with a Quiz Assignment Scored</figcaption>
+  ![Student Dashboard with a Quiz Assignment and Exercise Assignment Scored](01-student-dashboard-exercise-score.png){ style="border: solid 1px black" }
+  <figcaption>Student Dashboard with a Quiz Assignment and Exercise Assignment Scored</figcaption>
 </figure>
