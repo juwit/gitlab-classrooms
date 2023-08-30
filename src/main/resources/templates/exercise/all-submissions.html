@@ -59,11 +59,11 @@
                                     </div>
                                 </div>
                             </td>
-                            <td>
-                                <!-- TODO result -->
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                <div th:if="${result.submissionDate}" class="text-gray-900" th:text="${result.score} + ' / ' + ${result.maxScore}">8/10</div>
                             </td>
-                            <td>
-                                <!-- TODO Date -->
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                <div th:if="${result.submissionDate}" class="text-gray-900" th:text="${#temporals.format(result.submissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</div>
                             </td>
                             <td>
                                 <a th:href="${result.gitlabProjectUrl}" target="_blank" class="inline-flex items-center">
