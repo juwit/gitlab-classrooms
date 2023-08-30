@@ -1,6 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.assignments.grading.AssignmentGrade;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 
@@ -14,7 +15,7 @@ public class StudentExerciseAssignment extends StudentAssignment {
 
     private String gitlabProjectUrl;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<AssignmentGrade> assignmentGrades = new HashSet<>();
 
     public Long getGitlabProjectId() {
