@@ -47,7 +47,7 @@
                         <div class="flex justify-between gap-x-4 py-3">
                             <dt class="text-gray-800 inline-flex" th:if="${studentAssignment.submissionDate}">
                                 <span class="whitespace-pre">Submission date : </span>
-                                <span th:text="${#temporals.format(studentAssignment.submissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</span>
+                                <span th:text="${#temporals.format(studentAssignment.localizedSubmissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</span>
                             </dt>
                             <dt class="text-gray-800 inline-flex" th:unless="${studentAssignment.submissionDate}">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1.5">
