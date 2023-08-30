@@ -3,12 +3,12 @@ package fr.univ_lille.gitlab.classrooms.assignments.grading.junit;
 import fr.univ_lille.gitlab.classrooms.assignments.grading.AssignmentGrade;
 import fr.univ_lille.gitlab.classrooms.assignments.grading.AssignmentGradeType;
 import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Embeddable;
+import jakarta.persistence.Entity;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Embeddable
+@Entity
 public class JUnitAssignmentGrade extends AssignmentGrade {
 
     public JUnitAssignmentGrade() {

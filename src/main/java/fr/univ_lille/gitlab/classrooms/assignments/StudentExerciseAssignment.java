@@ -1,8 +1,8 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.assignments.grading.AssignmentGrade;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,7 +14,7 @@ public class StudentExerciseAssignment extends StudentAssignment {
 
     private String gitlabProjectUrl;
 
-    @ElementCollection
+    @OneToMany
     private Set<AssignmentGrade> assignmentGrades = new HashSet<>();
 
     public Long getGitlabProjectId() {

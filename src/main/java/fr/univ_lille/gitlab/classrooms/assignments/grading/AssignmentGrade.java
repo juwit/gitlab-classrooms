@@ -2,9 +2,14 @@ package fr.univ_lille.gitlab.classrooms.assignments.grading;
 
 import jakarta.persistence.*;
 
-@Embeddable
+import java.util.UUID;
+
+@Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class AssignmentGrade {
+
+    @Id
+    private UUID id = UUID.randomUUID();
 
     @Enumerated(EnumType.STRING)
     private AssignmentGradeType type;
@@ -14,6 +19,14 @@ public abstract class AssignmentGrade {
 
     protected AssignmentGrade(AssignmentGradeType type) {
         this.type = type;
+    }
+
+    public UUID getId() {
+        return id;
+    }
+
+    public void setId(UUID id) {
+        this.id = id;
     }
 
     public AssignmentGradeType getType() {
