@@ -1,5 +1,40 @@
 # Changelog
 
+<a name="0.0.6"></a>
+## 0.0.6 (2023-09-01)
+
+### Added
+
+- ✨ : add documentation link for teachers [c6a9c61]
+    * ✨ : add documentation link for students (6aa5280)
+- ✨ : add submission count and average on exercice view [b77f97a]
+- ✨ : show students count on each assignment [83067bc]
+
+### Changed
+
+- ♻️ : use TABLE_PER_CLASS inheritance strategy [3db7e0b]
+
+### Fixed
+
+- ✏️ : correct GitLab name [c23aabb]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;feature/doc-link&#x27; into develop [212a7df]
+    * 🔀 : merge branch &#x27;feature/pom-metadata&#x27; into develop (1146417)
+    * 🔀 : merge branch &#x27;feature/readme&#x27; into develop (a1e516f)
+- 🔀 : merge branch &#x27;feature/dashboard-assignents-info&#x27; into develop [3f90dfc]
+- 📝 : add submission count and average [58601eb]
+- 📝 : add scm metadata [185732c]
+- 📝 : add developer info [0cb2c92]
+- 📝 : add license information [b942dce]
+- 📝 : add description and url [8204c5f]
+- 📄 : add LICENSE [51c6e6a]
+- 📝 : add features section [2932888]
+- 📝 : center logo and add badges [681d00f]
+- 🔀 : merge tag &#x27;0.0.5&#x27; into develop [08c8d9a]
+
+
 <a name="0.0.5"></a>
 ## 0.0.5 (2023-08-30)
 
