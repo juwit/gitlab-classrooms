@@ -13,9 +13,11 @@ The views are similar for the 2 types of _Assignments_, _Exercise_ or _Quiz_.
 
 The view shows:
 
+* the total count of _Students_ that accepted the _Assignment_
 * the total count of submissions by the _Students_
+* the average grade of the _Assignment_
 * for each _Student_:
-    * the score of the _Student_ for the assignment
+    * the grade of the _Student_ for the assignment
     * the submission date of the assignment
     * the link to the GitLab project
 
