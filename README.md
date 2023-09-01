@@ -1,4 +1,14 @@
-![Gitlab Classrooms](src/main/docs/logo-with-text.png)
+<p align="center">
+  <img src="src/main/docs/logo-with-text.png" alt="GitLab Classrooms Logo" width="350">
+</p>
+
+<p align="center">
+<img alt="GitHub activity" src="https://img.shields.io/github/commit-activity/m/juwit/gitlab-classrooms?color=00FF0">
+<a href="https://sonarcloud.io/project/overview?id=gitlab-classrooms_gitlab-classrooms">
+<img alt="SonarCloud" src="https://sonarcloud.io/api/project_badges/measure?project=gitlab-classrooms_gitlab-classrooms&metric=alert_status">
+</a>
+<img alt="Last Tag" src="https://img.shields.io/github/v/tag/juwit/gitlab-classrooms">
+</p>
 
 **Gitlab Classroom** is a modest clone of [Github Classroom](https://classroom.github.com/), aimed at Gitlab.
 
