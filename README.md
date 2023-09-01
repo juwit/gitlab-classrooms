@@ -31,3 +31,7 @@ For _Students_, **GitLab Classrooms** help them to:
 * see their grade on each assignment
 
 **GitLab Classroom** uses GitLab OAuth2 provider to authenticate _Teachers_ and _Students_, so no account management is required.
+
+## License
+
+**GitLab Classrooms** is licensed under the terms of [Mozilla Public License 2.0](LICENSE).
