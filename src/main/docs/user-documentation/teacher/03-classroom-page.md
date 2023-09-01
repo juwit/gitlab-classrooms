@@ -47,7 +47,7 @@ Each card show the _Student_ GitLab avatar, the _Student_ GitLab user name, and 
 
 This section lists all the _Assignments_ of the _Classroom_.
 
-Each card show the _Assignment_ type (Exercise or Quiz) with an icon, the _Assignment_ name, and the _Accept Link_ button.
+Each card show the _Assignment_ type (Exercise or Quiz) with an icon, the _Assignment_ name, the number of _Students_ who already accepted the _Assignment_, and the _Accept Link_ button.
 
 <figure markdown>
   ![The Assignment list for a Classroom](03-assignment-list.png){ style="border: solid 1px black" }
