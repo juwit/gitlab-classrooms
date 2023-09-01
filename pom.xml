@@ -26,6 +26,15 @@
         </license>
     </licenses>
 
+    <developers>
+        <developer>
+            <name>Julien Wittouck</name>
+            <email>julien.wittouck@gmail.com</email>
+            <url>https://juwit.github.io</url>
+            <timezone>Europe/Paris</timezone>
+        </developer>
+    </developers>
+
     <properties>
         <java.version>17</java.version>
 
