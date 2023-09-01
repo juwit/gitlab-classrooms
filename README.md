@@ -10,7 +10,11 @@
 <img alt="Last Tag" src="https://img.shields.io/github/v/tag/juwit/gitlab-classrooms">
 </p>
 
+---
+
 **GitLab Classroom** is a modest clone of [Github Classroom](https://classroom.github.com/), aimed at GitLab.
+
+## Features
 
 **GitLab Classrooms** helps _Teachers_ to:
 
@@ -20,10 +24,10 @@
 * use project templates, to have a code skeleton to start with
 * grade work automatically by importing test results
 
-_Students_ can:
+For _Students_, **GitLab Classrooms** help them to:
 
 * access their assignments
-* create their repositories automatically by simply joining a class with a magic link
+* create their repositories automatically by simply joining a classroom with a magic link
 * see their grade on each assignment
 
-**GitLab Classroom** uses GitLab OAuth2 provider to authenticate _Teachers_ and _Students_.
+**GitLab Classroom** uses GitLab OAuth2 provider to authenticate _Teachers_ and _Students_, so no account management is required.
