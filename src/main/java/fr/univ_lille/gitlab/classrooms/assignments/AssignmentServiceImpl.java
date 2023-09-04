@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
@@ -43,14 +44,16 @@ class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     @Transactional
-    public void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException {
+    public void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException, GitLabException {
         assignment.accept(student);
         this.assignmentRepository.save(assignment);
 
         if (assignment instanceof ExerciseAssignment exerciseAssignment) {
             // create the project in gitlab
             var project = gitlab.createProject(exerciseAssignment, student);
-
+            if (this.studentAssignmentRepository.existsByAssignmentAndStudent(exerciseAssignment, student)) {
+                return;
+            }
             // create the student exercise assignment
             var studentExercise = new StudentExerciseAssignment();
             studentExercise.setAssignment(exerciseAssignment);
@@ -58,8 +61,10 @@ class AssignmentServiceImpl implements AssignmentService {
             studentExercise.setGitlabProjectId(project.getId());
             studentExercise.setGitlabProjectUrl(project.getWebUrl());
             this.studentAssignmentRepository.save(studentExercise);
-        }
-        else if (assignment instanceof QuizAssignment quizAssignment) {
+        } else if (assignment instanceof QuizAssignment quizAssignment) {
+            if (this.studentAssignmentRepository.existsByAssignmentAndStudent(quizAssignment, student)) {
+                return;
+            }
             // create the student quiz assignment
             var studentExercise = new StudentQuizAssignment();
             studentExercise.setAssignment(quizAssignment);

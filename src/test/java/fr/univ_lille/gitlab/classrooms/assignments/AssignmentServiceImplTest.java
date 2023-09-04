@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
@@ -50,7 +51,7 @@ class AssignmentServiceImplTest {
     }
 
     @Test
-    void acceptAssignment_shouldAssociateTheStudentWithTheAssignment_andSave() throws GitLabApiException {
+    void acceptAssignment_shouldAssociateTheStudentWithTheAssignment_andSave() throws GitLabApiException, GitLabException {
         var assignment = new QuizAssignment();
 
         var student = new ClassroomUser();
@@ -63,7 +64,20 @@ class AssignmentServiceImplTest {
     }
 
     @Test
-    void acceptExerciceAssignment_shouldCreateAGitlabProject() throws GitLabApiException {
+    void acceptAssignment_shouldDoNothing_ifQuizAssignmentIsAlreadyAccepted() throws GitLabApiException, GitLabException {
+        var assignment = new QuizAssignment();
+
+        var student = new ClassroomUser();
+
+        when(studentAssignmentRepository.existsByAssignmentAndStudent(assignment,  student)).thenReturn(true);
+
+        this.assignmentService.acceptAssigment(assignment, student);
+
+        verifyNoMoreInteractions(studentAssignmentRepository);
+    }
+
+    @Test
+    void acceptExerciceAssignment_shouldCreateAGitlabProject() throws GitLabApiException, GitLabException {
         var teacher = new ClassroomUser();
 
         var classroom = new Classroom();
@@ -95,6 +109,28 @@ class AssignmentServiceImplTest {
         assertThat(studentExercise.getStudent()).isEqualTo(student);
         assertThat(studentExercise.getGitlabProjectId()).isEqualTo(25L);
         assertThat(studentExercise.getGitlabProjectUrl()).isEqualTo("https://gitlab.univ-lille.fr/gitlab-classroom");
+    }
+
+    @Test
+    void acceptAssignment_shouldDoNothing_ifExerciseAssignmentIsAlreadyAccepted() throws GitLabApiException, GitLabException {
+        var teacher = new ClassroomUser();
+
+        var classroom = new Classroom();
+        classroom.setTeacher(teacher);
+
+        var assignment = new ExerciseAssignment();
+        assignment.setName("Exercice 1");
+        assignment.setGitlabGroupId(12L);
+        classroom.addAssignment(assignment);
+
+        var student = new ClassroomUser();
+        student.setName("luke.skywalker");
+
+        when(studentAssignmentRepository.existsByAssignmentAndStudent(assignment,  student)).thenReturn(true);
+
+        this.assignmentService.acceptAssigment(assignment, student);
+
+        verifyNoMoreInteractions(studentAssignmentRepository);
     }
 
     @Test
