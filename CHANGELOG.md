@@ -1,5 +1,25 @@
 # Changelog
 
+<a name="0.0.7"></a>
+## 0.0.7 (2023-09-04)
+
+### Added
+
+- ✅ : show error when accepting assignment [95b43f2]
+- ✨ : do not create projet if it already exists [14619d5]
+- ✨ : add custom exception class [d726d1b]
+- ✨ : add error page for 5XX errors [8224af9]
+
+### Fixed
+
+- 🐛 : do not create StudentExerciseAssignment if already existing [76eb04a]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;bugfix/existing-projects&#x27; into develop [8dfa3a8]
+- 🔀 : merge tag &#x27;0.0.6&#x27; into develop [b210b03]
+
+
 <a name="0.0.6"></a>
 ## 0.0.6 (2023-09-01)
 
