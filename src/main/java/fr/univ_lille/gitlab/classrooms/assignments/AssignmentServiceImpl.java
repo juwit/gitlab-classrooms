@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
@@ -43,7 +44,7 @@ class AssignmentServiceImpl implements AssignmentService {
 
     @Override
     @Transactional
-    public void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException {
+    public void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException, GitLabException {
         assignment.accept(student);
         this.assignmentRepository.save(assignment);
 

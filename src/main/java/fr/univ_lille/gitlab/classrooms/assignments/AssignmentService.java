@@ -1,6 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
+import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
 import org.gitlab4j.api.GitLabApiException;
@@ -13,7 +14,7 @@ public interface AssignmentService {
     Optional<Assignment> getAssignment(UUID id);
 
     @Transactional
-    void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException;
+    void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException, GitLabException;
 
     List<StudentAssignment> getAssignmentResults(Assignment assignment);
 

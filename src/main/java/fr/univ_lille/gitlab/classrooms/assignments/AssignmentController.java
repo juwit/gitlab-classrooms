@@ -1,6 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
@@ -85,7 +86,7 @@ class AssignmentController {
         try {
             this.assignmentService.acceptAssigment(assignment, student);
         }
-        catch (GitLabApiException e){
+        catch (GitLabApiException | GitLabException e){
             LOGGER.log(System.Logger.Level.ERROR, "Could not accept assignment");
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept assignment", e);
         }

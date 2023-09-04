@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import fr.univ_lille.gitlab.classrooms.quiz.QuizService;
@@ -50,7 +51,7 @@ class AssignmentServiceImplTest {
     }
 
     @Test
-    void acceptAssignment_shouldAssociateTheStudentWithTheAssignment_andSave() throws GitLabApiException {
+    void acceptAssignment_shouldAssociateTheStudentWithTheAssignment_andSave() throws GitLabApiException, GitLabException {
         var assignment = new QuizAssignment();
 
         var student = new ClassroomUser();
@@ -63,7 +64,7 @@ class AssignmentServiceImplTest {
     }
 
     @Test
-    void acceptExerciceAssignment_shouldCreateAGitlabProject() throws GitLabApiException {
+    void acceptExerciceAssignment_shouldCreateAGitlabProject() throws GitLabApiException, GitLabException {
         var teacher = new ClassroomUser();
 
         var classroom = new Classroom();

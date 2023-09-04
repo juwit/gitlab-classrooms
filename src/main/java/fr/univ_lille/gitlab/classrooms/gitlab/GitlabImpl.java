@@ -86,20 +86,26 @@ class GitlabImpl implements Gitlab {
     }
 
     @Override
-    public Project createProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException {
+    public Project createProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException, GitLabException {
         var classroom = exerciseAssignment.getClassroom();
         var teacher = classroom.getTeacher();
         // get a gitlab api client ith the teacher's rights
         var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher);
 
-        Project project;
+        Project project = null;
 
+        // get gitlab group info
+        var group = teacherGitlabApi.getGroupApi().getGroup(exerciseAssignment.getGitlabGroupId());
         var projectName = exerciseAssignment.getName() + "-" + student.getName();
 
-        if (exerciseAssignment.getGitlabRepositoryTemplateId() != null && !exerciseAssignment.getGitlabRepositoryTemplateId().isBlank()) {
-            // get gitlab group info
-            var group = teacherGitlabApi.getGroupApi().getGroup(exerciseAssignment.getGitlabGroupId());
+        try {
+            project = teacherGitlabApi.getProjectApi().getProject(group.getFullPath(), projectName);
+        }
+        catch (GitLabApiException ignore){
+            // ignoring the 404 exception, meaning that the project doesn't exists yet
+        }
 
+        if (project == null && (exerciseAssignment.getGitlabRepositoryTemplateId() != null && !exerciseAssignment.getGitlabRepositoryTemplateId().isBlank())) {
             var path = slugify(projectName);
             // fork the template project
             project = teacherGitlabApi.getProjectApi().forkProject(
@@ -109,16 +115,37 @@ class GitlabImpl implements Gitlab {
                     projectName);
             // remove the fork link
             teacherGitlabApi.getProjectApi().deleteForkedFromRelationship(project.getId());
-        } else {
+        } else if (project == null) {
             // create a blank project
             var projectParams = new Project()
                     .withName(projectName)
-                    .withNamespaceId(exerciseAssignment.getGitlabGroupId());
+                    .withNamespaceId(group.getId());
             project = teacherGitlabApi.getProjectApi().createProject(projectParams);
         }
+
         // grant the student access to its project
-        teacherGitlabApi.getProjectApi().addMember(project.getId(), student.getGitlabUserId(), AccessLevel.MAINTAINER);
+        this.ensureStudentCanAccessItsProject(teacherGitlabApi, project, student);
 
         return project;
+    }
+
+    private void ensureStudentCanAccessItsProject(GitLabApi gitlabApi, Project project, ClassroomUser student) throws GitLabException {
+        try {
+            var member = gitlabApi.getProjectApi().getMember(project.getId(), student.getGitlabUserId(), true);
+            if(member != null){
+                // found, student has access
+                return;
+            }
+        } catch (GitLabApiException ignore) {
+            // ignoring the 404 exception, meaning that the student doesn't have access to its repository
+        }
+        // grant the student access to its project
+        try {
+            gitlabApi.getProjectApi().addMember(project.getId(), student.getGitlabUserId(), AccessLevel.MAINTAINER);
+        } catch (GitLabApiException e) {
+            var message = String.format("Unable to give student %s access to its GitLab project %s", student.getGitlabUserId(), project.getId());
+            throw new GitLabException(message, e);
+        }
+
     }
 }
