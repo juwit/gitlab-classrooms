@@ -2,11 +2,13 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
+import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.quiz.*;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
 import fr.univ_lille.gitlab.classrooms.users.WithMockStudent;
 import fr.univ_lille.gitlab.classrooms.users.WithMockTeacher;
+import org.gitlab4j.api.GitLabApiException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,8 +24,7 @@ import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -128,6 +129,17 @@ class AssignmentControllerMVCTest {
                 .andExpect(status().isOk())
                 .andExpect(model().attributeExists("assignmentResult"))
                 .andExpect(view().name("assignments/accepted"));
+
+        verify(assignmentService).acceptAssigment(any(), any());
+    }
+
+    @Test
+    @WithMockStudent
+    void acceptAssignment_shouldShowAnError_whenGitLabException() throws Exception {
+        doThrow(new GitLabException("Could not create project", new GitLabApiException("500"))).when(this.assignmentService).acceptAssigment(any(), any());
+
+        mockMvc.perform(post("/assignments/"+ exerciseAssignmentId +"/accept").with(csrf()))
+                .andExpect(status().is5xxServerError());
 
         verify(assignmentService).acceptAssigment(any(), any());
     }
