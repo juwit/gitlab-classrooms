@@ -10,6 +10,8 @@ import java.util.UUID;
 interface StudentAssignmentRepository extends JpaRepository<StudentAssignment, UUID> {
     List<StudentAssignment> findAllByAssignment(Assignment assignment);
 
+    boolean existsByAssignmentAndStudent(Assignment assignment, ClassroomUser student);
+
     StudentAssignment findByAssignmentAndStudent(Assignment assignment, ClassroomUser student);
 
     List<StudentAssignment> findByAssignmentClassroomAndStudent(Classroom classroom, ClassroomUser student);
