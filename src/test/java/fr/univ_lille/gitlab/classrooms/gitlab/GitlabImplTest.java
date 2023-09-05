@@ -80,7 +80,7 @@ class GitlabImplTest {
 
         assertThat(gitlabGroupCaptor.getValue())
                 .hasFieldOrPropertyWithValue("name", "Test classroom")
-                .hasFieldOrPropertyWithValue("path", "Test_classroom")
+                .hasFieldOrPropertyWithValue("path", "test-classroom")
                 .hasFieldOrPropertyWithValue("description", "Gitlab group for the Classroom Test classroom");
 
         assertThat(classroom.getGitlabGroupId()).isEqualTo(36L);
@@ -106,7 +106,7 @@ class GitlabImplTest {
 
         assertThat(gitlabGroupCaptor.getValue())
                 .hasFieldOrPropertyWithValue("name", "Exercice 1")
-                .hasFieldOrPropertyWithValue("path", "Exercice_1")
+                .hasFieldOrPropertyWithValue("path", "exercice-1")
                 .hasFieldOrPropertyWithValue("parentId", 12L)
                 .hasFieldOrPropertyWithValue("description", "Gitlab group for the assignment Exercice 1");
 
@@ -126,7 +126,7 @@ class GitlabImplTest {
         var group = new Group();
         group.setId(72L);
         group.setFullPath("my-group/path");
-        when(gitLabApi.getGroupApi().getGroup(72L)).thenReturn(group);
+        when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
         classroom.setTeacher(teacher);
@@ -137,13 +137,13 @@ class GitlabImplTest {
         var projectMock = new Project();
         projectMock.setId(125L);
         // project non existing
-        when(gitLabApi.getProjectApi().getProject("my-group/path", "Exercice 1-luke.skywalker")).thenThrow(new GitLabApiException("Not Member"));
+        when(gitLabApi.getProjectApi().getOptionalProject("my-group/path", "exercice-1-luke.skywalker")).thenReturn(Optional.empty());
         when(gitLabApi.getProjectApi().createProject(any(Project.class))).thenReturn(projectMock);
 
         // no rights on project yet
-        when(gitLabApi.getProjectApi().getMember(125L, 8L, true)).thenThrow(new GitLabApiException("Not Member"));
+        when(gitLabApi.getProjectApi().getOptionalMember(125L, 8L, true)).thenReturn(Optional.empty());
 
-        gitlab.createProject(assignment, student);
+        gitlab.createStudentProject(assignment, student);
 
         var projectCaptor = ArgumentCaptor.forClass(Project.class);
         verify(gitLabApi.getProjectApi()).createProject(projectCaptor.capture());
@@ -151,6 +151,7 @@ class GitlabImplTest {
         var project = projectCaptor.getValue();
         assertThat(project).isNotNull();
         assertThat(project.getName()).isEqualTo("Exercice 1-luke.skywalker");
+        assertThat(project.getPath()).isEqualTo("exercice-1-luke.skywalker");
         assertThat(project.getNamespace().getId()).isEqualTo(72L);
 
         verify(gitLabApi.getProjectApi()).addMember(125L, 8L, AccessLevel.MAINTAINER);
@@ -171,7 +172,7 @@ class GitlabImplTest {
         var group = new Group();
         group.setId(72L);
         group.setFullPath("my-group/path");
-        when(gitLabApi.getGroupApi().getGroup(72L)).thenReturn(group);
+        when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
         classroom.setTeacher(teacher);
@@ -182,12 +183,12 @@ class GitlabImplTest {
         // project already exists
         var projectMock = new Project();
         projectMock.setId(125L);
-        when(gitLabApi.getProjectApi().getProject("my-group/path", "Exercice 1-luke.skywalker")).thenReturn(projectMock);
+        when(gitLabApi.getProjectApi().getOptionalProject("my-group/path", "exercice-1-luke.skywalker")).thenReturn(Optional.of(projectMock));
 
         // no rights on project
-        when(gitLabApi.getProjectApi().getMember(125L, 8L, true)).thenThrow(new GitLabApiException("Not Member"));
+        when(gitLabApi.getProjectApi().getOptionalMember(125L, 8L, true)).thenReturn(Optional.empty());
 
-        gitlab.createProject(assignment, student);
+        gitlab.createStudentProject(assignment, student);
 
         verify(gitLabApi.getProjectApi()).addMember(125L, 8L, AccessLevel.MAINTAINER);
 
@@ -207,7 +208,7 @@ class GitlabImplTest {
         var group = new Group();
         group.setId(72L);
         group.setFullPath("my-group/path");
-        when(gitLabApi.getGroupApi().getGroup(72L)).thenReturn(group);
+        when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
         classroom.setTeacher(teacher);
@@ -218,12 +219,12 @@ class GitlabImplTest {
         // project already exists
         var projectMock = new Project();
         projectMock.setId(125L);
-        when(gitLabApi.getProjectApi().getProject("my-group/path", "Exercice 1-luke.skywalker")).thenReturn(projectMock);
+        when(gitLabApi.getProjectApi().getOptionalProject("my-group/path", "exercice-1-luke.skywalker")).thenReturn(Optional.of(projectMock));
 
         // rights on project
-        when(gitLabApi.getProjectApi().getMember(125L, 8L, true)).thenReturn(new Member());
+        when(gitLabApi.getProjectApi().getOptionalMember(125L, 8L, true)).thenReturn(Optional.of(new Member()));
 
-        gitlab.createProject(assignment, student);
+        gitlab.createStudentProject(assignment, student);
 
         verifyNoMoreInteractions(gitLabApi.getProjectApi());
     }
@@ -242,7 +243,7 @@ class GitlabImplTest {
         var group = new Group();
         group.setId(72L);
         group.setFullPath("my-group/path");
-        when(gitLabApi.getGroupApi().getGroup(72L)).thenReturn(group);
+        when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
         classroom.setTeacher(teacher);
@@ -253,16 +254,15 @@ class GitlabImplTest {
         var projectMock = new Project();
         projectMock.setId(125L);
         // project non existing
-        when(gitLabApi.getProjectApi().getProject("my-group/path", "Exercice 2 - Template-luke.skywalker")).thenThrow(new GitLabApiException("Not Member"));
-        when(gitLabApi.getProjectApi().forkProject("12", "my-group/path", "Exercice_2_-_Template-luke.skywalker", "Exercice 2 - Template-luke.skywalker")).thenReturn(projectMock);
+        when(gitLabApi.getProjectApi().getOptionalProject("my-group/path", "exercice-2---template-luke.skywalker")).thenReturn(Optional.empty());
+        when(gitLabApi.getProjectApi().forkProject("12", "my-group/path", "exercice-2---template-luke.skywalker", "Exercice 2 - Template-luke.skywalker")).thenReturn(projectMock);
 
         // no rights on project
-        when(gitLabApi.getProjectApi().getMember(125L, 8L, true)).thenThrow(new GitLabApiException("Not Member"));
+        when(gitLabApi.getProjectApi().getOptionalMember(125L, 8L, true)).thenReturn(Optional.empty());
 
-        gitlab.createProject(assignment, student);
+        gitlab.createStudentProject(assignment, student);
 
-        verify(gitLabApi.getProjectApi()).forkProject("12", "my-group/path", "Exercice_2_-_Template-luke.skywalker", "Exercice 2 - Template-luke.skywalker");
-        verify(gitLabApi.getProjectApi()).deleteForkedFromRelationship(125L);
+        verify(gitLabApi.getProjectApi()).forkProject("12", "my-group/path", "exercice-2---template-luke.skywalker", "Exercice 2 - Template-luke.skywalker");
         verify(gitLabApi.getProjectApi()).addMember(125L, 8L, AccessLevel.MAINTAINER);
 
         verifyNoMoreInteractions(gitLabApi.getProjectApi());

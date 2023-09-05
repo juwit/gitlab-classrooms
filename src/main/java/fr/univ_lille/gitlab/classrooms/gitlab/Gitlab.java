@@ -44,5 +44,5 @@ public interface Gitlab {
      * @param student the student who accepted the assignment
      * @return the Gitlab Project
      */
-    Project createProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException, GitLabException;
+    Project createStudentProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException, GitLabException;
 }

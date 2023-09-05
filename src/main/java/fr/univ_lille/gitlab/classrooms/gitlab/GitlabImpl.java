@@ -44,13 +44,13 @@ class GitlabImpl implements Gitlab {
     }
 
     /**
-     * Slugify a name by removing all chars that are not letters, numbers, underscore or hyphens, and replacing them by underscores.
+     * Slugify a name by removing all chars that are not letters, numbers, underscore or hyphens, and replacing them by hyphens.
      *
      * @param name value to slugify
      * @return slugified value
      */
     private String slugify(String name) {
-        return name.trim().replaceAll("[^\\w\\-.]", "_");
+        return name.trim().toLowerCase().replaceAll("[^\\w.]", "-");
     }
 
     @Override
@@ -86,42 +86,14 @@ class GitlabImpl implements Gitlab {
     }
 
     @Override
-    public Project createProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException, GitLabException {
+    public Project createStudentProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabException {
         var classroom = exerciseAssignment.getClassroom();
         var teacher = classroom.getTeacher();
         // get a gitlab api client ith the teacher's rights
         var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher);
 
-        Project project = null;
-
-        // get gitlab group info
-        var group = teacherGitlabApi.getGroupApi().getGroup(exerciseAssignment.getGitlabGroupId());
-        var projectName = exerciseAssignment.getName() + "-" + student.getName();
-
-        try {
-            project = teacherGitlabApi.getProjectApi().getProject(group.getFullPath(), projectName);
-        }
-        catch (GitLabApiException ignore){
-            // ignoring the 404 exception, meaning that the project doesn't exists yet
-        }
-
-        if (project == null && (exerciseAssignment.getGitlabRepositoryTemplateId() != null && !exerciseAssignment.getGitlabRepositoryTemplateId().isBlank())) {
-            var path = slugify(projectName);
-            // fork the template project
-            project = teacherGitlabApi.getProjectApi().forkProject(
-                    exerciseAssignment.getGitlabRepositoryTemplateId(),
-                    group.getFullPath(),
-                    path,
-                    projectName);
-            // remove the fork link
-            teacherGitlabApi.getProjectApi().deleteForkedFromRelationship(project.getId());
-        } else if (project == null) {
-            // create a blank project
-            var projectParams = new Project()
-                    .withName(projectName)
-                    .withNamespaceId(group.getId());
-            project = teacherGitlabApi.getProjectApi().createProject(projectParams);
-        }
+        // create the project if needed
+        var project = this.ensureStudentProjectExists(teacherGitlabApi, exerciseAssignment, student);
 
         // grant the student access to its project
         this.ensureStudentCanAccessItsProject(teacherGitlabApi, project, student);
@@ -129,21 +101,40 @@ class GitlabImpl implements Gitlab {
         return project;
     }
 
-    private void ensureStudentCanAccessItsProject(GitLabApi gitlabApi, Project project, ClassroomUser student) throws GitLabException {
+    private Project ensureStudentProjectExists(GitLabApi teacherGitlabApi, ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabException {
+        var groupId = exerciseAssignment.getGitlabGroupId();
+        var group = teacherGitlabApi.getGroupApi().getOptionalGroup(groupId).orElseThrow(() -> new GitLabException("Group with id %s doest not exists".formatted(groupId)));
+        var projectName = exerciseAssignment.getName() + "-" + student.getName();
+        var projectPath = slugify(projectName);
+
+        var existingProject = teacherGitlabApi.getProjectApi().getOptionalProject(group.getFullPath(), projectPath);
+        if (existingProject.isPresent()) {
+            return existingProject.get();
+        }
         try {
-            var member = gitlabApi.getProjectApi().getMember(project.getId(), student.getGitlabUserId(), true);
-            if(member != null){
-                // found, student has access
-                return;
+            if (exerciseAssignment.getGitlabRepositoryTemplateId() != null && !exerciseAssignment.getGitlabRepositoryTemplateId().isBlank()) {
+                // fork the template project
+                return teacherGitlabApi.getProjectApi().forkProject(exerciseAssignment.getGitlabRepositoryTemplateId(), group.getFullPath(), projectPath, projectName);
+            } else {
+                // create a blank project
+                var projectParams = new Project().withPath(projectPath).withName(projectName).withNamespaceId(group.getId());
+                return teacherGitlabApi.getProjectApi().createProject(projectParams);
             }
-        } catch (GitLabApiException ignore) {
-            // ignoring the 404 exception, meaning that the student doesn't have access to its repository
+        } catch (GitLabApiException e) {
+            throw new GitLabException("Unable to create GitLab project with path '%s' in group '%s'".formatted(projectPath, group.getFullPath()), e);
+        }
+    }
+
+    private void ensureStudentCanAccessItsProject(GitLabApi teacherGitlabApi, Project project, ClassroomUser student) throws GitLabException {
+        var member = teacherGitlabApi.getProjectApi().getOptionalMember(project.getId(), student.getGitlabUserId(), true);
+        if (member.isPresent()) {
+            return;
         }
         // grant the student access to its project
         try {
-            gitlabApi.getProjectApi().addMember(project.getId(), student.getGitlabUserId(), AccessLevel.MAINTAINER);
+            teacherGitlabApi.getProjectApi().addMember(project.getId(), student.getGitlabUserId(), AccessLevel.MAINTAINER);
         } catch (GitLabApiException e) {
-            var message = String.format("Unable to give student %s access to its GitLab project %s", student.getGitlabUserId(), project.getId());
+            var message = String.format("Unable to give student '%s' access to its GitLab project '%s'", student.getGitlabUserId(), project.getId());
             throw new GitLabException(message, e);
         }
 

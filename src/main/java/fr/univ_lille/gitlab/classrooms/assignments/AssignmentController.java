@@ -87,7 +87,7 @@ class AssignmentController {
             this.assignmentService.acceptAssigment(assignment, student);
         }
         catch (GitLabApiException | GitLabException e){
-            LOGGER.log(System.Logger.Level.ERROR, "Could not accept assignment");
+            LOGGER.log(System.Logger.Level.ERROR, "Could not accept assignment", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept assignment", e);
         }
 
