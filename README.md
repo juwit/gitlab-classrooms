@@ -8,6 +8,9 @@
 <img alt="SonarCloud" src="https://sonarcloud.io/api/project_badges/measure?project=gitlab-classrooms_gitlab-classrooms&metric=alert_status">
 </a>
 <img alt="Last Tag" src="https://img.shields.io/github/v/tag/juwit/gitlab-classrooms">
+<a href="https://stats.uptimerobot.com/MqRx3tx6xn">
+<img alt="Uptime Robot ratio (7 days)" src="https://img.shields.io/uptimerobot/ratio/7/m795221442-66c0b9f2a75110739df9bde8">
+</a>
 </p>
 
 ---
