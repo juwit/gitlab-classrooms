@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import java.security.Principal;
 import java.util.NoSuchElementException;
 
-@ControllerAdvice(basePackages = "fr.univ_lille.gitlab.classrooms")
+@ControllerAdvice({"fr.univ_lille.gitlab.classrooms", "org.springframework.boot.autoconfigure.web.servlet.error"})
 public class UserControllerAdvice {
 
     private final ClassroomUserService classroomUserService;
