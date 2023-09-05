@@ -1,5 +1,37 @@
 # Changelog
 
+<a name="0.0.8"></a>
+## 0.0.8 (2023-09-05)
+
+### Added
+
+- 🔊 : add parent error when logging [a9495dc]
+- ✨ : implement project creation idempotency [b3eb09d]
+- 🔊 : add exception message [5f75691]
+
+### Changed
+
+- ♻️ : rename method [bd08c1f]
+    * ♻️ : rename method (6d42784)
+
+### Fixed
+
+- 🐛 : do not remove fork relationship [619e4fa]
+- 🐛 : allow the advice to the error controller [4f3e91d]
+- 🐛 : scope the advice to app controllers only [dc5b5a5]
+
+### Security
+
+- 🔒 : authorize actuator requests [bfc4691]
+
+### Miscellaneous
+
+- 📝 : add status badge [af8283f]
+- 🔀 : merge branch &#x27;bugfix/accept-idempotency&#x27; into develop [7432b74]
+    * 🔀 : merge branch &#x27;bugfix/actuator-exposition&#x27; into develop (8854339)
+- 🔀 : merge tag &#x27;0.0.7&#x27; into develop [f5feceb]
+
+
 <a name="0.0.7"></a>
 ## 0.0.7 (2023-09-04)
 

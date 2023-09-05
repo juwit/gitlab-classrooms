@@ -263,7 +263,6 @@ class GitlabImplTest {
         gitlab.createStudentProject(assignment, student);
 
         verify(gitLabApi.getProjectApi()).forkProject("12", "my-group/path", "exercice-2---template-luke.skywalker", "Exercice 2 - Template-luke.skywalker");
-        verify(gitLabApi.getProjectApi()).deleteForkedFromRelationship(125L);
         verify(gitLabApi.getProjectApi()).addMember(125L, 8L, AccessLevel.MAINTAINER);
 
         verifyNoMoreInteractions(gitLabApi.getProjectApi());

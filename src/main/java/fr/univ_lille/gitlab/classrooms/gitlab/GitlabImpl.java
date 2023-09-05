@@ -114,10 +114,7 @@ class GitlabImpl implements Gitlab {
         try {
             if (exerciseAssignment.getGitlabRepositoryTemplateId() != null && !exerciseAssignment.getGitlabRepositoryTemplateId().isBlank()) {
                 // fork the template project
-                var project = teacherGitlabApi.getProjectApi().forkProject(exerciseAssignment.getGitlabRepositoryTemplateId(), group.getFullPath(), projectPath, projectName);
-                // remove the fork link
-                teacherGitlabApi.getProjectApi().deleteForkedFromRelationship(project.getId());
-                return project;
+                return teacherGitlabApi.getProjectApi().forkProject(exerciseAssignment.getGitlabRepositoryTemplateId(), group.getFullPath(), projectPath, projectName);
             } else {
                 // create a blank project
                 var projectParams = new Project().withPath(projectPath).withName(projectName).withNamespaceId(group.getId());
