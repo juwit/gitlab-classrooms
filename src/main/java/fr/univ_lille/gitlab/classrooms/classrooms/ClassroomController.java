@@ -45,7 +45,7 @@ class ClassroomController {
 
     @GetMapping("/{classroomId}")
     String showClassroom(@PathVariable UUID classroomId, Model model) {
-        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        var classroom = this.classroomService.getClassroom(classroomId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Classroom with id %s does not exists".formatted(classroomId)));
         model.addAttribute(CLASSROOM_MODEL_ATTRIBUTE, classroom);
 
         try {

@@ -94,11 +94,11 @@ class AssignmentServiceImplTest {
         var project = new Project();
         project.setId(25L);
         project.setWebUrl("https://gitlab.univ-lille.fr/gitlab-classroom");
-        when(gitlab.createProject(assignment, student)).thenReturn(project);
+        when(gitlab.createStudentProject(assignment, student)).thenReturn(project);
 
         this.assignmentService.acceptAssigment(assignment, student);
 
-        verify(gitlab).createProject(assignment, student);
+        verify(gitlab).createStudentProject(assignment, student);
 
         var studentExerciseCaptor = ArgumentCaptor.forClass(StudentExerciseAssignment.class);
         verify(studentAssignmentRepository).save(studentExerciseCaptor.capture());
