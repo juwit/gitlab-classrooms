@@ -1,6 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.security;
 
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUserService;
+import org.springframework.boot.actuate.autoconfigure.security.servlet.EndpointRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.core.JdbcOperations;
@@ -44,6 +45,10 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(it -> {
                     it.requestMatchers(LOGIN_PAGE).permitAll();
                     it.requestMatchers("images/**").permitAll();
+
+                    // authorize actuator endpoints
+                    it.requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll();
+
                     it.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth2 -> {
