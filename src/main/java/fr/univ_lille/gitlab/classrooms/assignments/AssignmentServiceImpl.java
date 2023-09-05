@@ -50,7 +50,7 @@ class AssignmentServiceImpl implements AssignmentService {
 
         if (assignment instanceof ExerciseAssignment exerciseAssignment) {
             // create the project in gitlab
-            var project = gitlab.createProject(exerciseAssignment, student);
+            var project = gitlab.createStudentProject(exerciseAssignment, student);
             if (this.studentAssignmentRepository.existsByAssignmentAndStudent(exerciseAssignment, student)) {
                 return;
             }
