@@ -5,11 +5,11 @@ import java.util.regex.Pattern;
 
 class Answer {
 
-    private static final Pattern multipleChoiceCorrectRegex = Pattern.compile("\\[x\\] (.*)");
-    private static final Pattern multipleChoiceIncorrectRegex = Pattern.compile("\\[ \\] (.*)");
-    private static final Pattern singleChoiceCorrectRegex = Pattern.compile("\\(x\\) (.*)");
-    private static final Pattern singleChoiceIncorrectRegex = Pattern.compile("\\( \\) (.*)");
-    private static final Pattern fullTextRegex = Pattern.compile("= (.*)");
+    private static final Pattern multipleChoiceCorrectRegex = Pattern.compile("\\[[xX]\\] ?(.*)");
+    private static final Pattern multipleChoiceIncorrectRegex = Pattern.compile("\\[ ?\\] ?(.*)");
+    private static final Pattern singleChoiceCorrectRegex = Pattern.compile("\\([xX]\\) ?(.*)");
+    private static final Pattern singleChoiceIncorrectRegex = Pattern.compile("\\( ?\\) ?(.*)");
+    private static final Pattern fullTextRegex = Pattern.compile("= ?(.*)");
     private final String text;
     private final boolean correct;
     private boolean selected = false;
