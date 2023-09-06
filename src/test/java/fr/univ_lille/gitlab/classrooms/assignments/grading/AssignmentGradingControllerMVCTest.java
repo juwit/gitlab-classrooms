@@ -82,7 +82,7 @@ class AssignmentGradingControllerMVCTest {
         mockMvc.perform(
                         multipart("/api/assignments/submit/junit")
                                 .file(mockMultipartFile)
-                                .with(jwt().jwt(builder -> builder.claim("project_id", 12)))
+                                .with(jwt().jwt(builder -> builder.claim("project_id", 12).claim("user_login", "luke.skywalker")))
                 )
                 .andExpect(status().is4xxClientError())
                 .andExpect(status().is(404));
@@ -100,7 +100,7 @@ class AssignmentGradingControllerMVCTest {
         mockMvc.perform(
                         multipart("/api/assignments/submit/junit")
                                 .file(mockMultipartFile)
-                                .with(jwt().jwt(builder -> builder.claim("project_id", 12)))
+                                .with(jwt().jwt(builder -> builder.claim("project_id", 12).claim("user_login", "luke.skywalker")))
                 )
                 .andExpect(status().is2xxSuccessful())
                 .andExpect(status().is(200));

@@ -1,5 +1,15 @@
 # Changelog
 
+<a name="0.0.10"></a>
+## 0.0.10 (2023-09-06)
+
+### Added
+
+- ✨ : update gitlab project id and url when re-accepting assignment [ff1c96a]
+- 🔊 : add more logs [1cfbd2f]
+- ✅ : stabilize temporal tests [40ce037]
+
+
 <a name="0.0.9"></a>
 ## 0.0.9 (2023-09-06)
 

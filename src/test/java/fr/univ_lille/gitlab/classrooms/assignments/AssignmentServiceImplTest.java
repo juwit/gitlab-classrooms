@@ -112,7 +112,7 @@ class AssignmentServiceImplTest {
     }
 
     @Test
-    void acceptAssignment_shouldDoNothing_ifExerciseAssignmentIsAlreadyAccepted() throws GitLabApiException, GitLabException {
+    void acceptAssignment_shouldUpdateGitlabInfo_ifExerciseAssignmentIsAlreadyAccepted() throws GitLabApiException, GitLabException {
         var teacher = new ClassroomUser();
 
         var classroom = new Classroom();
@@ -126,10 +126,21 @@ class AssignmentServiceImplTest {
         var student = new ClassroomUser();
         student.setName("luke.skywalker");
 
-        when(studentAssignmentRepository.existsByAssignmentAndStudent(assignment,  student)).thenReturn(true);
+        var studentExerciseAssignment = new StudentExerciseAssignment();
+
+        var project = new Project();
+        project.setId(65L);
+        project.setWebUrl("web_url");
+        when(gitlab.createStudentProject(assignment, student)).thenReturn(project);
+
+        when(studentAssignmentRepository.findByAssignmentAndStudent(assignment,  student)).thenReturn(studentExerciseAssignment);
 
         this.assignmentService.acceptAssigment(assignment, student);
 
+        assertThat(studentExerciseAssignment.getGitlabProjectId()).isEqualTo(65L);
+        assertThat(studentExerciseAssignment.getGitlabProjectUrl()).isEqualTo("web_url");
+
+        verify(studentAssignmentRepository).save(studentExerciseAssignment);
         verifyNoMoreInteractions(studentAssignmentRepository);
     }
 
