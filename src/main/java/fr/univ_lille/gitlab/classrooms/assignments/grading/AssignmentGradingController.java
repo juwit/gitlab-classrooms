@@ -15,6 +15,8 @@ import java.security.Principal;
 @RequestMapping("/api/assignments/")
 class AssignmentGradingController {
 
+    private static final System.Logger LOGGER = System.getLogger(AssignmentGradingController.class.getName());
+
     private final StudentAssignmentService studentAssignmentService;
 
     private final AssignmentGradeService assignmentGradeService;
@@ -38,22 +40,29 @@ class AssignmentGradingController {
                                     @RequestParam("file") MultipartFile testResultsFile) throws IOException {
         // this ressource only works with gitlab id token authentication
         if (!(authenticationPrincipal instanceof JwtAuthenticationToken jwtToken)) {
+            LOGGER.log(System.Logger.Level.ERROR, "Forbidden access to /api/assignments/submit/junit");
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         // get the gitlab project id from the authentication token
         if(! jwtToken.getTokenAttributes().containsKey("project_id")){
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+            LOGGER.log(System.Logger.Level.ERROR, "No project_id found in authentication token");
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No project_id found in authentication token");
         }
         var gitlabProjectId = Long.parseLong(jwtToken.getTokenAttributes().get("project_id").toString());
 
         // find the associated exercise assignment
         var exerciseAssignment = this.studentAssignmentService.getByGitlabProjectId(gitlabProjectId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+                .orElseThrow(() -> {
+                    var message = "Student Exercise Assignment not found for student '%s', project '%s'".formatted(student.getName(), gitlabProjectId);
+                    LOGGER.log(System.Logger.Level.ERROR, message);
+                    return new ResponseStatusException(HttpStatus.NOT_FOUND, message );
+                });
 
         // grade using the test report
         try {
             this.assignmentGradeService.gradeAssignmentWithJUnitReport(exerciseAssignment, testResultsFile.getInputStream());
         } catch (AssignmentGradingException e) {
+            LOGGER.log(System.Logger.Level.ERROR, "Error when grading assignment for student '%s', project '%s'".formatted(student.getName(), gitlabProjectId));
             throw new ResponseStatusException(500, e.getMessage(), e);
         }
 
