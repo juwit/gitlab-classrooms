@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnswerTest {
@@ -12,7 +13,19 @@ class AnswerTest {
     @Nested
     class SingleChoice {
         String sampleSingleChoiceCorrectAnswer = "(x) Requête/réponse";
+        String sampleSingleChoiceCorrectAnswerMajX = "(X)Requête/réponse";
         String sampleSingleChoiceInCorrectAnswer = "( ) Non connecté";
+        String sampleSingleChoiceInCorrectAnswerNoSpace = "()Non connecté";
+
+        @Test
+        void testQuestionParsing(){
+            // testing correctness directly after parsing the questions
+            // so correct questions are false (not selected), and incorrect are true (not selected)
+            assertThat(Answer.fromMarkdown(sampleSingleChoiceCorrectAnswer, "0").isCorrect()).isFalse();
+            assertThat(Answer.fromMarkdown(sampleSingleChoiceCorrectAnswerMajX, "0").isCorrect()).isFalse();
+            assertThat(Answer.fromMarkdown(sampleSingleChoiceInCorrectAnswer, "0").isCorrect()).isTrue();
+            assertThat(Answer.fromMarkdown(sampleSingleChoiceInCorrectAnswerNoSpace, "0").isCorrect()).isTrue();
+        }
 
         @Test
         void selectedSingleChoiceCorrectAnswer_shouldBeCorrect(){
@@ -54,7 +67,19 @@ class AnswerTest {
     @Nested
     class MultipleChoice {
         String sampleCorrectAnswer = "[x] Java";
+        String sampleCorrectAnswerMajX = "[X]Java";
         String sampleInCorrectAnswer = "[ ] JavaScript";
+        String sampleInCorrectAnswerNoSpace = "[]JavaScript";
+
+        @Test
+        void testQuestionParsing(){
+            // testing correctness directly after parsing the questions
+            // so correct questions are false (not selected), and incorrect are true (not selected)
+            assertThat(Answer.fromMarkdown(sampleCorrectAnswer, "0").isCorrect()).isFalse();
+            assertThat(Answer.fromMarkdown(sampleCorrectAnswerMajX, "0").isCorrect()).isFalse();
+            assertThat(Answer.fromMarkdown(sampleInCorrectAnswer, "0").isCorrect()).isTrue();
+            assertThat(Answer.fromMarkdown(sampleInCorrectAnswerNoSpace, "0").isCorrect()).isTrue();
+        }
 
         @Test
         void selectedCorrectAnswer_shouldBeCorrect(){
@@ -117,7 +142,7 @@ class AnswerTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"[x] Java", "[ ] JavaScript", "(x) Requête/réponse", "( ) Non connecté", "= 8080"})
+    @ValueSource(strings = {"[x] Java", "[ ] JavaScript", "(x) Requête/réponse", "( ) Non connecté", "= 8080", "=80", "()no space", "[]no space", "(X) Maj X", "[X] Maj X"})
     void shouldParseMarkdown(String answerMarkdown){
         var answer = Answer.fromMarkdown(answerMarkdown, "0");
 
