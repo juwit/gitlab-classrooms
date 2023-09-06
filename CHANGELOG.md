@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.0.9"></a>
+## 0.0.9 (2023-09-06)
+
+### Fixed
+
+- 🐛 : allow capital X and no spaces in answers format [476702c]
+
+
 <a name="0.0.8"></a>
 ## 0.0.8 (2023-09-05)
 
