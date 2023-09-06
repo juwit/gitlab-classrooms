@@ -3,6 +3,8 @@ package fr.univ_lille.gitlab.classrooms.assignments.grading;
 import fr.univ_lille.gitlab.classrooms.assignments.StudentExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.JUnitAssignmentGrade;
 import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports.TestReportParser;
+import org.assertj.core.data.TemporalOffset;
+import org.assertj.core.data.TemporalUnitOffset;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,6 +15,7 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -64,7 +67,7 @@ class AssignmentGradeServiceImplTest {
         assertThat(testSuite.getErrors()).isZero();
         assertThat(testSuite.getSkipped()).isZero();
 
-        assertThat(studentExerciseAssignment.getSubmissionDate()).isEqualToIgnoringSeconds(ZonedDateTime.now());
+        assertThat(studentExerciseAssignment.getSubmissionDate()).isCloseTo(ZonedDateTime.now(), within(10, ChronoUnit.SECONDS));
         assertThat(studentExerciseAssignment.getScore()).isEqualTo(10);
         assertThat(studentExerciseAssignment.getMaxScore()).isEqualTo(10);
     }
@@ -79,7 +82,7 @@ class AssignmentGradeServiceImplTest {
         assignmentGradeService.gradeAssignmentWithJUnitReport(studentExerciseAssignment, firstReportInputStream);
         assignmentGradeService.gradeAssignmentWithJUnitReport(studentExerciseAssignment, secondReportInputStream);
 
-        assertThat(studentExerciseAssignment.getSubmissionDate()).isEqualToIgnoringSeconds(ZonedDateTime.now());
+        assertThat(studentExerciseAssignment.getSubmissionDate()).isCloseTo(ZonedDateTime.now(), within(10, ChronoUnit.SECONDS));
         assertThat(studentExerciseAssignment.getScore()).isEqualTo(18);
         assertThat(studentExerciseAssignment.getMaxScore()).isEqualTo(18);
     }
@@ -113,7 +116,7 @@ class AssignmentGradeServiceImplTest {
         assertThat(testSuite.getErrors()).isZero();
         assertThat(testSuite.getSkipped()).isZero();
 
-        assertThat(studentExerciseAssignment.getSubmissionDate()).isEqualToIgnoringSeconds(ZonedDateTime.now());
+        assertThat(studentExerciseAssignment.getSubmissionDate()).isCloseTo(ZonedDateTime.now(), within(10, ChronoUnit.SECONDS));
         assertThat(studentExerciseAssignment.getScore()).isEqualTo(1);
         assertThat(studentExerciseAssignment.getMaxScore()).isEqualTo(2);
     }
