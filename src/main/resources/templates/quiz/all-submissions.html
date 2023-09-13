@@ -55,10 +55,10 @@
                                 </div>
                             </td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                <div class="text-gray-900" th:text="${submission.score} + ' / ' + ${submission.maxScore}">8/10</div>
+                                <div th:if="${submission.submissionDate}" class="text-gray-900" th:text="${submission.score} + ' / ' + ${submission.maxScore}">8/10</div>
                             </td>
                             <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
-                                <div class="text-gray-900" th:text="${#temporals.format(submission.localizedSubmissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</div>
+                                <div th:if="${submission.submissionDate}" class="text-gray-900" th:text="${#temporals.format(submission.localizedSubmissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</div>
                             </td>
                         </tr>
 
