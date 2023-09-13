@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.0.11"></a>
+## 0.0.11 (2023-09-13)
+
+### Fixed
+
+- 🐛 : only show score when submission date is not null [62f57c1]
+
+
 <a name="0.0.10"></a>
 ## 0.0.10 (2023-09-06)
 
