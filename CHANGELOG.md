@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.0.12"></a>
+## 0.0.12 (2023-09-13)
+
+### Fixed
+
+- 🐛 : correct grade overwriting [72515ea]
+
+
 <a name="0.0.11"></a>
 ## 0.0.11 (2023-09-13)
 
