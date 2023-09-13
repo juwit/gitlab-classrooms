@@ -36,6 +36,8 @@ class AssignmentGradeServiceImpl implements AssignmentGradeService {
 
             // add parsed suite to current grade
             var jUnitAssignmentGrade = ((JUnitAssignmentGrade) assignmentGrade);
+            // overwrite existing test suite
+            jUnitAssignmentGrade.getTestSuites().remove(junitTestSuite);
             jUnitAssignmentGrade.getTestSuites().add(junitTestSuite);
 
             studentExerciseAssignment.getAssignmentGrades().add(assignmentGrade);

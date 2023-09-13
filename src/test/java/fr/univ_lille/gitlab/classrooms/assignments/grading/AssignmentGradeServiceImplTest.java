@@ -2,6 +2,7 @@ package fr.univ_lille.gitlab.classrooms.assignments.grading;
 
 import fr.univ_lille.gitlab.classrooms.assignments.StudentExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.JUnitAssignmentGrade;
+import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.JUnitTestSuite;
 import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports.TestReportParser;
 import org.assertj.core.data.TemporalOffset;
 import org.assertj.core.data.TemporalUnitOffset;
@@ -70,6 +71,46 @@ class AssignmentGradeServiceImplTest {
         assertThat(studentExerciseAssignment.getSubmissionDate()).isCloseTo(ZonedDateTime.now(), within(10, ChronoUnit.SECONDS));
         assertThat(studentExerciseAssignment.getScore()).isEqualTo(10);
         assertThat(studentExerciseAssignment.getMaxScore()).isEqualTo(10);
+    }
+
+    @Test
+    void testGradeAssignmentWithJUnitReport_shouldOverridePreviousGrade() throws IOException, AssignmentGradingException {
+        var studentExerciseAssignment = new StudentExerciseAssignment();
+
+        // create a grade with an existing test suite
+        JUnitAssignmentGrade junitGrade = new JUnitAssignmentGrade();
+        studentExerciseAssignment.getAssignmentGrades().add(junitGrade);
+
+        JUnitTestSuite testSuite = new JUnitTestSuite();
+        testSuite.setName("test.dao.CatalogDaoTest");
+        testSuite.setTests(10);
+        testSuite.setFailures(5);
+        junitGrade.getTestSuites().add(testSuite);
+
+        var reportInputStream = new ClassPathResource("/junit-reports/TEST-test.dao.CatalogDaoTest.xml").getInputStream();
+
+        assignmentGradeService.gradeAssignmentWithJUnitReport(studentExerciseAssignment, reportInputStream);
+
+        assertThat(studentExerciseAssignment.getAssignmentGrades())
+                .isNotEmpty()
+                .hasSize(1);
+
+        var assignmentGrade = studentExerciseAssignment.getAssignmentGrades().stream().findFirst().get();
+        assertThat(assignmentGrade)
+                .isNotNull()
+                .isInstanceOf(JUnitAssignmentGrade.class);
+        var junitAssignmentGrade = ((JUnitAssignmentGrade) assignmentGrade);
+
+        assertThat(junitAssignmentGrade.getTestSuites())
+                .isNotEmpty()
+                .hasSize(1);
+
+        var newTestSuite = junitAssignmentGrade.getTestSuites().stream().findFirst().get();
+        assertThat(newTestSuite.getName()).isEqualTo("test.dao.CatalogDaoTest");
+        assertThat(newTestSuite.getTests()).isEqualTo(10);
+        assertThat(newTestSuite.getFailures()).isZero();
+        assertThat(newTestSuite.getErrors()).isZero();
+        assertThat(newTestSuite.getSkipped()).isZero();
     }
 
     @Test
