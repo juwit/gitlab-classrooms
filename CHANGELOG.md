@@ -1,5 +1,27 @@
 # Changelog
 
+<a name="0.0.13"></a>
+## 0.0.13 (2023-09-14)
+
+### Changed
+
+- 💄 : replace warning icon with info icon [5265abb]
+- 💄 : add icons to good and bad answers [92ff945]
+- 💄 : use stronger colors to yield a better contrast [ef886a8]
+- ♻️ : update repository url [a130eaa]
+- 🍱 : add smaller logo sizes [abd9af5]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;feature/better-color-contrast-quiz-answers&#x27; into develop [086212f]
+- 🔀 : merge tag &#x27;0.0.12&#x27; into develop [ee3ec13]
+    * 🔀 : merge tag &#x27;0.0.11&#x27; into develop (50d7db6)
+    * 🔀 : merge tag &#x27;0.0.8&#x27; into develop (143e879)
+-  👷 : remove .clever.json file [e2ac737]
+- 🔀 : merge branch &#x27;main&#x27; into develop [ecb8b9c]
+    * 🔀 : merge branch &#x27;main&#x27; into develop (527aa45)
+
+
 <a name="0.0.12"></a>
 ## 0.0.12 (2023-09-13)
 
