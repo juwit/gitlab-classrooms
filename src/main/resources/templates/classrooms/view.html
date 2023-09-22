@@ -81,10 +81,10 @@
             <div class="flex w-full items-center justify-between space-x-6 p-6">
                 <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" th:src="${student.avatarUrl}" alt="">
                 <div class="flex-1 truncate">
-                    <div class="flex items-center space-x-3">
+                    <a th:href="@{/classrooms/{classroomId}/students/{studentName}(classroomId=${classroom.id},studentName=${student.name})}" class="items-center space-x-3">
                         <h3 class="truncate text-sm font-medium text-gray-900" th:text="${student.name}">Jane
                             Cooper</h3>
-                    </div>
+                    </a>
                     <a th:href="'mailto:'+${student.email}" class="mt-1 truncate text-sm text-gray-500 flex">
                         <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                             <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z"/>
