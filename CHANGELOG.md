@@ -1,5 +1,19 @@
 # Changelog
 
+<a name="0.1.0"></a>
+## 0.1.0 (2023-09-22)
+
+### Added
+
+- ✨ : add classroom student view [0a123e8]
+- ✨ : add an input to filter students [d5d63ac]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;feature/student-view&#x27; into develop [039a6de]
+- 🔀 : merge tag &#x27;0.0.13&#x27; into develop [f0ae265]
+
+
 <a name="0.0.13"></a>
 ## 0.0.13 (2023-09-14)
 
