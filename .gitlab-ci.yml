@@ -19,7 +19,7 @@ variables:
     -Dsonar.organization=gitlab-classrooms
     -Dsonar.host.url=https://sonarcloud.io
 
-image: maven:3-eclipse-temurin-17
+image: maven:3-eclipse-temurin-21
 
 cache:
   paths:
