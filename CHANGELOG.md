@@ -1,5 +1,33 @@
 # Changelog
 
+<a name="0.2.0"></a>
+## 0.2.0 (2023-11-10)
+
+### Added
+
+- ✨ : add reset score button on teacher student view page [746e91f]
+- ✨ : add reset score button on teacher exercise submissions page [af1485c]
+    * ✨ : add reset score button on teacher quiz submissions page (37509d9)
+- ✅ : use correct test user [1529e89]
+- ✅ : add second test student [79648a0]
+- ✅ : allow user name override [612496e]
+- ✨ : add reset grade view controller endpoint [17a5bb2]
+- ✨ : add resetGrade method in StudentAssignmentService [422801d]
+    * ✨ : add resetGrades() method on StudentAssignment (ff46143)
+
+### Changed
+
+- ♻️ : replace usage of deprecated constructor [5de36fc]
+- ⬆️ : bump spring-boot-starter-parent to 3.1.5 [577f2e0]
+- ♻️ : extract icons as files [d224095]
+- 💄 : update Classroom header [5a2cb4b]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;feature/student-reset-score&#x27; into develop [7817cfd]
+- 🔀 : merge tag &#x27;0.1.0&#x27; into develop [5e91ba0]
+
+
 <a name="0.1.0"></a>
 ## 0.1.0 (2023-09-22)
 
