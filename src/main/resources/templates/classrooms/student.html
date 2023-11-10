@@ -65,6 +65,12 @@
                             </div>
                         </dt>
                     </div>
+                    <form
+                            th:action="@{/assignments/{assignmentId}/students/{studentId}/reset(assignmentId=${studentAssignment.assignment.id}, studentId=${student.name})}" method="post">
+                        <button type="submit" class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                            Reset Grade
+                        </button>
+                    </form>
                 </div>
                 <div th:if="${studentAssignment.assignment.type.name() == 'EXERCISE'}"
                      class="flex justify-between gap-x-4 py-3">

@@ -56,4 +56,10 @@ public class StudentExerciseAssignment extends StudentAssignment {
                 .mapToLong(AssignmentGrade::getMaxScore)
                 .sum();
     }
+
+    @Override
+    public void resetGrades() {
+        this.setSubmissionDate(null);
+        this.assignmentGrades.clear();
+    }
 }

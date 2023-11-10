@@ -1,21 +1,38 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 class StudentAssignmentServiceImpl implements StudentAssignmentService {
 
     private final StudentExerciceAssignmentRepository studentExerciceAssignmentRepository;
 
-    StudentAssignmentServiceImpl(StudentExerciceAssignmentRepository studentExerciceAssignmentRepository) {
+    private final StudentAssignmentRepository studentAssignmentRepository;
+
+    StudentAssignmentServiceImpl(StudentExerciceAssignmentRepository studentExerciceAssignmentRepository, StudentAssignmentRepository studentAssignmentRepository) {
         this.studentExerciceAssignmentRepository = studentExerciceAssignmentRepository;
+        this.studentAssignmentRepository = studentAssignmentRepository;
     }
 
     @Override
     public Optional<StudentExerciseAssignment> getByGitlabProjectId(long gitlabProjectId) {
         return this.studentExerciceAssignmentRepository.findByGitlabProjectId(gitlabProjectId);
+    }
+
+    @Override
+    @Transactional
+    public void resetGrades(ClassroomUser student, UUID assignmentId) {
+        var studentAssignment= this.studentAssignmentRepository.findByAssignmentIdAndStudent(assignmentId, student);
+
+        studentAssignment.ifPresent(it -> {
+            it.resetGrades();
+            this.studentAssignmentRepository.save(it);
+        });
     }
 
     @Override

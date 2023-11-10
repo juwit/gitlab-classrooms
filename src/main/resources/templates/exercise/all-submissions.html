@@ -86,6 +86,15 @@
                                     Open in Gitlab
                                 </a>
                             </td>
+                            <td class="whitespace-nowrap px-3 py-5 text-sm text-gray-500">
+                                <form
+                                        th:if="${result.submissionDate}"
+                                        th:action="@{/assignments/{assignmentId}/students/{studentId}/reset(assignmentId=${exercise.id}, studentId=${result.student.name})}" method="post">
+                                    <button type="submit" class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
+                                        Reset Grade
+                                    </button>
+                                </form>
+                            </td>
                         </tr>
 
                         <!-- More people... -->
