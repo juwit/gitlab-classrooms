@@ -1,10 +1,16 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
+import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.mockito.Mockito.*;
 
@@ -16,6 +22,10 @@ class StudentAssignmentServiceImplTest {
 
     @Mock
     private StudentExerciceAssignmentRepository studentExerciceAssignmentRepository;
+
+
+    @Mock
+    private StudentAssignmentRepository studentAssignmentRepository;
 
     @Test
     void getByGitlabProjectId() {
@@ -30,5 +40,34 @@ class StudentAssignmentServiceImplTest {
         this.studentAssignmentService.save(exercise);
 
         verify(this.studentExerciceAssignmentRepository).save(exercise);
+    }
+
+    @Test
+    void resetGrades_doesNothing_ifNoStudentAssignment_exists(){
+        var student = new ClassroomUser("luke", List.of(ClassroomRole.STUDENT));
+        var assignmentId = UUID.randomUUID();
+
+        when(this.studentAssignmentRepository.findByAssignmentIdAndStudent(assignmentId, student)).thenReturn(Optional.empty());
+
+        this.studentAssignmentService.resetGrades(student, assignmentId);
+
+        verify(studentAssignmentRepository).findByAssignmentIdAndStudent(assignmentId, student);
+        verifyNoMoreInteractions(studentAssignmentRepository);
+    }
+
+    @Test
+    void resetGrades(){
+        var student = new ClassroomUser("luke", List.of(ClassroomRole.STUDENT));
+        var assignmentId = UUID.randomUUID();
+
+        var studentAssignment = mock(StudentAssignment.class);
+
+        when(this.studentAssignmentRepository.findByAssignmentIdAndStudent(assignmentId, student)).thenReturn(Optional.of(studentAssignment));
+
+        this.studentAssignmentService.resetGrades(student, assignmentId);
+
+        verify(studentAssignmentRepository).findByAssignmentIdAndStudent(assignmentId, student);
+        verify(studentAssignment).resetGrades();
+        verify(studentAssignmentRepository).save(studentAssignment);
     }
 }
