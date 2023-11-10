@@ -5,7 +5,7 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
 import java.util.List;
 
 @Service
@@ -35,7 +35,7 @@ class ClassroomUserServiceImpl implements ClassroomUserService {
 
         if(oauth2User.getAttributes().containsKey("avatar_url")){
             try {
-                classroomUser.setAvatarUrl(new URL(oauth2User.getAttribute("avatar_url")));
+                classroomUser.setAvatarUrl(URI.create(oauth2User.getAttribute("avatar_url")).toURL());
             } catch (MalformedURLException ignore) {
                 // ignore incorrect url
             }

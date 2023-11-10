@@ -82,4 +82,6 @@ public abstract class StudentAssignment {
     public boolean hasBeenSubmitted() {
         return this.submissionDate != null;
     }
+
+    public abstract void resetGrades();
 }
