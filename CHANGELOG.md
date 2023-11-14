@@ -1,5 +1,17 @@
 # Changelog
 
+<a name="0.2.1"></a>
+## 0.2.1 (2023-11-14)
+
+### Fixed
+
+- ✏️ : correct GitLab naming [4625ea6]
+
+### Miscellaneous
+
+- 🔀 : merge tag &#x27;0.2.0&#x27; into develop [e4fc27f]
+
+
 <a name="0.2.0"></a>
 ## 0.2.0 (2023-11-10)
 
