@@ -21,20 +21,20 @@
                         <div class="mt-2">
                             <input type="text" name="classroomName" id="classroomName" class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="">
                         </div>
-                        <p class="mt-3 text-sm leading-6 text-gray-600">The Classroom name will be used as a Gitlab Group name.</p>
+                        <p class="mt-3 text-sm leading-6 text-gray-600">The Classroom name will be used as a GitLab Group name.</p>
                     </div>
 
                     <div class="col-span-full">
-                        <label for="parentGitlabGroupId" class="block text-sm font-medium leading-6 text-gray-900">Parent Gitlab Group</label>
+                        <label for="parentGitLabGroupId" class="block text-sm font-medium leading-6 text-gray-900">Parent GitLab Group</label>
                         <div class="relative mt-2">
-                            <select id="parentGitlabGroupId" name="parentGitlabGroupId" class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" role="combobox" aria-controls="options" aria-expanded="false">
+                            <select id="parentGitLabGroupId" name="parentGitLabGroupId" class="w-full rounded-md border-0 bg-white py-1.5 pl-3 pr-12 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" role="combobox" aria-controls="options" aria-expanded="false">
                                 <option></option>
-                                <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}">Gitlab Group Name</option>
+                                <option th:each="group : ${groups}" th:value="${group.id}" th:text="${group.name}">GitLab Group Name</option>
                             </select>
                         </div>
 
-                        <p class="mt-3 text-sm leading-6 text-gray-600">A new Gitlab Group with the Classroom name will be <b>created</b> in the selected Gitlab Group.</p>
-                        <p class="mt-3 text-sm leading-6 text-gray-600">If no Gitlab Group is selected, the Classroom will be created at the root of Gitlab.</p>
+                        <p class="mt-3 text-sm leading-6 text-gray-600">A new GitLab Group with the Classroom name will be <b>created</b> in the selected GitLab Group.</p>
+                        <p class="mt-3 text-sm leading-6 text-gray-600">If no GitLab Group is selected, the Classroom will be created at the root of GitLab.</p>
                     </div>
                 </div>
             </div>
