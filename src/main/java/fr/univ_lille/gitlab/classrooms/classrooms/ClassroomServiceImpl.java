@@ -50,7 +50,7 @@ class ClassroomServiceImpl implements ClassroomService {
     public void createClassroom(String classroomName, Long parentGitlabGroupId, ClassroomUser teacher) throws GitLabApiException {
         var classroom = new Classroom();
         classroom.setName(classroomName);
-        classroom.setTeacher(teacher);
+        classroom.addTeacher(teacher);
 
         this.gitlab.createGroup(classroom, Optional.ofNullable(parentGitlabGroupId));
 

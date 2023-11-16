@@ -76,6 +76,8 @@ class ClassroomServiceImplTest {
 
         assertThat(classroomCaptor.getValue())
                 .isNotNull()
-                .hasFieldOrPropertyWithValue("teacher.name", "obiwan.kenobi");
+                .satisfies(it -> {
+                    assertThat(it.getTeachers()).contains(teacher);
+                });
     }
 }

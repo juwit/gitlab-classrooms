@@ -81,7 +81,7 @@ class AssignmentServiceImplTest {
         var teacher = new ClassroomUser();
 
         var classroom = new Classroom();
-        classroom.setTeacher(teacher);
+        classroom.addTeacher(teacher);
 
         var assignment = new ExerciseAssignment();
         assignment.setName("Exercice 1");
@@ -116,7 +116,7 @@ class AssignmentServiceImplTest {
         var teacher = new ClassroomUser();
 
         var classroom = new Classroom();
-        classroom.setTeacher(teacher);
+        classroom.addTeacher(teacher);
 
         var assignment = new ExerciseAssignment();
         assignment.setName("Exercice 1");
