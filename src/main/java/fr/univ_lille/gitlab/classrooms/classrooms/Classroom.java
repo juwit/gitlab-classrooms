@@ -19,8 +19,8 @@ public class Classroom {
 
     private Long gitlabGroupId;
 
-    @ManyToOne
-    private ClassroomUser teacher;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<ClassroomUser> teachers = new HashSet<>();
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<ClassroomUser> students = new HashSet<>();
@@ -52,12 +52,16 @@ public class Classroom {
         this.gitlabUrl = gitlabUrl;
     }
 
-    public ClassroomUser getTeacher() {
-        return teacher;
+    public Set<ClassroomUser> getTeachers() {
+        return teachers;
     }
 
-    public void setTeacher(ClassroomUser teacher) {
-        this.teacher = teacher;
+    public void setTeachers(Set<ClassroomUser> teachers) {
+        this.teachers = teachers;
+    }
+
+    public void addTeacher(ClassroomUser teacher) {
+        this.teachers.add(teacher);
     }
 
     public Set<ClassroomUser> getStudents() {
