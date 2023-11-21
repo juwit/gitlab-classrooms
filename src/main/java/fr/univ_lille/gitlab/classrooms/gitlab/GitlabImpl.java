@@ -88,9 +88,14 @@ class GitlabImpl implements Gitlab {
     @Override
     public Project createStudentProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabException {
         var classroom = exerciseAssignment.getClassroom();
-        var teacher = classroom.getTeacher();
-        // get a gitlab api client ith the teacher's rights
-        var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher);
+
+        var teacher = classroom.getTeachers().stream().findFirst();
+
+        if(teacher.isEmpty()){
+            throw new GitLabException("Could not create student %s project for assignment %s. Classroom has no teacher.".formatted(student.getName(), exerciseAssignment.getName()));
+        }
+        // get a gitlab api client with the teacher's rights
+        var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher.get());
 
         // create the project if needed
         var project = this.ensureStudentProjectExists(teacherGitlabApi, exerciseAssignment, student);

@@ -129,7 +129,7 @@ class GitlabImplTest {
         when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
-        classroom.setTeacher(teacher);
+        classroom.addTeacher(teacher);
         classroom.addAssignment(assignment);
 
         when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
@@ -160,6 +160,30 @@ class GitlabImplTest {
     }
 
     @Test
+    void createProject_shouldNotCreateAProject_ifClassroomHasNoTeacher() throws GitLabApiException, GitLabException {
+        var student = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
+        student.setGitlabUserId(8L);
+
+        var assignment = new ExerciseAssignment();
+        assignment.setName("Exercice 1");
+        assignment.setGitlabGroupId(72L);
+
+        var group = new Group();
+        group.setId(72L);
+        group.setFullPath("my-group/path");
+        when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
+
+        var classroom = new Classroom();
+        classroom.addAssignment(assignment);
+
+        assertThatThrownBy(() -> gitlab.createStudentProject(assignment, student))
+                .isInstanceOf(GitLabException.class)
+                .hasMessage("Could not create student luke.skywalker project for assignment Exercice 1. Classroom has no teacher.");
+
+        verifyNoMoreInteractions(gitLabApi.getProjectApi());
+    }
+
+    @Test
     void createProject_shouldNotCreateAProject_ifProjectAlreadyExists() throws GitLabApiException, GitLabException {
         var student = new ClassroomUser("luke.skywalker", List.of(ClassroomRole.STUDENT));
         student.setGitlabUserId(8L);
@@ -175,7 +199,7 @@ class GitlabImplTest {
         when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
-        classroom.setTeacher(teacher);
+        classroom.addTeacher(teacher);
         classroom.addAssignment(assignment);
 
         when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
@@ -211,7 +235,7 @@ class GitlabImplTest {
         when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
-        classroom.setTeacher(teacher);
+        classroom.addTeacher(teacher);
         classroom.addAssignment(assignment);
 
         when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
@@ -246,7 +270,7 @@ class GitlabImplTest {
         when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
-        classroom.setTeacher(teacher);
+        classroom.addTeacher(teacher);
         classroom.addAssignment(assignment);
 
         when(gitlabApiFactory.userGitlabApi(teacher)).thenReturn(gitLabApi);
