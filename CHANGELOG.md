@@ -1,5 +1,23 @@
 # Changelog
 
+<a name="0.3.0"></a>
+## 0.3.0 (2023-11-21)
+
+### Added
+
+- ✨ : classrooms can have multiple teachers [aca9e6c]
+
+### Changed
+
+- 🔧 : add application name in database connection [02c0f5b]
+- 🗃️ : add classroom_teachers table [3b51e65]
+
+### Miscellaneous
+
+- 🔀 : merge branch &#x27;feature/classroom-teachers&#x27; into develop [2059198]
+- 🔀 : merge tag &#x27;0.2.1&#x27; into develop [386a020]
+
+
 <a name="0.2.1"></a>
 ## 0.2.1 (2023-11-14)
 
