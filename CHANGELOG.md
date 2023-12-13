@@ -1,5 +1,25 @@
 # Changelog
 
+<a name="0.3.1"></a>
+## 0.3.1 (2023-12-13)
+
+### Added
+
+- ✅ : remove unnecessary stubbing [f8623e7]
+
+### Changed
+
+- ⬆️ : bump spring-boot-starter-parent to 3.2.0 [a6de774]
+- ⬆️ : bump archunit to 1.2.0 [c96a5d4]
+- ⬆️ : bump jacoco-maven-plugin to 0.8.11 [02d4ad4]
+- ⬆️ : bump gitlab4j-api to 6.0.0-rc.3 [0907d92]
+- ⬆️ : bump java version to 21 [ff61e08]
+
+### Miscellaneous
+
+- 🔀 : merge tag &#x27;0.3.0&#x27; into develop [f140b40]
+
+
 <a name="0.3.0"></a>
 ## 0.3.0 (2023-11-21)
 
