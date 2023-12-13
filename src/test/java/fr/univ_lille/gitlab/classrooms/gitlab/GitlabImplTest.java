@@ -166,12 +166,6 @@ class GitlabImplTest {
 
         var assignment = new ExerciseAssignment();
         assignment.setName("Exercice 1");
-        assignment.setGitlabGroupId(72L);
-
-        var group = new Group();
-        group.setId(72L);
-        group.setFullPath("my-group/path");
-        when(gitLabApi.getGroupApi().getOptionalGroup(72L)).thenReturn(Optional.of(group));
 
         var classroom = new Classroom();
         classroom.addAssignment(assignment);
