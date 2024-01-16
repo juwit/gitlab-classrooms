@@ -8,6 +8,8 @@ import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpSession;
 import org.gitlab4j.api.GitLabApiException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -31,7 +33,7 @@ class AssignmentController {
 
     private final Gitlab gitlab;
 
-    private static final System.Logger LOGGER = System.getLogger(AssignmentController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssignmentController.class.getName());
 
     AssignmentController(AssignmentService assignmentService, QuizService quizService, ClassroomService classroomService, Gitlab gitlab) {
         this.assignmentService = assignmentService;
@@ -88,7 +90,7 @@ class AssignmentController {
             this.assignmentService.acceptAssigment(assignment, student);
         }
         catch (GitLabApiException | GitLabException e){
-            LOGGER.log(System.Logger.Level.ERROR, "Could not accept assignment", e);
+            LOGGER.error("Could not accept assignment", e);
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept assignment", e);
         }
 

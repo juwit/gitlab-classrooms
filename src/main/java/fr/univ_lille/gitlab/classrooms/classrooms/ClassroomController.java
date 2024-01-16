@@ -5,6 +5,8 @@ import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.servlet.http.HttpSession;
 import org.gitlab4j.api.GitLabApiException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,7 +26,7 @@ class ClassroomController {
 
     private final Gitlab gitlab;
 
-    private static final System.Logger LOGGER = System.getLogger(ClassroomController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(ClassroomController.class.getName());
 
     ClassroomController(ClassroomService classroomService, Gitlab gitlab) {
         this.classroomService = classroomService;
@@ -52,7 +54,7 @@ class ClassroomController {
             model.addAttribute("gitlabGroupUrl", gitlab.getGroupURI(classroom));
         }
         catch (GitLabApiException e){
-            LOGGER.log(System.Logger.Level.ERROR, e.getMessage());
+            LOGGER.error(e.getMessage());
         }
 
         return "classrooms/view";
