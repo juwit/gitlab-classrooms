@@ -110,6 +110,12 @@
             <artifactId>jakarta.xml.bind-api</artifactId>
         </dependency>
 
+        <!-- mustache is used to generate scripts -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mustache</artifactId>
+        </dependency>
+
         <!-- test dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
