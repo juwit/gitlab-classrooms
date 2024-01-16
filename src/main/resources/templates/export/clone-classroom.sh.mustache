@@ -3,13 +3,13 @@
 mkdir -p classroom
 cd classroom
 
-{{ #students }}
-
-mkdir -p {{student.name}}
-cd {{student.name}}
-{{ #assignments }}
-git clone {{clone_url}}
-{{ /assignments }}
+{{#studentRepositories}}
+mkdir -p {{studentName}}
+cd {{studentName}}
+{{ #cloneUrls }}
+git clone {{.}}
+{{ /cloneUrls }}
 cd ..
 
-{{ /students }}
+{{/studentRepositories}}
+cd ..

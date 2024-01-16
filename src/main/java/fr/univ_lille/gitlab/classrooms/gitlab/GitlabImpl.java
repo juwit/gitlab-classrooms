@@ -146,12 +146,12 @@ class GitlabImpl implements Gitlab {
     }
 
     @Override
-    public URI getAssignmentCloneUrl(StudentExerciseAssignment studentExerciseAssignment) throws GitLabApiException {
+    public String getAssignmentCloneUrl(StudentExerciseAssignment studentExerciseAssignment) throws GitLabApiException {
         // get api client for teacher
         var classroom = studentExerciseAssignment.getAssignment().getClassroom();
         var teacher = classroom.getTeachers().stream().findFirst().orElseThrow();
         var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher);
 
-        return URI.create(teacherGitlabApi.getProjectApi().getProject(studentExerciseAssignment.getGitlabProjectId()).getSshUrlToRepo());
+        return teacherGitlabApi.getProjectApi().getProject(studentExerciseAssignment.getGitlabProjectId()).getSshUrlToRepo();
     }
 }

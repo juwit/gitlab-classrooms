@@ -52,5 +52,5 @@ public interface Gitlab {
      * @param studentExerciseAssignment
      * @return
      */
-    URI getAssignmentCloneUrl(StudentExerciseAssignment studentExerciseAssignment) throws GitLabApiException;
+    String getAssignmentCloneUrl(StudentExerciseAssignment studentExerciseAssignment) throws GitLabApiException;
 }

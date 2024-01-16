@@ -12,7 +12,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
-import java.net.URI;
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 class ExportServiceImpl implements ExportService {
@@ -26,6 +27,35 @@ class ExportServiceImpl implements ExportService {
     ExportServiceImpl(Gitlab gitlab, AssignmentService assignmentService) {
         this.gitlab = gitlab;
         this.assignmentService = assignmentService;
+    }
+
+    public record StudentRepository(String studentName, List<String> cloneUrls){}
+
+    @Override
+    public List<StudentRepository> listStudentRepositories(Classroom classroom) throws ExportException {
+        LOGGER.info("Listing student repositories for classroom {} with name {}", classroom.getId(), classroom.getName());
+
+        var studentRepositoriesList = new LinkedList<StudentRepository>();
+
+        for(ClassroomUser student : classroom.getStudents()){
+            var studentExerciseAssignments = assignmentService.getAllStudentAssignmentsForAClassroom(classroom, student);
+
+            var cloneUrls = new LinkedList<String>();
+
+            for (StudentAssignment studentAssignment : studentExerciseAssignments){
+                StudentExerciseAssignment studentExerciseAssignment = (StudentExerciseAssignment) studentAssignment;
+                try {
+                    String sshCloneUrl = gitlab.getAssignmentCloneUrl(studentExerciseAssignment);
+                    cloneUrls.add(sshCloneUrl);
+                } catch (GitLabApiException e) {
+                    throw new ExportException("Could not get clone URL for Assignment " + studentExerciseAssignment.getGitlabProjectId(), e);
+                }
+            }
+
+            studentRepositoriesList.add(new StudentRepository(student.getName(), cloneUrls));
+        }
+
+        return studentRepositoriesList;
     }
 
     @Override
@@ -52,7 +82,7 @@ class ExportServiceImpl implements ExportService {
             for (StudentAssignment studentAssignment : studentExerciseAssignments){
                 StudentExerciseAssignment studentExerciseAssignment = (StudentExerciseAssignment) studentAssignment;
                 try {
-                    URI sshCloneUrl = gitlab.getAssignmentCloneUrl(studentExerciseAssignment);
+                    String sshCloneUrl = gitlab.getAssignmentCloneUrl(studentExerciseAssignment);
                     writer.write("git clone " + sshCloneUrl);
                     writer.write("\n");
                 } catch (GitLabApiException e) {

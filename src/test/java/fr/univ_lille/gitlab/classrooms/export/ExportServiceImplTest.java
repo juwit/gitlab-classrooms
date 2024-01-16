@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -33,119 +34,10 @@ class ExportServiceImplTest {
     private Gitlab gitlab;
 
     @Test
-    void generateCloneClassroomScript_ForASingleStudentExercise() throws ExportException, GitLabApiException {
-        var expectedScript = """
-                #!/bin/sh
-                
-                mkdir -p classroom
-                cd classroom
-                
-                mkdir -p Luke
-                cd Luke
-                git clone git+ssh://luke-fake-url.git
-                cd ..
-                
-                cd ..
-                """;
-
+    void listStudentRepositories_ForAMultipleStudentsAndExercises() throws ExportException, GitLabApiException {
         var classroom = new Classroom();
         classroom.setName("Test Classroom");
         classroom.setId(UUID.randomUUID());
-
-        var yoda = new ClassroomUser("Yoda", List.of(ClassroomRole.TEACHER));
-        classroom.addTeacher(yoda);
-
-        var luke = new ClassroomUser("Luke", List.of(ClassroomRole.STUDENT));
-        classroom.join(luke);
-
-        var lukeExercise = new StudentExerciseAssignment();
-
-        when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, luke)).thenReturn(List.of(lukeExercise));
-
-        when(gitlab.getAssignmentCloneUrl(lukeExercise)).thenReturn(URI.create("git+ssh://luke-fake-url.git"));
-
-        var exported = exportService.generateCloneClassroomScriptByStudent(classroom);
-
-        assertThat(exported).isEqualTo(expectedScript);
-    }
-
-    @Test
-    void generateCloneClassroomScript_ForAMultipleStudents() throws ExportException, GitLabApiException {
-        var expectedScript = """
-                #!/bin/sh
-                
-                mkdir -p classroom
-                cd classroom
-                
-                mkdir -p Leia
-                cd Leia
-                git clone git+ssh://leia-fake-url.git
-                cd ..
-                
-                mkdir -p Luke
-                cd Luke
-                git clone git+ssh://luke-fake-url.git
-                cd ..
-                
-                cd ..
-                """;
-
-        var classroom = new Classroom();
-        classroom.setName("Test Classroom");
-        classroom.setId(UUID.randomUUID());
-
-        var yoda = new ClassroomUser("Yoda", List.of(ClassroomRole.TEACHER));
-        classroom.addTeacher(yoda);
-
-        var luke = new ClassroomUser("Luke", List.of(ClassroomRole.STUDENT));
-        classroom.join(luke);
-
-        var leia = new ClassroomUser("Leia", List.of(ClassroomRole.STUDENT));
-        classroom.join(leia);
-
-        var lukeExercise = new StudentExerciseAssignment();
-        var leiaExercise = new StudentExerciseAssignment();
-
-        when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, luke)).thenReturn(List.of(lukeExercise));
-        when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, leia)).thenReturn(List.of(leiaExercise));
-
-        when(gitlab.getAssignmentCloneUrl(lukeExercise)).thenReturn(URI.create("git+ssh://luke-fake-url.git"));
-        when(gitlab.getAssignmentCloneUrl(leiaExercise)).thenReturn(URI.create("git+ssh://leia-fake-url.git"));
-
-        var exported = exportService.generateCloneClassroomScriptByStudent(classroom);
-
-        assertThat(exported).isEqualTo(expectedScript);
-    }
-
-    @Test
-    void generateCloneClassroomScript_ForAMultipleStudentsAndExercises() throws ExportException, GitLabApiException {
-        var expectedScript = """
-                #!/bin/sh
-                
-                mkdir -p classroom
-                cd classroom
-                
-                mkdir -p Leia
-                cd Leia
-                git clone git+ssh://leia-fake-url-exercise-1.git
-                git clone git+ssh://leia-fake-url-exercise-2.git
-                cd ..
-                
-                mkdir -p Luke
-                cd Luke
-                git clone git+ssh://luke-fake-url-exercise-1.git
-                git clone git+ssh://luke-fake-url-exercise-2.git
-                cd ..
-                
-                cd ..
-                """;
-
-        var classroom = new Classroom();
-        classroom.setName("Test Classroom");
-        classroom.setId(UUID.randomUUID());
-
-        var yoda = new ClassroomUser("Yoda", List.of(ClassroomRole.TEACHER));
-        classroom.addTeacher(yoda);
 
         var luke = new ClassroomUser("Luke", List.of(ClassroomRole.STUDENT));
         classroom.join(luke);
@@ -161,13 +53,25 @@ class ExportServiceImplTest {
         when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, luke)).thenReturn(List.of(lukeExercise1, lukeExercise2));
         when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, leia)).thenReturn(List.of(leiaExercise1, leiaExercise2));
 
-        when(gitlab.getAssignmentCloneUrl(lukeExercise1)).thenReturn(URI.create("git+ssh://luke-fake-url-exercise-1.git"));
-        when(gitlab.getAssignmentCloneUrl(lukeExercise2)).thenReturn(URI.create("git+ssh://luke-fake-url-exercise-2.git"));
-        when(gitlab.getAssignmentCloneUrl(leiaExercise1)).thenReturn(URI.create("git+ssh://leia-fake-url-exercise-1.git"));
-        when(gitlab.getAssignmentCloneUrl(leiaExercise2)).thenReturn(URI.create("git+ssh://leia-fake-url-exercise-2.git"));
+        when(gitlab.getAssignmentCloneUrl(lukeExercise1)).thenReturn("git+ssh://luke-fake-url-exercise-1.git");
+        when(gitlab.getAssignmentCloneUrl(lukeExercise2)).thenReturn("git+ssh://luke-fake-url-exercise-2.git");
+        when(gitlab.getAssignmentCloneUrl(leiaExercise1)).thenReturn("git+ssh://leia-fake-url-exercise-1.git");
+        when(gitlab.getAssignmentCloneUrl(leiaExercise2)).thenReturn("git+ssh://leia-fake-url-exercise-2.git");
 
-        var exported = exportService.generateCloneClassroomScriptByStudent(classroom);
+        var studentRepositories = exportService.listStudentRepositories(classroom);
 
-        assertThat(exported).isEqualTo(expectedScript);
+        assertThat(studentRepositories)
+                .hasSize(2)
+                .first()
+                .satisfies(it -> {
+                    assertThat(it.studentName()).isEqualTo("Leia");
+                    assertThat(it.cloneUrls()).containsExactly("git+ssh://leia-fake-url-exercise-1.git", "git+ssh://leia-fake-url-exercise-2.git");
+                });
+        assertThat(studentRepositories)
+                .last()
+                .satisfies(it -> {
+                    assertThat(it.studentName()).isEqualTo("Luke");
+                    assertThat(it.cloneUrls()).containsExactly("git+ssh://luke-fake-url-exercise-1.git", "git+ssh://luke-fake-url-exercise-2.git");
+                });
     }
 }
