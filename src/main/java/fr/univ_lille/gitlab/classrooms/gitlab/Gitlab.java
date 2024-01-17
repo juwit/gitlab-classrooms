@@ -47,10 +47,4 @@ public interface Gitlab {
      */
     Project createStudentProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException, GitLabException;
 
-    /**
-     * Returns the SSH Clone URL of a exercise assignment
-     * @param studentExerciseAssignment
-     * @return
-     */
-    String getAssignmentCloneUrl(StudentExerciseAssignment studentExerciseAssignment) throws GitLabApiException;
 }

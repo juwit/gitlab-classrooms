@@ -1,25 +1,20 @@
 package fr.univ_lille.gitlab.classrooms.export;
 
-import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
 import fr.univ_lille.gitlab.classrooms.assignments.StudentAssignmentService;
 import fr.univ_lille.gitlab.classrooms.assignments.StudentExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
-import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
-import org.gitlab4j.api.GitLabApiException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.net.URI;
 import java.util.List;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.AssertionsForClassTypes.tuple;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,11 +26,8 @@ class ExportServiceImplTest {
     @Mock
     private StudentAssignmentService assignmentService;
 
-    @Mock
-    private Gitlab gitlab;
-
     @Test
-    void listStudentRepositories_ForAMultipleStudentsAndExercises() throws ExportException, GitLabApiException {
+    void listStudentRepositories_ForAMultipleStudentsAndExercises() {
         var classroom = new Classroom();
         classroom.setName("Test Classroom");
         classroom.setId(UUID.randomUUID());
@@ -55,9 +47,9 @@ class ExportServiceImplTest {
         when(assignmentService.getAllStudentExerciseAssignmentsForAClassroom(classroom, leia)).thenReturn(List.of(leiaExercise1, leiaExercise2));
 
         lukeExercise1.setGitlabCloneUrl("git+ssh://luke-fake-url-exercise-1.git");
-        when(gitlab.getAssignmentCloneUrl(lukeExercise2)).thenReturn("git+ssh://luke-fake-url-exercise-2.git");
+        lukeExercise2.setGitlabCloneUrl("git+ssh://luke-fake-url-exercise-2.git");
         leiaExercise1.setGitlabCloneUrl("git+ssh://leia-fake-url-exercise-1.git");
-        when(gitlab.getAssignmentCloneUrl(leiaExercise2)).thenReturn("git+ssh://leia-fake-url-exercise-2.git");
+        leiaExercise2.setGitlabCloneUrl("git+ssh://leia-fake-url-exercise-2.git");
 
         var studentRepositories = exportService.listStudentRepositories(classroom);
 
