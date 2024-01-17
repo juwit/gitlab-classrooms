@@ -44,12 +44,15 @@ class ExportServiceImpl implements ExportService {
 
             for (StudentAssignment studentAssignment : studentExerciseAssignments){
                 StudentExerciseAssignment studentExerciseAssignment = (StudentExerciseAssignment) studentAssignment;
-                try {
-                    String sshCloneUrl = gitlab.getAssignmentCloneUrl(studentExerciseAssignment);
-                    cloneUrls.add(sshCloneUrl);
-                } catch (GitLabApiException e) {
-                    throw new ExportException("Could not get clone URL for Assignment " + studentExerciseAssignment.getGitlabProjectId(), e);
+                var sshCloneUrl = studentExerciseAssignment.getGitlabCloneUrl();
+                if (sshCloneUrl == null) {
+                    try {
+                        sshCloneUrl = gitlab.getAssignmentCloneUrl(studentExerciseAssignment);
+                    } catch (GitLabApiException e) {
+                        throw new ExportException("Could not get clone URL for Assignment " + studentExerciseAssignment.getGitlabProjectId(), e);
+                    }
                 }
+                cloneUrls.add(sshCloneUrl);
             }
 
             studentRepositoriesList.add(new StudentRepository(student.getName(), cloneUrls));
@@ -71,7 +74,7 @@ class ExportServiceImpl implements ExportService {
         writer.write("\n");
         writer.write("cd classroom");
         writer.write("\n");
-        for(ClassroomUser student : classroom.getStudents()){
+        for (ClassroomUser student : classroom.getStudents()) {
             writer.write("\n");
             writer.write("mkdir -p " + student.getName());
             writer.write("\n");
@@ -79,7 +82,7 @@ class ExportServiceImpl implements ExportService {
             writer.write("\n");
 
             var studentExerciseAssignments = assignmentService.getAllStudentAssignmentsForAClassroom(classroom, student);
-            for (StudentAssignment studentAssignment : studentExerciseAssignments){
+            for (StudentAssignment studentAssignment : studentExerciseAssignments) {
                 StudentExerciseAssignment studentExerciseAssignment = (StudentExerciseAssignment) studentAssignment;
                 try {
                     String sshCloneUrl = gitlab.getAssignmentCloneUrl(studentExerciseAssignment);

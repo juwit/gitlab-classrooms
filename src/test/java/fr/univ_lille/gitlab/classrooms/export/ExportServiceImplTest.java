@@ -53,9 +53,9 @@ class ExportServiceImplTest {
         when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, luke)).thenReturn(List.of(lukeExercise1, lukeExercise2));
         when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, leia)).thenReturn(List.of(leiaExercise1, leiaExercise2));
 
-        when(gitlab.getAssignmentCloneUrl(lukeExercise1)).thenReturn("git+ssh://luke-fake-url-exercise-1.git");
+        lukeExercise1.setGitlabCloneUrl("git+ssh://luke-fake-url-exercise-1.git");
         when(gitlab.getAssignmentCloneUrl(lukeExercise2)).thenReturn("git+ssh://luke-fake-url-exercise-2.git");
-        when(gitlab.getAssignmentCloneUrl(leiaExercise1)).thenReturn("git+ssh://leia-fake-url-exercise-1.git");
+        leiaExercise1.setGitlabCloneUrl("git+ssh://leia-fake-url-exercise-1.git");
         when(gitlab.getAssignmentCloneUrl(leiaExercise2)).thenReturn("git+ssh://leia-fake-url-exercise-2.git");
 
         var studentRepositories = exportService.listStudentRepositories(classroom);
