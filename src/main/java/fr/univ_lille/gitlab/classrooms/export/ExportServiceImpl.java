@@ -21,9 +21,9 @@ class ExportServiceImpl implements ExportService {
 
     private final Gitlab gitlab;
 
-    private final AssignmentService assignmentService;
+    private final StudentAssignmentService assignmentService;
 
-    ExportServiceImpl(Gitlab gitlab, AssignmentService assignmentService) {
+    ExportServiceImpl(Gitlab gitlab, StudentAssignmentService assignmentService) {
         this.gitlab = gitlab;
         this.assignmentService = assignmentService;
     }
@@ -37,18 +37,17 @@ class ExportServiceImpl implements ExportService {
         var studentRepositoriesList = new LinkedList<StudentRepository>();
 
         for(ClassroomUser student : classroom.getStudents()){
-            var studentExerciseAssignments = assignmentService.getAllStudentAssignmentsForAClassroom(classroom, student);
+            var studentExerciseAssignments = assignmentService.getAllStudentExerciseAssignmentsForAClassroom(classroom, student);
 
             var cloneUrls = new LinkedList<String>();
 
-            for (StudentAssignment studentAssignment : studentExerciseAssignments){
-                StudentExerciseAssignment studentExerciseAssignment = (StudentExerciseAssignment) studentAssignment;
-                var sshCloneUrl = studentExerciseAssignment.getGitlabCloneUrl();
+            for (StudentExerciseAssignment studentAssignment : studentExerciseAssignments){
+                var sshCloneUrl = studentAssignment.getGitlabCloneUrl();
                 if (sshCloneUrl == null) {
                     try {
-                        sshCloneUrl = gitlab.getAssignmentCloneUrl(studentExerciseAssignment);
+                        sshCloneUrl = gitlab.getAssignmentCloneUrl(studentAssignment);
                     } catch (GitLabApiException e) {
-                        throw new ExportException("Could not get clone URL for Assignment " + studentExerciseAssignment.getGitlabProjectId(), e);
+                        throw new ExportException("Could not get clone URL for Assignment " + studentAssignment.getGitlabProjectId(), e);
                     }
                 }
                 cloneUrls.add(sshCloneUrl);

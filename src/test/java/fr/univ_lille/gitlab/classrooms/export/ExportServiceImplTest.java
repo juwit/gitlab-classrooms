@@ -1,6 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.export;
 
 import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
+import fr.univ_lille.gitlab.classrooms.assignments.StudentAssignmentService;
 import fr.univ_lille.gitlab.classrooms.assignments.StudentExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
@@ -28,7 +29,7 @@ class ExportServiceImplTest {
     private ExportServiceImpl exportService;
 
     @Mock
-    private AssignmentService assignmentService;
+    private StudentAssignmentService assignmentService;
 
     @Mock
     private Gitlab gitlab;
@@ -50,8 +51,8 @@ class ExportServiceImplTest {
         var leiaExercise1 = new StudentExerciseAssignment();
         var leiaExercise2 = new StudentExerciseAssignment();
 
-        when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, luke)).thenReturn(List.of(lukeExercise1, lukeExercise2));
-        when(assignmentService.getAllStudentAssignmentsForAClassroom(classroom, leia)).thenReturn(List.of(leiaExercise1, leiaExercise2));
+        when(assignmentService.getAllStudentExerciseAssignmentsForAClassroom(classroom, luke)).thenReturn(List.of(lukeExercise1, lukeExercise2));
+        when(assignmentService.getAllStudentExerciseAssignmentsForAClassroom(classroom, leia)).thenReturn(List.of(leiaExercise1, leiaExercise2));
 
         lukeExercise1.setGitlabCloneUrl("git+ssh://luke-fake-url-exercise-1.git");
         when(gitlab.getAssignmentCloneUrl(lukeExercise2)).thenReturn("git+ssh://luke-fake-url-exercise-2.git");

@@ -1,5 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomRole;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.junit.jupiter.api.Test;
@@ -32,6 +33,16 @@ class StudentAssignmentServiceImplTest {
         this.studentAssignmentService.getByGitlabProjectId(12);
 
         verify(this.studentExerciceAssignmentRepository).findByGitlabProjectId(12L);
+    }
+
+    @Test
+    void getAllByClassroomAndStudent() {
+        var classroom = new Classroom();
+        var student = new ClassroomUser();
+
+        this.studentAssignmentService.getAllStudentExerciseAssignmentsForAClassroom(classroom, student);
+
+        verify(this.studentExerciceAssignmentRepository).findByAssignmentClassroomAndStudent(classroom, student);
     }
 
     @Test

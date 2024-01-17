@@ -1,9 +1,11 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -22,6 +24,11 @@ class StudentAssignmentServiceImpl implements StudentAssignmentService {
     @Override
     public Optional<StudentExerciseAssignment> getByGitlabProjectId(long gitlabProjectId) {
         return this.studentExerciceAssignmentRepository.findByGitlabProjectId(gitlabProjectId);
+    }
+
+    @Override
+    public List<StudentExerciseAssignment> getAllStudentExerciseAssignmentsForAClassroom(Classroom classroom, ClassroomUser student) {
+        return this.studentExerciceAssignmentRepository.findByAssignmentClassroomAndStudent(classroom, student);
     }
 
     @Override
