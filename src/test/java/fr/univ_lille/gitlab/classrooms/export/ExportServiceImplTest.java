@@ -62,16 +62,12 @@ class ExportServiceImplTest {
 
         assertThat(studentRepositories)
                 .hasSize(2)
-                .first()
                 .satisfies(it -> {
-                    assertThat(it.studentName()).isEqualTo("Leia");
-                    assertThat(it.cloneUrls()).containsExactly("git+ssh://leia-fake-url-exercise-1.git", "git+ssh://leia-fake-url-exercise-2.git");
-                });
-        assertThat(studentRepositories)
-                .last()
-                .satisfies(it -> {
-                    assertThat(it.studentName()).isEqualTo("Luke");
-                    assertThat(it.cloneUrls()).containsExactly("git+ssh://luke-fake-url-exercise-1.git", "git+ssh://luke-fake-url-exercise-2.git");
+                    assertThat(it.getFirst().studentName()).isEqualTo("Leia");
+                    assertThat(it.getFirst().cloneUrls()).containsExactly("git+ssh://leia-fake-url-exercise-1.git", "git+ssh://leia-fake-url-exercise-2.git");
+
+                    assertThat(it.getLast().studentName()).isEqualTo("Luke");
+                    assertThat(it.getLast().cloneUrls()).containsExactly("git+ssh://luke-fake-url-exercise-1.git", "git+ssh://luke-fake-url-exercise-2.git");
                 });
     }
 }
