@@ -1,7 +1,6 @@
 package fr.univ_lille.gitlab.classrooms.gitlab;
 
 import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
-import fr.univ_lille.gitlab.classrooms.assignments.StudentExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.gitlab4j.api.GitLabApiException;
@@ -47,10 +46,4 @@ public interface Gitlab {
      */
     Project createStudentProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException, GitLabException;
 
-    /**
-     * Returns the SSH Clone URL of a exercise assignment
-     * @param studentExerciseAssignment
-     * @return
-     */
-    String getAssignmentCloneUrl(StudentExerciseAssignment studentExerciseAssignment) throws GitLabApiException;
 }

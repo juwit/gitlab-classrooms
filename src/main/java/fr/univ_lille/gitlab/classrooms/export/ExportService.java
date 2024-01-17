@@ -10,6 +10,6 @@ import java.util.List;
  */
 public interface ExportService {
 
-    List<ExportServiceImpl.StudentRepository> listStudentRepositories(Classroom classroom) throws ExportException;
+    List<ExportServiceImpl.StudentRepository> listStudentRepositories(Classroom classroom);
 
 }
