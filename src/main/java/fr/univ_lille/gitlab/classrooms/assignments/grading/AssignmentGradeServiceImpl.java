@@ -47,7 +47,7 @@ class AssignmentGradeServiceImpl implements AssignmentGradeService {
             // update the submission date
             studentExerciseAssignment.setSubmissionDate(ZonedDateTime.now());
         } catch (JAXBException e) {
-            LOGGER.error("Could not parse JUnit Report", e);
+            LOGGER.error("Could not parse JUnit Report for student exercise with id {} and gitlab project id {}", studentExerciseAssignment.getId() ,studentExerciseAssignment.getGitlabProjectId());
             throw new AssignmentGradingException("Could not parse JUnit Report", e);
         }
     }

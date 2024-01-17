@@ -90,7 +90,7 @@ class AssignmentController {
             this.assignmentService.acceptAssigment(assignment, student);
         }
         catch (GitLabApiException | GitLabException e){
-            LOGGER.error("Could not accept assignment", e);
+            LOGGER.error("Could not accept assignment with id {} for user {}", assignmentId, student.getName());
             throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Could not accept assignment", e);
         }
 
