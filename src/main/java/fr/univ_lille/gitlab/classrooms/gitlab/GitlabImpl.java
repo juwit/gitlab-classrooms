@@ -142,6 +142,6 @@ class GitlabImpl implements Gitlab {
             var message = String.format("Unable to give student '%s' access to its GitLab project '%s'", student.getGitlabUserId(), project.getId());
             throw new GitLabException(message, e);
         }
-
     }
+
 }

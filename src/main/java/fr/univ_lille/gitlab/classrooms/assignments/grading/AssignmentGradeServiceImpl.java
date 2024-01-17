@@ -5,6 +5,8 @@ import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.JUnitAssignment
 import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.JUnitTestSuite;
 import fr.univ_lille.gitlab.classrooms.assignments.grading.junit.reports.TestReportParser;
 import jakarta.xml.bind.JAXBException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.InputStream;
@@ -13,7 +15,7 @@ import java.time.ZonedDateTime;
 @Service
 class AssignmentGradeServiceImpl implements AssignmentGradeService {
 
-    private static final System.Logger LOGGER = System.getLogger(AssignmentGradeServiceImpl.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssignmentGradeServiceImpl.class.getName());
 
     private final TestReportParser testReportParser;
 
@@ -45,7 +47,7 @@ class AssignmentGradeServiceImpl implements AssignmentGradeService {
             // update the submission date
             studentExerciseAssignment.setSubmissionDate(ZonedDateTime.now());
         } catch (JAXBException e) {
-            LOGGER.log(System.Logger.Level.ERROR, "Could not parse JUnit Report", e);
+            LOGGER.error("Could not parse JUnit Report for student exercise with id {} and gitlab project id {}", studentExerciseAssignment.getId() ,studentExerciseAssignment.getGitlabProjectId());
             throw new AssignmentGradingException("Could not parse JUnit Report", e);
         }
     }

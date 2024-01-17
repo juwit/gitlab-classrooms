@@ -15,6 +15,8 @@ public class StudentExerciseAssignment extends StudentAssignment {
 
     private String gitlabProjectUrl;
 
+    private String gitlabCloneUrl;
+
     @OneToMany(cascade = CascadeType.ALL)
     private Set<AssignmentGrade> assignmentGrades = new HashSet<>();
 
@@ -34,13 +36,20 @@ public class StudentExerciseAssignment extends StudentAssignment {
         this.gitlabProjectUrl = gitlabProjectUrl;
     }
 
-
     public Set<AssignmentGrade> getAssignmentGrades() {
         return assignmentGrades;
     }
 
     public void setAssignmentGrades(Set<AssignmentGrade> assignmentGrades) {
         this.assignmentGrades = assignmentGrades;
+    }
+
+    public String getGitlabCloneUrl() {
+        return gitlabCloneUrl;
+    }
+
+    public void setGitlabCloneUrl(String gitlabCloneUrl) {
+        this.gitlabCloneUrl = gitlabCloneUrl;
     }
 
     @Override

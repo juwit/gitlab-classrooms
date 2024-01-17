@@ -5,6 +5,7 @@ import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
+import org.slf4j.Logger;
 import org.springframework.data.repository.Repository;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
@@ -91,4 +92,16 @@ class ArchitectureTest {
             .areNotAnnotatedWith(rawType(RolesAllowed.class).or(rawType(PermitAll.class)))
             .should()
             .beAnnotatedWith(rawType(RolesAllowed.class).or(rawType(PermitAll.class)));
+
+    final ArchRule loggers_should_be_private_static_final_slf4j_loggers = fields()
+            .that()
+            .haveNameMatching("LOGGER")
+            .should()
+            .beFinal()
+            .andShould()
+            .beStatic()
+            .andShould()
+            .bePrivate()
+            .andShould()
+            .haveRawType(Logger.class);
 }

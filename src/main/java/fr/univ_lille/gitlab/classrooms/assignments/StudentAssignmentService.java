@@ -1,7 +1,9 @@
 package fr.univ_lille.gitlab.classrooms.assignments;
 
+import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -14,6 +16,8 @@ public interface StudentAssignmentService {
      * @return
      */
     Optional<StudentExerciseAssignment> getByGitlabProjectId(long gitlabProjectId);
+
+    List<StudentExerciseAssignment> getAllStudentExerciseAssignmentsForAClassroom(Classroom classroom, ClassroomUser student);
 
     void resetGrades(ClassroomUser student, UUID studentAssignmentId);
 
