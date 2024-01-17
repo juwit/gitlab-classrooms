@@ -28,10 +28,9 @@ class ExportController {
      * Generates a script that git clones all repositories from a classroom, organized by student.
      * @param classroomId the id of the classroom to export
      * @return a view containing a sh script
-     * @throws ExportException if the export fails
      */
     @GetMapping(value = "/classrooms/{classroomId}/export/clone-classroom.sh")
-    ModelAndView exportCloneClassroomScriptByStudent(@PathVariable UUID classroomId, HttpServletResponse response) throws ExportException {
+    ModelAndView exportCloneClassroomScriptByStudent(@PathVariable UUID classroomId, HttpServletResponse response) {
         var classroom = this.classroomService.getClassroom(classroomId).orElseThrow();
         var studentRepos = exportService.listStudentRepositories(classroom);
 
