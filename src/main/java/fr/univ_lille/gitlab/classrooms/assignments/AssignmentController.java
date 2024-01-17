@@ -20,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.UUID;
 
 @Controller
+@RolesAllowed("STUDENT")
 class AssignmentController {
 
     private final AssignmentService assignmentService;

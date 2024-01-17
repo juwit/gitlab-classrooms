@@ -3,10 +3,13 @@ package fr.univ_lille.gitlab.classrooms;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.data.repository.Repository;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
+import static com.tngtech.archunit.core.domain.properties.HasType.Predicates.rawType;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 
 @AnalyzeClasses(packages = "fr.univ_lille.gitlab.classrooms")
@@ -77,4 +80,15 @@ class ArchitectureTest {
             .areAnnotatedWith(Service.class)
             .should()
             .bePackagePrivate();
+
+    @ArchTest
+    final ArchRule controller_methods_should_have_security_rules = methods()
+            .that()
+            .areDeclaredInClassesThat()
+            .areAnnotatedWith(Controller.class)
+            .and()
+            .areDeclaredInClassesThat()
+            .areNotAnnotatedWith(rawType(RolesAllowed.class).or(rawType(PermitAll.class)))
+            .should()
+            .beAnnotatedWith(rawType(RolesAllowed.class).or(rawType(PermitAll.class)));
 }
