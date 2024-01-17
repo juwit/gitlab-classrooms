@@ -29,12 +29,15 @@ class AssignmentServiceImpl implements AssignmentService {
 
     private final StudentAssignmentRepository studentAssignmentRepository;
 
-    AssignmentServiceImpl(QuizService quizService, Gitlab gitlab, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentAssignmentRepository studentAssignmentRepository) {
+    private final StudentExerciceAssignmentRepository studentExerciceAssignmentRepository;
+
+    AssignmentServiceImpl(QuizService quizService, Gitlab gitlab, ClassroomService classroomService, AssignmentRepository assignmentRepository, StudentAssignmentRepository studentAssignmentRepository, StudentExerciceAssignmentRepository studentExerciceAssignmentRepository) {
         this.quizService = quizService;
         this.gitlab = gitlab;
         this.classroomService = classroomService;
         this.assignmentRepository = assignmentRepository;
         this.studentAssignmentRepository = studentAssignmentRepository;
+        this.studentExerciceAssignmentRepository = studentExerciceAssignmentRepository;
     }
 
     @Override
@@ -51,23 +54,14 @@ class AssignmentServiceImpl implements AssignmentService {
         if (assignment instanceof ExerciseAssignment exerciseAssignment) {
             // create the project in gitlab
             var project = gitlab.createStudentProject(exerciseAssignment, student);
-            var existingStudentExercise = this.studentAssignmentRepository.findByAssignmentAndStudent(exerciseAssignment, student);
-            if (existingStudentExercise != null) {
-                var existingStudentExerciseAssignment = ((StudentExerciseAssignment) existingStudentExercise);
-                existingStudentExerciseAssignment.setGitlabProjectId(project.getId());
-                existingStudentExerciseAssignment.setGitlabProjectUrl(project.getWebUrl());
-                existingStudentExerciseAssignment.setGitlabCloneUrl(project.getSshUrlToRepo());
-                this.studentAssignmentRepository.save(existingStudentExerciseAssignment);
-                return;
-            }
-            // create the student exercise assignment
-            var studentExercise = new StudentExerciseAssignment();
+            // save in database, and update if necessary
+            var studentExercise = this.studentExerciceAssignmentRepository.findByAssignmentAndStudent(exerciseAssignment, student).orElse(new StudentExerciseAssignment());
             studentExercise.setAssignment(exerciseAssignment);
             studentExercise.setStudent(student);
             studentExercise.setGitlabProjectId(project.getId());
             studentExercise.setGitlabProjectUrl(project.getWebUrl());
             studentExercise.setGitlabCloneUrl(project.getSshUrlToRepo());
-            this.studentAssignmentRepository.save(studentExercise);
+            this.studentExerciceAssignmentRepository.save(studentExercise);
         } else if (assignment instanceof QuizAssignment quizAssignment) {
             if (this.studentAssignmentRepository.existsByAssignmentAndStudent(quizAssignment, student)) {
                 return;

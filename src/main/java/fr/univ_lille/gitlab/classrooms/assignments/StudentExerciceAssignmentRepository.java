@@ -12,5 +12,7 @@ interface StudentExerciceAssignmentRepository extends JpaRepository<StudentExerc
 
     Optional<StudentExerciseAssignment> findByGitlabProjectId(Long gitlabProjectId);
 
+    Optional<StudentExerciseAssignment> findByAssignmentAndStudent(Assignment assignment, ClassroomUser student);
+
     List<StudentExerciseAssignment> findByAssignmentClassroomAndStudent(Classroom classroom, ClassroomUser student);
 }

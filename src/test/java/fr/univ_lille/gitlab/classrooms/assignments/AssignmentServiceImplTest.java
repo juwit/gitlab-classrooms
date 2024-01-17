@@ -41,6 +41,9 @@ class AssignmentServiceImplTest {
     @Mock
     private StudentAssignmentRepository studentAssignmentRepository;
 
+    @Mock
+    private StudentExerciceAssignmentRepository studentExerciceAssignmentRepository;
+
     @Test
     void getAssignment_shouldReturnTheAssignment() {
         var uuid = UUID.randomUUID();
@@ -102,7 +105,7 @@ class AssignmentServiceImplTest {
         verify(gitlab).createStudentProject(assignment, student);
 
         var studentExerciseCaptor = ArgumentCaptor.forClass(StudentExerciseAssignment.class);
-        verify(studentAssignmentRepository).save(studentExerciseCaptor.capture());
+        verify(studentExerciceAssignmentRepository).save(studentExerciseCaptor.capture());
 
         var studentExercise = studentExerciseCaptor.getValue();
         assertThat(studentExercise).isNotNull();
@@ -136,7 +139,7 @@ class AssignmentServiceImplTest {
         project.setSshUrlToRepo("clone_url");
         when(gitlab.createStudentProject(assignment, student)).thenReturn(project);
 
-        when(studentAssignmentRepository.findByAssignmentAndStudent(assignment,  student)).thenReturn(studentExerciseAssignment);
+        when(studentExerciceAssignmentRepository.findByAssignmentAndStudent(assignment,  student)).thenReturn(Optional.of(studentExerciseAssignment));
 
         this.assignmentService.acceptAssigment(assignment, student);
 
@@ -144,7 +147,7 @@ class AssignmentServiceImplTest {
         assertThat(studentExerciseAssignment.getGitlabProjectUrl()).isEqualTo("web_url");
         assertThat(studentExerciseAssignment.getGitlabCloneUrl()).isEqualTo("clone_url");
 
-        verify(studentAssignmentRepository).save(studentExerciseAssignment);
+        verify(studentExerciceAssignmentRepository).save(studentExerciseAssignment);
         verifyNoMoreInteractions(studentAssignmentRepository);
     }
 
