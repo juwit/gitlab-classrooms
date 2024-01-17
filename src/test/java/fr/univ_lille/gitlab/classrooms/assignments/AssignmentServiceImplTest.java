@@ -94,6 +94,7 @@ class AssignmentServiceImplTest {
         var project = new Project();
         project.setId(25L);
         project.setWebUrl("https://gitlab.univ-lille.fr/gitlab-classroom");
+        project.setSshUrlToRepo("git@gitlab.univ-lille.fr:/gitlab-classroom");
         when(gitlab.createStudentProject(assignment, student)).thenReturn(project);
 
         this.assignmentService.acceptAssigment(assignment, student);
@@ -109,6 +110,7 @@ class AssignmentServiceImplTest {
         assertThat(studentExercise.getStudent()).isEqualTo(student);
         assertThat(studentExercise.getGitlabProjectId()).isEqualTo(25L);
         assertThat(studentExercise.getGitlabProjectUrl()).isEqualTo("https://gitlab.univ-lille.fr/gitlab-classroom");
+        assertThat(studentExercise.getGitlabCloneUrl()).isEqualTo("git@gitlab.univ-lille.fr:/gitlab-classroom");
     }
 
     @Test
@@ -131,6 +133,7 @@ class AssignmentServiceImplTest {
         var project = new Project();
         project.setId(65L);
         project.setWebUrl("web_url");
+        project.setSshUrlToRepo("clone_url");
         when(gitlab.createStudentProject(assignment, student)).thenReturn(project);
 
         when(studentAssignmentRepository.findByAssignmentAndStudent(assignment,  student)).thenReturn(studentExerciseAssignment);
@@ -139,6 +142,7 @@ class AssignmentServiceImplTest {
 
         assertThat(studentExerciseAssignment.getGitlabProjectId()).isEqualTo(65L);
         assertThat(studentExerciseAssignment.getGitlabProjectUrl()).isEqualTo("web_url");
+        assertThat(studentExerciseAssignment.getGitlabCloneUrl()).isEqualTo("clone_url");
 
         verify(studentAssignmentRepository).save(studentExerciseAssignment);
         verifyNoMoreInteractions(studentAssignmentRepository);

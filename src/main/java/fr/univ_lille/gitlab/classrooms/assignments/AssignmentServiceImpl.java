@@ -56,6 +56,7 @@ class AssignmentServiceImpl implements AssignmentService {
                 var existingStudentExerciseAssignment = ((StudentExerciseAssignment) existingStudentExercise);
                 existingStudentExerciseAssignment.setGitlabProjectId(project.getId());
                 existingStudentExerciseAssignment.setGitlabProjectUrl(project.getWebUrl());
+                existingStudentExerciseAssignment.setGitlabCloneUrl(project.getSshUrlToRepo());
                 this.studentAssignmentRepository.save(existingStudentExerciseAssignment);
                 return;
             }
@@ -65,6 +66,7 @@ class AssignmentServiceImpl implements AssignmentService {
             studentExercise.setStudent(student);
             studentExercise.setGitlabProjectId(project.getId());
             studentExercise.setGitlabProjectUrl(project.getWebUrl());
+            studentExercise.setGitlabCloneUrl(project.getSshUrlToRepo());
             this.studentAssignmentRepository.save(studentExercise);
         } else if (assignment instanceof QuizAssignment quizAssignment) {
             if (this.studentAssignmentRepository.existsByAssignmentAndStudent(quizAssignment, student)) {
