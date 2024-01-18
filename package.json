@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@dagger.io/dagger": "^0.9.6"
+  }
+}
