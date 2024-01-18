@@ -1,59 +1,21 @@
-variables:
-  MAVEN_OPTS: >-
-    -Dhttps.protocols=TLSv1.2
-    -Dmaven.repo.local=$CI_PROJECT_DIR/.m2/repository
-    -Dorg.slf4j.simpleLogger.showDateTime=true
-    -Djava.awt.headless=true
-
-  MAVEN_CLI_OPTS: >-
-    --batch-mode
-    --errors
-    --fail-at-end
-    --show-version
-    --no-transfer-progress
-    -DinstallAtEnd=true
-    -DdeployAtEnd=true
-
-  SONAR_CLI_OPTS: >-
-    -Dsonar.projectKey=gitlab-classrooms_gitlab-classrooms
-    -Dsonar.organization=gitlab-classrooms
-    -Dsonar.host.url=https://sonarcloud.io
-
-image: maven:3-eclipse-temurin-21
-
-cache:
-  paths:
-    - .m2/repository
-
-verify:
-  stage: test
+.docker:
+  image: node:18-alpine
+  services:
+    - docker:${DOCKER_VERSION}-dind
+  variables:
+    DOCKER_HOST: tcp://docker:2376
+    DOCKER_TLS_VERIFY: '1'
+    DOCKER_TLS_CERTDIR: '/certs'
+    DOCKER_CERT_PATH: '/certs/client'
+    DOCKER_DRIVER: overlay2
+    DOCKER_VERSION: '20.10.16'
+.dagger:
+  extends: [.docker]
+  before_script:
+    - apk add docker-cli curl
+    - cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sh; cd -; }
+build:
+  extends: [.dagger]
   script:
-    - 'mvn $MAVEN_CLI_OPTS verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar $SONAR_CLI_OPTS'
-
-deploy:
-  image:
-    name: clevercloud/clever-tools
-    entrypoint: ["/bin/sh", "-c"]
-  stage: deploy
-  rules:
-    - if: $CI_COMMIT_REF_NAME == 'main'
-  script:
-    - clever deploy
-  environment:
-    name: production
-    deployment_tier: production
-    url: https://gitlab-classrooms.cleverapps.io/
-    action: start
-
-pages:
-  image:
-    name: squidfunk/mkdocs-material
-    entrypoint: ["/bin/sh", "-c"]
-  stage: deploy
-  rules:
-    - if: $CI_COMMIT_REF_NAME == 'main'
-  script:
-    - mkdocs build -d public
-  artifacts:
-    paths:
-      - public
+    - npm ci
+    - dagger run node build.mjs
