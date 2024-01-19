@@ -1293,6 +1293,16 @@ h6 {
   border-color: rgb(252 109 38 / var(--tw-border-opacity));
 }
 
+.bg-dark-1 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(20 23 28 / var(--tw-bg-opacity));
+}
+
+.bg-dark-2 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(18 27 38 / var(--tw-bg-opacity));
+}
+
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity));
