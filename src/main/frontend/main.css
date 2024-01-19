@@ -6,6 +6,32 @@
     html {
         font-family: "Noto Sans", system-ui, sans-serif;
     }
+
+    h1 { /* 60px , 3.75em */
+        @apply text-6xl;
+    }
+
+    h2 { /* 48px , 3em */
+        @apply text-5xl;
+    }
+
+    h3 { /* 40px , 2.5em */
+        font-size: 2.5em;
+        line-height: 1;
+    }
+
+    h4 { /* 28px , 1.75em */
+        font-size: 1.75em;
+        line-height: 1;
+    }
+
+    h5 { /* 24px, 1.5em */
+        @apply text-2xl;
+    }
+
+    h6 { /* 20px, 1.25em */
+        @apply text-xl;
+    }
 }
 
 @font-face {
