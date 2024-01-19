@@ -639,6 +639,10 @@ select {
   outline: 1px auto -webkit-focus-ring-color;
 }
 
+html {
+  font-family: "Noto Sans", system-ui, sans-serif;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -1778,6 +1782,12 @@ select {
 
 .filter {
   filter: var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow);
+}
+
+@font-face {
+  font-family: "Noto Sans";
+
+  src: url("/fonts/NotoSans-VariableFont_wdth,wght.ttf");
 }
 
 .placeholder\:text-gray-400::-moz-placeholder {
