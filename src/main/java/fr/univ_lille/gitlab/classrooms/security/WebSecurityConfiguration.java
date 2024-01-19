@@ -44,7 +44,7 @@ public class WebSecurityConfiguration implements WebMvcConfigurer {
         return http
                 .authorizeHttpRequests(it -> {
                     it.requestMatchers(LOGIN_PAGE).permitAll();
-                    it.requestMatchers("images/**").permitAll();
+                    it.requestMatchers("images/**", "fonts/**", "*.css").permitAll();
 
                     // authorize actuator endpoints
                     it.requestMatchers(EndpointRequest.toAnyEndpoint()).permitAll();
