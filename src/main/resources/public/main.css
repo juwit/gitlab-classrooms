@@ -1032,6 +1032,10 @@ h6 {
   width: 3rem;
 }
 
+.w-16 {
+  width: 4rem;
+}
+
 .w-4 {
   width: 1rem;
 }
@@ -1158,6 +1162,14 @@ h6 {
 
 .gap-6 {
   gap: 1.5rem;
+}
+
+.gap-10 {
+  gap: 2.5rem;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .gap-x-3 {
@@ -1288,19 +1300,19 @@ h6 {
   border-left-width: 4px;
 }
 
-.border-\[\#fc6d26\] {
-  --tw-border-opacity: 1;
-  border-color: rgb(252 109 38 / var(--tw-border-opacity));
-}
-
 .bg-dark-1 {
   --tw-bg-opacity: 1;
-  background-color: rgb(20 23 28 / var(--tw-bg-opacity));
+  background-color: rgb(17 25 40 / var(--tw-bg-opacity));
 }
 
 .bg-dark-2 {
   --tw-bg-opacity: 1;
   background-color: rgb(18 27 38 / var(--tw-bg-opacity));
+}
+
+.bg-primary-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(67 97 238 / var(--tw-bg-opacity));
 }
 
 .bg-white {
@@ -1463,6 +1475,38 @@ h6 {
   padding-top: 1.25rem;
 }
 
+.pb-1 {
+  padding-bottom: 0.25rem;
+}
+
+.pl-2 {
+  padding-left: 0.5rem;
+}
+
+.pr-2 {
+  padding-right: 0.5rem;
+}
+
+.pt-1 {
+  padding-top: 0.25rem;
+}
+
+.pb-4 {
+  padding-bottom: 1rem;
+}
+
+.pl-8 {
+  padding-left: 2rem;
+}
+
+.pr-8 {
+  padding-right: 2rem;
+}
+
+.pt-4 {
+  padding-top: 1rem;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1526,10 +1570,6 @@ h6 {
 
 .leading-8 {
   line-height: 2rem;
-}
-
-.leading-9 {
-  line-height: 2.25rem;
 }
 
 .tracking-tight {
@@ -1653,10 +1693,6 @@ h6 {
 
 .focus-visible\:outline-offset-2:focus-visible {
   outline-offset: 2px;
-}
-
-.focus-visible\:outline-\[\#1D9BF0\]:focus-visible {
-  outline-color: #1D9BF0;
 }
 
 @media (min-width: 640px) {
