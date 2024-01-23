@@ -2,7 +2,7 @@
 <html
         xmlns:th="http://www.thymeleaf.org"
         lang="en"
-        class="h-full bg-gray-100"
+        class="h-full bg-dark-1"
         th:fragment="layout (pageTitle, content, activeMenu)">
 <head>
     <meta charset="UTF-8">
@@ -18,8 +18,8 @@
     Created from template : https://tailwindui.com/components/application-ui/application-shells/stacked#component-2573937b459d64c1734b4141b1eff8d7
 -->
 <div class="min-h-full">
-    <div class="bg-gray-800 pb-32">
-        <nav class="bg-gray-800">
+    <div class="pb-32">
+        <nav>
             <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div class="border-b border-gray-700">
                     <div class="flex h-16 items-center justify-between px-4 sm:px-0">
@@ -122,14 +122,14 @@
         </nav>
         <header class="py-10">
             <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <h1 th:text="${pageTitle}" class="text-3xl font-bold tracking-tight text-white">Page Title</h1>
+                <h3 th:text="${pageTitle}" class="font-bold tracking-tight text-white">Page Title</h3>
             </div>
         </header>
     </div>
 
     <main class="-mt-32">
         <div class="mx-auto max-w-7xl px-4 pb-12 sm:px-6 lg:px-8">
-            <div class="rounded-lg bg-white px-5 py-6 shadow sm:px-6">
+            <div class="rounded-lg bg-dark-2 px-5 py-6 shadow sm:px-6">
                 <div
                         class="relative overflow-hidden rounded opacity-75"
                         th:insert="${content}"
