@@ -2,7 +2,11 @@
 module.exports = {
     content: ["../resources/templates/**/*.{html,js}"], // it will be explained later
     theme: {
-        extend: {},
+        extend: {
+            outlineWidth: {
+                6: '6px'
+            }
+        },
         colors: {
             'primary': {
                 40: "#1B275F",
@@ -51,7 +55,19 @@ module.exports = {
                 "light": "#82E6AC",
                 "light-20": "#22AD5C"
             }
-
+        },
+        spacing: {
+            '1': '4px',
+            '2': '8px',
+            '4': '16px',
+            '6': '24px',
+            '8': '32px',
+            '10': '40px',
+            '12': '48px',
+            '14': '56px',
+            '16': '64px',
+            '18': '72px',
+            '20': '80px',
         }
     },
     plugins: [

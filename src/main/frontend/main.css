@@ -38,3 +38,20 @@
     font-family: "Noto Sans";
     src: url("/fonts/NotoSans-VariableFont_wdth,wght.ttf");
 }
+
+
+@layer components {
+
+    .btn-primary {
+        @apply flex items-center justify-center rounded-lg bg-primary-100;
+        @apply hover:bg-primary-80;
+        @apply active:bg-primary-60;
+        @apply focus:bg-primary-100 focus:outline focus:outline-6 focus:outline-primary-40;
+        padding: 13px 28px;
+        gap: 10px;
+    }
+    .btn-primary img {
+        width: 20px;
+        height: 20px;
+    }
+}
