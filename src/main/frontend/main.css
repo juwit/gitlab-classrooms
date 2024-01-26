@@ -47,11 +47,26 @@
         @apply hover:bg-primary-80;
         @apply active:bg-primary-60;
         @apply focus:bg-primary-100 focus:outline focus:outline-6 focus:outline-primary-40;
+        @apply text-white font-medium;
         padding: 13px 28px;
         gap: 10px;
     }
     .btn-primary img {
         width: 20px;
         height: 20px;
+    }
+
+
+
+    .classroom-card {
+        @apply rounded-xl bg-dark-3 flex flex-col items-stretch gap-4 p-2;
+    }
+
+    .classroom-card-name {
+        @apply font-medium text-white bg-dark-1 rounded-xl p-8;
+    }
+
+    .classroom-card .btn-primary {
+        @apply rounded-2xl;
     }
 }
