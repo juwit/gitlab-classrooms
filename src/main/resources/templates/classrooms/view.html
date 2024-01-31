@@ -22,12 +22,11 @@
         }
     </script>
 
-    <div class="lg:flex lg:items-center lg:justify-between mb-6">
-        <div class="min-w-0 flex-1">
-            <h2 th:text="${classroom.name}"
-                class="text-2xl font-bold leading-7 text-gray-900 sm:truncate sm:text-3xl sm:tracking-tight">
+    <div class="mb-6">
+        <div>
+            <h5 th:text="${classroom.name}">
                 Classroom name
-            </h2>
+            </h5>
             <div class="mt-1 flex flex-col sm:mt-0 sm:flex-row sm:flex-wrap sm:space-x-6">
                 <div class="mt-2 flex items-center text-sm text-gray-500">
                     <img src="/images/users-icon-grey.svg" class="h-6 w-6 mr-1.5" alt="users icon"/>
@@ -60,7 +59,6 @@
         </div>
     </div>
 
-
     <div class="border-b border-gray-200 pb-5 sm:flex sm:items-center sm:justify-between">
         <div>
             <h3 class="text-base font-semibold leading-6 text-gray-900">Students</h3>
@@ -81,26 +79,12 @@
         </div>
     </div>
 
-    <ul role="list" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 pt-5">
+    <ul role="list" class="grid grid-cols-3 gap-6 mt-6">
         <li th:each="student: ${classroom.students}"
             th:x-show="|filterStudents('${student.name}')|"
-            class="col-span-1 divide-y divide-gray-200 rounded-lg bg-gray-100 shadow">
-            <div class="flex w-full items-center justify-between space-x-6 p-6">
-                <img class="h-10 w-10 flex-shrink-0 rounded-full bg-gray-300" th:src="${student.avatarUrl}" alt="">
-                <div class="flex-1 truncate">
-                    <a th:href="@{/classrooms/{classroomId}/students/{studentName}(classroomId=${classroom.id},studentName=${student.name})}" class="items-center space-x-3">
-                        <h3 class="truncate text-sm font-medium text-gray-900" th:text="${student.name}">Jane
-                            Cooper</h3>
-                    </a>
-                    <a th:href="'mailto:'+${student.email}" class="mt-1 truncate text-sm text-gray-500 flex">
-                        <svg class="h-5 w-5 text-gray-400" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                            <path d="M3 4a2 2 0 00-2 2v1.161l8.441 4.221a1.25 1.25 0 001.118 0L19 7.162V6a2 2 0 00-2-2H3z"/>
-                            <path d="M19 8.839l-7.77 3.885a2.75 2.75 0 01-2.46 0L1 8.839V14a2 2 0 002 2h14a2 2 0 002-2V8.839z"/>
-                        </svg>
-                        <span class="ml-2" th:text="${student.email}">Email</span>
-                    </a>
-                </div>
-            </div>
+            th:insert="~{ components/student-card::div(${student}) }"
+            th:with="link=@{/classrooms/{classroomId}/students/{studentName}(classroomId=${classroom.id},studentName=${student.name})}"
+            >
         </li>
     </ul>
 
