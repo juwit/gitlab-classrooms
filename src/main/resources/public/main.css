@@ -641,6 +641,8 @@ select {
 
 html {
   font-family: "Noto Sans", system-ui, sans-serif;
+  --tw-text-opacity: 1;
+  color: rgb(255 255 255 / var(--tw-text-opacity));
 }
 
 h1 {
@@ -844,6 +846,62 @@ h6 {
   border-radius: 1rem;
 }
 
+.student-card {
+  width: 100%;
+  border-radius: 1.5rem;
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 42 55 / var(--tw-bg-opacity));
+  padding: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 32px;
+  .avatar {
+    height: 80px;
+  }
+  .avatar {
+    width: 80px;
+  }
+  .avatar {
+    flex-shrink: 0;
+  }
+  .avatar {
+    border-radius: 9999px;
+  }
+  .student-details {
+    display: flex;
+  }
+  .student-details {
+    flex-direction: column;
+  }
+  .student-details {
+    gap: 4px;
+  }
+  .student-details {
+    a {
+      font-size: 1.125rem;
+      line-height: 1.75rem;
+    }
+    a {
+      font-weight: 500;
+    }
+    .email {
+      display: flex;
+    }
+    .email {
+      align-items: center;
+    }
+    .email {
+      font-size: 0.875rem;
+      line-height: 1.25rem;
+    }
+    .email {
+      --tw-text-opacity: 1;
+      color: rgb(156 163 175 / var(--tw-text-opacity));
+    }
+  }
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -891,10 +949,6 @@ h6 {
 
 .z-10 {
   z-index: 10;
-}
-
-.col-span-1 {
-  grid-column: span 1 / span 1;
 }
 
 .col-span-full {
@@ -1012,10 +1066,6 @@ h6 {
   display: none;
 }
 
-.h-10 {
-  height: 40px;
-}
-
 .h-12 {
   height: 48px;
 }
@@ -1042,10 +1092,6 @@ h6 {
 
 .min-h-full {
   min-height: 100%;
-}
-
-.w-10 {
-  width: 40px;
 }
 
 .w-12 {
@@ -1079,10 +1125,6 @@ h6 {
 
 .w-full {
   width: 100%;
-}
-
-.min-w-0 {
-  min-width: 0px;
 }
 
 .min-w-full {
@@ -1220,12 +1262,6 @@ h6 {
   --tw-space-x-reverse: 0;
   margin-right: calc(16px * var(--tw-space-x-reverse));
   margin-left: calc(16px * calc(1 - var(--tw-space-x-reverse)));
-}
-
-.space-x-6 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 0;
-  margin-right: calc(24px * var(--tw-space-x-reverse));
-  margin-left: calc(24px * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .space-y-12 > :not([hidden]) ~ :not([hidden]) {
@@ -1479,11 +1515,6 @@ h6 {
   vertical-align: middle;
 }
 
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
-}
-
 .text-3xl {
   font-size: 1.875rem;
   line-height: 2.25rem;
@@ -1708,10 +1739,6 @@ h6 {
     flex: 1 1 auto;
   }
 
-  .sm\:grid-cols-2 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .sm\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
@@ -1742,12 +1769,6 @@ h6 {
     margin-left: calc(24px * calc(1 - var(--tw-space-x-reverse)));
   }
 
-  .sm\:truncate {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
   .sm\:p-6 {
     padding: 24px;
   }
@@ -1771,11 +1792,6 @@ h6 {
     padding-left: 0px;
   }
 
-  .sm\:text-3xl {
-    font-size: 1.875rem;
-    line-height: 2.25rem;
-  }
-
   .sm\:text-4xl {
     font-size: 2.25rem;
     line-height: 2.5rem;
@@ -1788,10 +1804,6 @@ h6 {
 
   .sm\:leading-6 {
     line-height: 1.5rem;
-  }
-
-  .sm\:tracking-tight {
-    letter-spacing: -0.025em;
   }
 }
 
@@ -1831,20 +1843,8 @@ h6 {
     margin-top: 0px;
   }
 
-  .lg\:flex {
-    display: flex;
-  }
-
   .lg\:grid-cols-3 {
     grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-
-  .lg\:items-center {
-    align-items: center;
-  }
-
-  .lg\:justify-between {
-    justify-content: space-between;
   }
 
   .lg\:px-8 {

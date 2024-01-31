@@ -5,6 +5,7 @@
 @layer base {
     html {
         font-family: "Noto Sans", system-ui, sans-serif;
+        @apply text-white;
     }
 
     h1 { /* 60px , 3.75em */
@@ -39,7 +40,6 @@
     src: url("/fonts/NotoSans-VariableFont_wdth,wght.ttf");
 }
 
-
 @layer components {
 
     .btn-primary {
@@ -56,8 +56,6 @@
         height: 20px;
     }
 
-
-
     .classroom-card {
         @apply rounded-xl bg-dark-3 flex flex-col items-stretch gap-4 p-2;
     }
@@ -69,4 +67,25 @@
     .classroom-card .btn-primary {
         @apply rounded-2xl;
     }
+
+    .student-card {
+        @apply bg-dark-3 rounded-3xl p-10 w-full;
+        @apply flex items-center justify-center gap-8;
+
+        .avatar {
+            @apply h-20 w-20 flex-shrink-0 rounded-full;
+        }
+        .student-details {
+            @apply flex flex-col gap-1;
+
+            a {
+                @apply text-lg font-medium;
+            }
+
+            .email {
+                @apply text-sm text-dark-7 flex items-center;
+            }
+        }
+    }
+
 }
