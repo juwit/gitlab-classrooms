@@ -1,0 +1,35 @@
+<!--/*
+
+    A Student Card component
+
+    Parameters :
+
+    * Student : A ClassroomUser object
+    * Link : The link to open when clicking on the student name
+
+    Fragment usage :
+
+    <li th:each="student: ${classroom.students}"
+        th:insert="~{ components/student-card::div(${student}) }"
+        th:with="link=@{/classrooms/{classroomId}/students/{studentName}(classroomId=${classroom.id},studentName=${student.name})}"
+        >
+    </li>
+
+*/-->
+
+<div th:fragment="assignment-card(assignment)" class="assignment-card">
+    <a th:href="${link}" class="assignment-header">
+        <div>
+            <img src="/icons/cubes.svg" />
+        </div>
+        <span th:text="${assignment.name}">Exercise 1</span>
+    </a>
+    <div class="flex flex-row items-center justify-center gap-4 py-2">
+        <img src="/icons/users.svg" />
+        <span th:text="${assignment.students.size} + ' / ' + ${classroom.students.size} + ' Students accepted'">2</span>
+    </div>
+    <button onclick="copyToClipboard(this)" th:data-clipboard="@{/assignments/{assignmentId}/accept(assignmentId=${assignment.id})}" class="btn-primary rounded-3xl">
+        <img src="/icons/link-alt-2.svg" />
+        Copy Accept Link
+    </button>
+</div>

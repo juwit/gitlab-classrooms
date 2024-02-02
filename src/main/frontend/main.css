@@ -88,4 +88,25 @@
         }
     }
 
+    .assignment-card {
+        @apply bg-dark-3 rounded-3xl p-2 w-full;
+        @apply flex flex-col items-stretch justify-center gap-2;
+
+        .icon {
+            @apply h-20 w-20 flex-shrink-0 rounded-full;
+        }
+        .assignment-header {
+            @apply bg-dark-1 flex-1 rounded-2xl p-8;
+            @apply flex flex-row items-center gap-6;
+
+            div {
+                @apply w-20 h-20 bg-dark-3 rounded-full flex items-center justify-center;
+
+                img {
+                    @apply w-6 h-6;
+                }
+            }
+        }
+    }
+
 }
