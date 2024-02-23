@@ -11,15 +11,29 @@
 <body class="h-full">
 
 <div class="flex min-h-full bg-dark-1">
-    <div class="flex flex-col justify-center px-12 py-12">
+    <div class="flex flex-col justify-center px-12 py-12 gap-8 max-w-2xl">
+
         <h3 class="text-white bold">
             <img src="/images/fox-svgrepo-com.svg" class="w-20 mb-4"/>
             GitLab Classrooms
         </h3>
-        <h4 class="mt-8 text-white">Sign in to your account</h4>
+
+        <h4 class="text-white">Sign in to your account</h4>
+
+        <div
+                th:if="${param.error}"
+                class="flex flex-row gap-6 bg-dark-3 rounded text-white text-base p-8 border-l-red border-l-4"
+        >
+            <img src="/icons/cross-circle.svg" class="w-8 h-8 p-1 bg-red rounded" />
+
+            <div class="flex flex-col gap-4">
+                <p>Login Error</p>
+                <p class="text-dark-7" th:text="${session.SPRING_SECURITY_LAST_EXCEPTION.message}"></p>
+            </div>
+        </div>
 
         <div class="flex">
-            <a th:href="@{/oauth2/authorization/gitlab}" class="btn-primary mt-10">
+            <a th:href="@{/oauth2/authorization/gitlab}" class="btn-primary">
                 <img src="/images/gitlab-logo-200.svg"/>
                 <span class="text-white text-base font-medium">Login with GitLab</span>
             </a>

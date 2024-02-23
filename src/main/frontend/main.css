@@ -5,6 +5,7 @@
 @layer base {
     html {
         font-family: "Noto Sans", system-ui, sans-serif;
+        @apply text-white;
     }
 
     h1 { /* 60px , 3.75em */
@@ -26,7 +27,7 @@
     }
 
     h5 { /* 24px, 1.5em */
-        @apply text-2xl;
+        @apply text-2xl font-bold;
     }
 
     h6 { /* 20px, 1.25em */
@@ -39,7 +40,6 @@
     src: url("/fonts/NotoSans-VariableFont_wdth,wght.ttf");
 }
 
-
 @layer components {
 
     .btn-primary {
@@ -47,6 +47,7 @@
         @apply hover:bg-primary-80;
         @apply active:bg-primary-60;
         @apply focus:bg-primary-100 focus:outline focus:outline-6 focus:outline-primary-40;
+        @apply text-white font-medium;
         padding: 13px 28px;
         gap: 10px;
     }
@@ -54,4 +55,58 @@
         width: 20px;
         height: 20px;
     }
+
+    .classroom-card {
+        @apply rounded-xl bg-dark-3 flex flex-col items-stretch gap-4 p-2;
+    }
+
+    .classroom-card-name {
+        @apply font-medium text-white bg-dark-1 rounded-xl p-8;
+    }
+
+    .classroom-card .btn-primary {
+        @apply rounded-2xl;
+    }
+
+    .student-card {
+        @apply bg-dark-3 rounded-3xl p-10 w-full;
+        @apply flex items-center justify-center gap-8;
+
+        .avatar {
+            @apply h-20 w-20 flex-shrink-0 rounded-full;
+        }
+        .student-details {
+            @apply flex flex-col gap-1;
+
+            a {
+                @apply text-lg font-medium;
+            }
+
+            .email {
+                @apply text-sm text-dark-7 flex items-center;
+            }
+        }
+    }
+
+    .assignment-card {
+        @apply bg-dark-3 rounded-3xl p-2 w-full;
+        @apply flex flex-col items-stretch justify-center gap-2;
+
+        .icon {
+            @apply h-20 w-20 flex-shrink-0 rounded-full;
+        }
+        .assignment-header {
+            @apply bg-dark-1 flex-1 rounded-2xl p-8;
+            @apply flex flex-row items-center gap-6;
+
+            div {
+                @apply w-20 h-20 bg-dark-3 rounded-full flex items-center justify-center;
+
+                img {
+                    @apply w-6 h-6;
+                }
+            }
+        }
+    }
+
 }
