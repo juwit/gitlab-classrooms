@@ -27,7 +27,7 @@
     }
 
     h5 { /* 24px, 1.5em */
-        @apply text-2xl;
+        @apply text-2xl font-bold;
     }
 
     h6 { /* 20px, 1.25em */
