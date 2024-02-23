@@ -20,11 +20,12 @@
 <div th:fragment="assignment-card(assignment)" class="assignment-card">
     <a th:href="${link}" class="assignment-header">
         <div>
-            <img src="/icons/cubes.svg" />
+            <img th:if="${assignment.type.name == 'EXERCISE'}" src="/icons/brackets.svg" />
+            <img th:if="${assignment.type.name == 'QUIZ'}" src="/icons/pencil-alt.svg" />
         </div>
         <span th:text="${assignment.name}">Exercise 1</span>
     </a>
-    <div class="flex flex-row items-center justify-center gap-4 py-2">
+    <div class="flex flex-row items-center gap-4 pl-8 py-2">
         <img src="/icons/users.svg" />
         <span th:text="${assignment.students.size} + ' / ' + ${classroom.students.size} + ' Students accepted'">2</span>
     </div>
