@@ -38,8 +38,8 @@ class ClassroomController {
     }
 
     @PostMapping("/new")
-    String newClassroom(@RequestParam String classroomName, @RequestParam(required = false) Long parentGitlabGroupId, @ModelAttribute("user") ClassroomUser teacher) throws GitLabApiException {
-        this.classroomService.createClassroom(classroomName, parentGitlabGroupId, teacher);
+    String newClassroom(@RequestParam String classroomName, @RequestParam(required = false) Long parentGitLabGroupId, @ModelAttribute("user") ClassroomUser teacher) throws GitLabApiException {
+        this.classroomService.createClassroom(classroomName, parentGitLabGroupId, teacher);
         return "redirect:/";
     }
 
