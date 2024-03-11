@@ -45,4 +45,5 @@ public interface Gitlab {
      * @return the Gitlab Project
      */
     Project createStudentProject(ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabApiException, GitLabException;
+
 }

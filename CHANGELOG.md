@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.3.3"></a>
+## 0.3.3 (2024-03-11)
+
+### Fixed
+
+- 🐛 : replace underscores with slugify [ff25e79]
+
+
 <a name="0.3.2"></a>
 ## 0.3.2 (2024-03-01)
 

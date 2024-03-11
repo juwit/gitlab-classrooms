@@ -5,6 +5,7 @@ import fr.univ_lille.gitlab.classrooms.assignments.StudentAssignment;
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.classrooms.ClassroomService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import jakarta.annotation.security.PermitAll;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,6 +16,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/")
+@PermitAll
 class DashboardController {
 
     private final ClassroomService classroomService;

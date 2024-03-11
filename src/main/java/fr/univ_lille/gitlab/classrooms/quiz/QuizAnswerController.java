@@ -4,6 +4,7 @@ import fr.univ_lille.gitlab.classrooms.assignments.AssignmentScoreService;
 import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
 import fr.univ_lille.gitlab.classrooms.assignments.QuizAssignment;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import jakarta.annotation.security.RolesAllowed;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import java.util.UUID;
 
 @Controller
 @RequestMapping("/assignments/{assignmentId}/quiz")
+@RolesAllowed("STUDENT")
 class QuizAnswerController {
 
     private final AssignmentService assignmentService;

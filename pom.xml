@@ -6,13 +6,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.0</version>
+        <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
     <groupId>fr.univ-lille</groupId>
     <artifactId>gitlab-classrooms</artifactId>
-    <version>0.3.2</version>
+    <version>0.3.3</version>
 
     <name>gitlab-classrooms</name>
     <description>GitLab Classroom is a modest clone of GitHub Classroom, aimed at GitLab.</description>
@@ -45,7 +45,7 @@
 
         <gitlab4j-api.version>6.0.0-rc.3</gitlab4j-api.version>
         <jacoco-maven-plugin.version>0.8.11</jacoco-maven-plugin.version>
-        <archunit.version>1.2.0</archunit.version>
+        <archunit.version>1.2.1</archunit.version>
     </properties>
 
     <dependencies>
@@ -108,6 +108,12 @@
         <dependency>
             <groupId>jakarta.xml.bind</groupId>
             <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
+
+        <!-- mustache is used to generate scripts -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mustache</artifactId>
         </dependency>
 
         <!-- test dependencies -->

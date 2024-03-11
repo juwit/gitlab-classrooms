@@ -1,0 +1,29 @@
+<!--/*
+
+    A Student Card component
+
+    Parameters :
+
+    * Student : A ClassroomUser object
+    * Link : The link to open when clicking on the student name
+
+    Fragment usage :
+
+    <li th:each="student: ${classroom.students}"
+        th:insert="~{ components/student-card::div(${student}) }"
+        th:with="link=@{/classrooms/{classroomId}/students/{studentName}(classroomId=${classroom.id},studentName=${student.name})}"
+        >
+    </li>
+
+*/-->
+
+<div th:fragment="student-card(student)" class="student-card">
+    <img class="avatar" th:src="${student.avatarUrl}" alt="Student avatar">
+    <div class="student-details">
+        <a th:href="${link}" th:text="${student.name}">Jane Cooper</a>
+        <div class="email">
+            <img src="/icons/send.svg" class="h-4 w-4" alt="send email icon">
+            <span class="ml-2" th:text="${student.email}">Email</span>
+        </div>
+    </div>
+</div>

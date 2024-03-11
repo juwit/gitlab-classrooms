@@ -1,0 +1,15 @@
+#!/bin/sh
+
+mkdir -p classroom
+cd classroom
+
+{{#studentRepositories}}
+mkdir -p {{studentName}}
+cd {{studentName}}
+{{ #cloneUrls }}
+git clone {{.}}
+{{ /cloneUrls }}
+cd ..
+
+{{/studentRepositories}}
+cd ..

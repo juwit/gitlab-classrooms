@@ -2,6 +2,8 @@ package fr.univ_lille.gitlab.classrooms.assignments.grading;
 
 import fr.univ_lille.gitlab.classrooms.assignments.StudentAssignmentService;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +17,7 @@ import java.security.Principal;
 @RequestMapping("/api/assignments/")
 class AssignmentGradingController {
 
-    private static final System.Logger LOGGER = System.getLogger(AssignmentGradingController.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(AssignmentGradingController.class.getName());
 
     private final StudentAssignmentService studentAssignmentService;
 
@@ -40,12 +42,12 @@ class AssignmentGradingController {
                                     @RequestParam("file") MultipartFile testResultsFile) throws IOException {
         // this ressource only works with gitlab id token authentication
         if (!(authenticationPrincipal instanceof JwtAuthenticationToken jwtToken)) {
-            LOGGER.log(System.Logger.Level.ERROR, "Forbidden access to /api/assignments/submit/junit");
+            LOGGER.error("Forbidden access to /api/assignments/submit/junit");
             throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
         // get the gitlab project id from the authentication token
         if(! jwtToken.getTokenAttributes().containsKey("project_id")){
-            LOGGER.log(System.Logger.Level.ERROR, "No project_id found in authentication token");
+            LOGGER.error("No project_id found in authentication token");
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "No project_id found in authentication token");
         }
         var gitlabProjectId = Long.parseLong(jwtToken.getTokenAttributes().get("project_id").toString());
@@ -54,7 +56,7 @@ class AssignmentGradingController {
         var exerciseAssignment = this.studentAssignmentService.getByGitlabProjectId(gitlabProjectId)
                 .orElseThrow(() -> {
                     var message = "Student Exercise Assignment not found for student '%s', project '%s'".formatted(student.getName(), gitlabProjectId);
-                    LOGGER.log(System.Logger.Level.ERROR, message);
+                    LOGGER.error(message);
                     return new ResponseStatusException(HttpStatus.NOT_FOUND, message );
                 });
 
@@ -62,7 +64,7 @@ class AssignmentGradingController {
         try {
             this.assignmentGradeService.gradeAssignmentWithJUnitReport(exerciseAssignment, testResultsFile.getInputStream());
         } catch (AssignmentGradingException e) {
-            LOGGER.log(System.Logger.Level.ERROR, "Error when grading assignment for student '%s', project '%s'".formatted(student.getName(), gitlabProjectId));
+            LOGGER.error("Error when grading assignment for student '{}', project '{}'", student.getName(), gitlabProjectId);
             throw new ResponseStatusException(500, e.getMessage(), e);
         }
 

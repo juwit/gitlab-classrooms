@@ -50,7 +50,9 @@ class GitlabImpl implements Gitlab {
      * @return slugified value
      */
     private String slugify(String name) {
-        return name.trim().toLowerCase().replaceAll("[^\\w.]", "-");
+        return name.trim().toLowerCase()
+                .replaceAll("[^\\w.]", "-")
+                .replaceAll("_", "-");
     }
 
     @Override
@@ -142,6 +144,6 @@ class GitlabImpl implements Gitlab {
             var message = String.format("Unable to give student '%s' access to its GitLab project '%s'", student.getGitlabUserId(), project.getId());
             throw new GitLabException(message, e);
         }
-
     }
+
 }
