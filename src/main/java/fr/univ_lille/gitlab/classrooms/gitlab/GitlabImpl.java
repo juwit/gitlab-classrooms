@@ -50,7 +50,9 @@ class GitlabImpl implements Gitlab {
      * @return slugified value
      */
     private String slugify(String name) {
-        return name.trim().toLowerCase().replaceAll("[^\\w.]", "-");
+        return name.trim().toLowerCase()
+                .replaceAll("[^\\w.]", "-")
+                .replaceAll("_", "-");
     }
 
     @Override
