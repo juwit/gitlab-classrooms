@@ -12,6 +12,7 @@ import org.gitlab4j.api.models.Project;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.text.Normalizer;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,8 +50,16 @@ class GitlabImpl implements Gitlab {
      * @param name value to slugify
      * @return slugified value
      */
-    private String slugify(String name) {
-        return name.trim().toLowerCase().replaceAll("[^\\w.]", "-");
+    String slugify(String name) {
+        // normalize string to remove diacritics
+        return Normalizer.normalize(name, Normalizer.Form.NFKD)
+                .replaceAll("\\p{M}", "")
+                .trim()
+                .toLowerCase()
+                // replace all chars that are not chars, digits, dot, dash, underscore with -
+                .replaceAll("[^a-zA-Z0-9.\\-_]", "-")
+                // remove last special chars as path should not end with a special char
+                .replaceAll("[^a-zA-Z0-9]+$", "");
     }
 
     @Override
