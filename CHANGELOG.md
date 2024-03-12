@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.3.2"></a>
+## 0.3.2 (2024-03-01)
+
+### Fixed
+
+- 🐛 : correct GitLab group id parameter name [7d47441]
+
+
 <a name="0.3.1"></a>
 ## 0.3.1 (2023-12-13)
 
