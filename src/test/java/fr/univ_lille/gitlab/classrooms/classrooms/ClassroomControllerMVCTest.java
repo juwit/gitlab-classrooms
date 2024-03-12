@@ -118,6 +118,26 @@ class ClassroomControllerMVCTest {
 
     @Test
     @WithMockTeacher
+    void createClassroom_shouldUseTheParentGitLabGroup() throws Exception {
+        mockMvc.perform(
+                        post("/classrooms/new")
+                                .with(csrf())
+                                .param("classroomName", "ClassroomControllerMVCTest newClassroom")
+                                .param("parentGitLabGroupId", "12"))
+                .andExpect(status().is3xxRedirection())
+                .andExpect(redirectedUrl("/"));
+
+        var captor = ArgumentCaptor.forClass(ClassroomUser.class);
+
+        verify(classroomService).createClassroom(eq("ClassroomControllerMVCTest newClassroom"), eq(12L), captor.capture());
+
+        assertThat(captor.getValue())
+                .isNotNull()
+                .extracting("name").isEqualTo("obiwan.kenobi");
+    }
+
+    @Test
+    @WithMockTeacher
     void createClassroom_shouldSaveTheAssociatedTeacher() throws Exception {
         mockMvc.perform(
                         post("/classrooms/new")
