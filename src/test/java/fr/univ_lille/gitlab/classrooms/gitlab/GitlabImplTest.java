@@ -285,4 +285,19 @@ class GitlabImplTest {
 
         verifyNoMoreInteractions(gitLabApi.getProjectApi());
     }
+
+    @Test
+    void slugify_shouldReplacellSpecialChars(){
+        assertThat( gitlab.slugify("luke.skywalker") ).isEqualTo("luke.skywalker");
+
+        assertThat( gitlab.slugify("luke-skywalker") ).isEqualTo("luke-skywalker");
+
+        assertThat( gitlab.slugify("luke_skywalker") ).isEqualTo("luke_skywalker");
+
+        // special chars at the end should be stripped
+        assertThat( gitlab.slugify("luke-skywalker_.-") ).isEqualTo("luke-skywalker");
+
+        // no diacritics
+        assertThat( gitlab.slugify("léïa") ).isEqualTo("leia");
+    }
 }
