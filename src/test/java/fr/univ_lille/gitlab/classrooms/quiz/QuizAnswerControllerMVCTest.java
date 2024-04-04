@@ -78,7 +78,7 @@ class QuizAnswerControllerMVCTest {
 
     @Test
     @WithMockStudent
-    void shouldReturnQuizPage_withPreviouslySubmittedAnswer_whenQuizExists() throws Exception {
+    void shouldReturnQuizPage_withPreviouslySubmittedAnswer_whenQuizIsRetaken() throws Exception {
         var quiz = new QuizEntity();
         quiz.setName("death-star-quiz");
         quiz.setMarkdownContent("""
@@ -89,12 +89,14 @@ class QuizAnswerControllerMVCTest {
 
         var assignment = new QuizAssignment();
         assignment.setQuiz(quiz);
+        assignment.setMaxRetakes(1);
 
         when(assignmentService.getAssignment(assignment.getId())).thenReturn(Optional.of(assignment));
 
         var student = classroomUserService.getClassroomUser("luke.skywalker");
         var studentAssignment = new StudentQuizAssignment();
         studentAssignment.setSubmissionDate(ZonedDateTime.now());
+        studentAssignment.setAssignment(assignment);
 
         when(assignmentService.getAssignmentResultsForStudent(assignment, student)).thenReturn(studentAssignment);
 
