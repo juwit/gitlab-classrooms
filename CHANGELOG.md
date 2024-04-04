@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.4.0"></a>
+## 0.4.0 (2024-04-04)
+
+### Added
+
+- ✨ : add quiz retake management [0485c0d]
+
+
 <a name="0.3.3"></a>
 ## 0.3.3 (2024-03-12)
 

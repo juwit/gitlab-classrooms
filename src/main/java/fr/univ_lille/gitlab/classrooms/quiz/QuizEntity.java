@@ -30,4 +30,5 @@ public class QuizEntity {
     public void setMarkdownContent(String markdownContent) {
         this.markdownContent = markdownContent;
     }
+
 }
