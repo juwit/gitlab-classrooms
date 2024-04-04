@@ -10,6 +10,8 @@ public class QuizAssignment extends Assignment {
     @OneToOne
     private QuizEntity quiz;
 
+    private int maxRetakes = 0;
+
     public QuizAssignment() {
         this.setType(AssignmentType.QUIZ);
     }
@@ -20,5 +22,17 @@ public class QuizAssignment extends Assignment {
 
     public void setQuiz(QuizEntity quiz) {
         this.quiz = quiz;
+    }
+
+    public int getMaxRetakes() {
+        return maxRetakes;
+    }
+
+    public void setMaxRetakes(int maxRetakes) {
+        this.maxRetakes = maxRetakes;
+    }
+
+    public boolean allowRetakes(){
+        return this.maxRetakes > 0;
     }
 }

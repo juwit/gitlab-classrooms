@@ -19,6 +19,12 @@ class AssignmentScoreServiceImpl implements AssignmentScoreService{
     @Transactional
     public void registerScore(Assignment assignment, ClassroomUser student, long score, long maxScore) {
         var studentAssignment = this.studentAssignmentRepository.findByAssignmentAndStudent(assignment, student);
+
+        // increment retake count if needed
+        if(studentAssignment instanceof StudentQuizAssignment quizAssignment && quizAssignment.hasBeenSubmitted()){
+            quizAssignment.setRetakes(quizAssignment.getRetakes() + 1);
+        }
+
         studentAssignment.setScore(score);
         studentAssignment.setMaxScore(maxScore);
         studentAssignment.setSubmissionDate(ZonedDateTime.now());

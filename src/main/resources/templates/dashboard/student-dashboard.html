@@ -78,7 +78,9 @@
                             </a>
                         </dt>
                     </div>
-                    <div th:if="${studentAssignment.assignment.type.name() == 'QUIZ'}" class="flex justify-between gap-x-4 py-3">
+                    <div
+                            th:if="${studentAssignment.assignment.type.name() == 'QUIZ' && studentAssignment.canRetake()}"
+                            class="flex justify-between gap-x-4 py-3">
                         <dt  class="text-gray-800">
                             <a th:href="@{/assignments/{assignmentId}/quiz(assignmentId=${studentAssignment.assignment.id})}" target="_blank" class="inline-flex items-center">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 mr-1.5">

@@ -3,6 +3,7 @@ package fr.univ_lille.gitlab.classrooms.quiz;
 import fr.univ_lille.gitlab.classrooms.assignments.AssignmentScoreService;
 import fr.univ_lille.gitlab.classrooms.assignments.AssignmentService;
 import fr.univ_lille.gitlab.classrooms.assignments.QuizAssignment;
+import fr.univ_lille.gitlab.classrooms.assignments.StudentQuizAssignment;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -41,11 +42,20 @@ class QuizAnswerController {
         model.addAttribute("quiz", quiz);
         model.addAttribute("assignment", assignment);
 
-        var studentAssignment = this.assignmentService.getAssignmentResultsForStudent(assignment, student);
+        var studentAssignment = (StudentQuizAssignment)this.assignmentService.getAssignmentResultsForStudent(assignment, student);
+
         if(studentAssignment.hasBeenSubmitted()){
-            model.addAttribute("previousSubmission", studentAssignment);
+            // check if quiz can be retaken
+            if(studentAssignment.canRetake()) {
+                model.addAttribute("previousSubmission", studentAssignment);
+                // quiz can be retaken, showing answer form, with previous information
+                return "quiz/answer";
+            }
+            // quiz cannot be retaken, showing results
+            return "quiz/results";
         }
 
+        // quiz has not been submitted yet, showing answer form
         return "quiz/answer";
     }
 
