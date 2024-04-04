@@ -12,7 +12,7 @@
 
     <groupId>fr.univ-lille</groupId>
     <artifactId>gitlab-classrooms</artifactId>
-    <version>0.3.3</version>
+    <version>0.4.0</version>
 
     <name>gitlab-classrooms</name>
     <description>GitLab Classroom is a modest clone of GitHub Classroom, aimed at GitLab.</description>
