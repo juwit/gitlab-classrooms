@@ -2,12 +2,12 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.quiz.QuizEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.OneToOne;
+import jakarta.persistence.ManyToOne;
 
 @Entity
 public class QuizAssignment extends Assignment {
 
-    @OneToOne
+    @ManyToOne
     private QuizEntity quiz;
 
     private int maxRetakes = 0;
