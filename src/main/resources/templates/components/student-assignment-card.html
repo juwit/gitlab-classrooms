@@ -1,0 +1,52 @@
+<!--/*
+
+    A Student Assignment Card component
+
+    Parameters :
+
+    * Assignment : A student assignment object
+
+    Fragment usage :
+
+    <li th:each="student: ${classroom.students}"
+        th:insert="~{ components/student-card::div(${student}) }"
+        th:with="link=@{/classrooms/{classroomId}/students/{studentName}(classroomId=${classroom.id},studentName=${student.name})}"
+        >
+    </li>
+
+*/-->
+
+<div th:fragment="student-assignment-card(studentAssignment)" class="assignment-card">
+    <a th:href="${link}" class="assignment-header">
+        <div>
+            <img th:if="${studentAssignment.assignment.type.name == 'EXERCISE'}" src="/icons/brackets.svg" />
+            <img th:if="${studentAssignment.assignment.type.name == 'QUIZ'}" src="/icons/pencil-alt.svg" />
+        </div>
+        <span th:text="${studentAssignment.assignment.name}">Exercise 1</span>
+    </a>
+    <div th:if="${studentAssignment.submissionDate!=null}" class="flex justify-between items-center">
+        <div class="pl-2" th:text="'Score : ' + ${studentAssignment.score} + ' / ' + ${studentAssignment.maxScore}">8/10</div>
+        <form
+                th:action="@{/assignments/{assignmentId}/students/{studentId}/reset(assignmentId=${studentAssignment.assignment.id}, studentId=${student.name})}" method="post">
+            <button type="submit" class="btn-secondary">
+                Reset Grade
+            </button>
+        </form>
+    </div>
+    <a
+        th:if="${studentAssignment.assignment.type.name() == 'EXERCISE'}"
+        th:href="${studentAssignment.gitlabProjectUrl}"
+        target="_blank" class="btn-primary "
+    >
+        <img src="/icons/gitlab-logo-200.svg">
+        Open in GitLab
+    </a>
+    <a
+            th:if="${studentAssignment.assignment.type.name() == 'QUIZ'}"
+            th:href="@{/assignments/{assignmentId}/quiz(assignmentId=${studentAssignment.assignment.id})}"
+            target="_blank" class="btn-primary"
+    >
+        <img src="/icons/link-alt-2.svg">
+        Answer Quiz
+    </a>
+</div>

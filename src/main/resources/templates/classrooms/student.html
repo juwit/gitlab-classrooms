@@ -4,107 +4,17 @@
 </head>
 <body>
 <section>
-    <div class="border-b border-gray-200 mt-5 pb-5 sm:flex sm:items-center sm:justify-between">
+    <div class="flex flex-row justify-between border-b border-b-dark-4 py-8">
         <div>
-            <h3 th:text="${classroom.name}" class="text-base font-semibold leading-6 text-gray-900">Classroom
-                Name</h3>
-            <p class="max-w-4xl text-sm text-gray-500">Accepted assignments of the classroom <span
-                    th:text="${classroom.name}">Classroom Name</span>.</p>
+            <h3 th:text="${classroom.name}" class="text-base font-semibold leading-6 text-gray-900 mb-2">Classroom Name</h3>
+            <p class="text-base text-dark-7">Accepted assignments of the classroom <span th:text="${classroom.name}">Classroom Name</span>.</p>
         </div>
     </div>
 
-    <ul role="list" class="mt-6 grid grid-cols-1 gap-x-6 gap-y-8 md:grid-cols-2 lg:grid-cols-3 xl:gap-x-8">
-        <li
-                th:each="studentAssignment : ${assignments}"
-                class="overflow-hidden rounded-xl border border-gray-200"
+    <ul role="list" class="grid grid-cols-3 gap-6 mt-6">
+        <li th:each="studentAssignment : ${assignments}"
+            th:insert="~{ components/student-assignment-card::div(${studentAssignment}) }"
         >
-            <div class="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
-                <!-- question mark icon -->
-                <svg th:if="${studentAssignment.assignment.type.name() == 'QUIZ'}" xmlns="http://www.w3.org/2000/svg"
-                     fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
-                     class="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"/>
-                </svg>
-                <!-- shell icon -->
-                <svg th:if="${studentAssignment.assignment.type.name() == 'EXERCISE'}"
-                     xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                     stroke="currentColor"
-                     class="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900">
-                    <path stroke-linecap="round" stroke-linejoin="round"
-                          d="M6.75 7.5l3 2.25-3 2.25m4.5 0h3m-9 8.25h13.5A2.25 2.25 0 0021 18V6a2.25 2.25 0 00-2.25-2.25H5.25A2.25 2.25 0 003 6v12a2.25 2.25 0 002.25 2.25z"/>
-                </svg>
-
-                <p th:text="${studentAssignment.assignment.name}" class="text-sm font-medium leading-6 text-gray-900">
-                    Assignment Name
-                </p>
-            </div>
-            <dl class="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
-                <div class="flex justify-between gap-x-4 py-3">
-                    <div class="flex justify-between gap-x-4 py-3">
-                        <dt class="text-gray-800 inline-flex" th:if="${studentAssignment.submissionDate}">
-                            <span class="whitespace-pre">Submission date : </span>
-                            <span th:text="${#temporals.format(studentAssignment.localizedSubmissionDate, 'dd MMMM yyyy à HH:mm', #locale.FRENCH)}">date</span>
-                        </dt>
-                        <dt class="text-gray-800 inline-flex" th:unless="${studentAssignment.submissionDate}">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-6 h-6 mr-1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z"/>
-                            </svg>
-                            No submission received yet.
-                        </dt>
-                    </div>
-                </div>
-                <div th:if="${studentAssignment.submissionDate!=null}" class="flex justify-between gap-x-4 py-3">
-                    <div class="flex justify-between gap-x-4 py-3">
-                        <dt class="text-gray-800 inline-flex">
-                            <span class="whitespace-pre">Score : </span>
-                            <div class="text-gray-900"
-                                 th:text="${studentAssignment.score} + ' / ' + ${studentAssignment.maxScore}">8/10
-                            </div>
-                        </dt>
-                    </div>
-                    <form
-                            th:action="@{/assignments/{assignmentId}/students/{studentId}/reset(assignmentId=${studentAssignment.assignment.id}, studentId=${student.name})}" method="post">
-                        <button type="submit" class="rounded-md bg-white px-3.5 py-2.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">
-                            Reset Grade
-                        </button>
-                    </form>
-                </div>
-                <div th:if="${studentAssignment.assignment.type.name() == 'EXERCISE'}"
-                     class="flex justify-between gap-x-4 py-3">
-                    <dt class="text-gray-800">
-                        <a th:href="${studentAssignment.gitlabProjectUrl}" target="_blank"
-                           class="inline-flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-6 h-6">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
-                            </svg>
-                            <svg fill="currentColor" stroke="currentColor" viewBox="0 0 256 256" id="Flat"
-                                 xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mr-1.5">
-                                <path d="M234.415,153.53322,207.08594,51.04787a7.99994,7.99994,0,0,0-15.22022-.74756L170.228,108H85.772L64.13477,50.3008a8.00014,8.00014,0,0,0-15.22071.74707L21.585,153.53322a12.02834,12.02834,0,0,0,4.76416,12.958l94.82031,65.645a11.94608,11.94608,0,0,0,5.45264,2.03467,3.97163,3.97163,0,0,0,.71924.07275c.02734,0,.05517-.00683.08252-.00732.19214.00879.384.02148.57617.02148s.384-.01269.57617-.02148c.02735.00049.05518.00732.08252.00732a3.95865,3.95865,0,0,0,.71826-.07275,11.9487,11.9487,0,0,0,5.45362-2.03467l94.82031-65.645A12.02834,12.02834,0,0,0,234.415,153.53322ZM199.35645,53.1094,213.9939,108H178.772ZM128,220.60891,88.77173,116h78.45654ZM56.644,53.1094,77.228,108H42.00635ZM29.31445,155.59426,39.87305,116H80.228l39.53784,105.43457-88.863-61.52051A4.01148,4.01148,0,0,1,29.31445,155.59426Zm195.78272,4.31982-88.863,61.52051L175.772,116H216.1272l10.55835,39.59424A4.01148,4.01148,0,0,1,225.09717,159.91408Z"></path>
-                            </svg>
-                            Open in GitLab
-                        </a>
-                    </dt>
-                </div>
-                <div th:if="${studentAssignment.assignment.type.name() == 'QUIZ'}"
-                     class="flex justify-between gap-x-4 py-3">
-                    <dt class="text-gray-800">
-                        <a th:href="@{/assignments/{assignmentId}/quiz(assignmentId=${studentAssignment.assignment.id})}"
-                           target="_blank" class="inline-flex items-center">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                 stroke="currentColor" class="w-6 h-6 mr-1.5">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                      d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/>
-                            </svg>
-                            Answer Quiz
-                        </a>
-                    </dt>
-                </div>
-            </dl>
         </li>
     </ul>
 </section>
