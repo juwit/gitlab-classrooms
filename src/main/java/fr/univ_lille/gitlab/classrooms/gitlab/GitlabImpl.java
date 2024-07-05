@@ -1,6 +1,7 @@
 package fr.univ_lille.gitlab.classrooms.gitlab;
 
 import fr.univ_lille.gitlab.classrooms.assignments.ExerciseAssignment;
+import fr.univ_lille.gitlab.classrooms.assignments.StudentExerciseAssignment;
 import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import org.gitlab4j.api.GitLabApi;
@@ -113,6 +114,17 @@ class GitlabImpl implements Gitlab {
         this.ensureStudentCanAccessItsProject(teacherGitlabApi, project, student);
 
         return project;
+    }
+
+    @Override
+    public void archiveProject(StudentExerciseAssignment studentExerciseAssignment) throws GitLabException {
+        var projectId = studentExerciseAssignment.getGitlabProjectId();
+
+        try {
+            this.gitLabApi.getProjectApi().archiveProject(projectId);
+        } catch (GitLabApiException e) {
+            throw new GitLabException("Unable to archive GitLab project with id '%s'".formatted(projectId), e);
+        }
     }
 
     private Project ensureStudentProjectExists(GitLabApi teacherGitlabApi, ExerciseAssignment exerciseAssignment, ClassroomUser student) throws GitLabException {
