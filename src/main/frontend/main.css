@@ -50,10 +50,26 @@
         @apply text-white font-medium;
         padding: 13px 28px;
         gap: 10px;
+
+        img {
+            width: 20px;
+            height: 20px;
+        }
     }
-    .btn-primary img {
-        width: 20px;
-        height: 20px;
+
+    .btn-secondary {
+        @apply flex items-center justify-center rounded-lg bg-dark-1;
+        @apply hover:bg-white hover:text-primary-100;
+        @apply active:bg-dark-1;
+        @apply focus:bg-dark-1 focus:outline focus:outline-6 focus:outline-primary-80;
+        @apply text-white font-medium;
+        padding: 13px 28px;
+        gap: 10px;
+
+        img {
+            width: 20px;
+            height: 20px;
+        }
     }
 
     .classroom-card {
