@@ -8,7 +8,7 @@
 
   <h1
     th:text="${quiz.name}"
-    class="text-3xl font-semibold leading-1 text-gray-900 mb-6">
+    class="text-2xl font-semibold leading-1 text-gray-900 mb-6">
     Quiz name
   </h1>
 
@@ -29,7 +29,7 @@
     </div>
   </div>
 
-  <h2><b>Plusieurs réponses correctes</b> par question sont possibles.</h2>
+  <h2 class="text-lg text-dark-6"><b>Plusieurs réponses correctes</b> par question sont possibles.</h2>
 
   <div th:if="${message}" class="border-l-4 border-red-400 bg-red-50 p-4 mt-12">
     <div class="flex">
@@ -48,12 +48,12 @@
 
 
   <form action="#" method="post" th:action="@{'/assignments/'+${assignment.id}+'/quiz/submit'}">
-
-    <section
-            class="border-b border-gray-900/10 pt-12 pb-12 "
+    <ol class="list-decimal">
+    <li
+            class="border-b border-dark-4 pt-12 pb-12 "
             th:each="question : ${quiz.questions}">
+      <span class="ml-2 text-base text-white bg-dark-3 px-4 py-4 rounded-lg" th:text="${question.text}">Question text</span>
       <fieldset >
-        <legend class="text-sm font-semibold leading-6 text-gray-900" th:text="${question.text}">Question text</legend>
         <div class="mt-6 space-y-6" th:if="${question.questionType.name() == 'SINGLE_CHOICE'}">
           <div th:each="answer : ${question.answers}" class="flex items-center gap-x-3">
             <input th:id="${answer.id}" th:name="${question.id}" th:value="${answer.id}" type="radio" th:checked="${answer.selected}" class="h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600">
@@ -74,8 +74,9 @@
           </div>
         </div>
       </fieldset>
+    </li>
 
-    </section>
+    </ol>
 
     <input
       type="hidden"
@@ -83,7 +84,7 @@
       th:value="${_csrf.token}"/>
 
     <div class="mt-6 flex items-center justify-start gap-x-6">
-      <button type="submit" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Envoyer les réponses</button>
+      <button type="submit" class="btn-primary">Envoyer les réponses</button>
     </div>
 
   </form>
