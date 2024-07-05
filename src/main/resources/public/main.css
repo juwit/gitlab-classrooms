@@ -1198,6 +1198,10 @@ h6 {
   height: 100%;
 }
 
+.h-14 {
+  height: 56px;
+}
+
 .min-h-full {
   min-height: 100%;
 }
@@ -1239,6 +1243,14 @@ h6 {
   width: 100%;
 }
 
+.w-14 {
+  width: 56px;
+}
+
+.w-10 {
+  width: 40px;
+}
+
 .min-w-full {
   min-width: 100%;
 }
@@ -1277,6 +1289,10 @@ h6 {
 
 .flex-shrink-0 {
   flex-shrink: 0;
+}
+
+.table-auto {
+  table-layout: auto;
 }
 
 .origin-top-right {
@@ -1353,6 +1369,10 @@ h6 {
 
 .gap-8 {
   gap: 32px;
+}
+
+.gap-1 {
+  gap: 4px;
 }
 
 .gap-x-3 {
@@ -1473,6 +1493,10 @@ h6 {
   border-left-width: 4px;
 }
 
+.border-b-2 {
+  border-bottom-width: 2px;
+}
+
 .border-b-dark-4 {
   --tw-border-opacity: 1;
   border-bottom-color: rgb(55 65 81 / var(--tw-border-opacity));
@@ -1481,6 +1505,11 @@ h6 {
 .border-l-red {
   --tw-border-opacity: 1;
   border-left-color: rgb(242 48 48 / var(--tw-border-opacity));
+}
+
+.border-b-dark-1 {
+  --tw-border-opacity: 1;
+  border-bottom-color: rgb(20 23 28 / var(--tw-border-opacity));
 }
 
 .bg-dark-1 {
@@ -1687,6 +1716,10 @@ h6 {
   padding-top: 48px;
 }
 
+.pb-8 {
+  padding-bottom: 32px;
+}
+
 .text-left {
   text-align: left;
 }
@@ -1717,6 +1750,21 @@ h6 {
 .text-sm {
   font-size: 0.875rem;
   line-height: 1.25rem;
+}
+
+.text-6xl {
+  font-size: 3.75rem;
+  line-height: 1;
+}
+
+.text-2xl {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem;
 }
 
 .font-bold {
@@ -1763,6 +1811,11 @@ h6 {
 .text-white {
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
+}
+
+.text-dark-6 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity));
 }
 
 .opacity-0 {
@@ -1846,6 +1899,16 @@ h6 {
 .placeholder\:text-dark-6::placeholder {
   --tw-text-opacity: 1;
   color: rgb(107 114 128 / var(--tw-text-opacity));
+}
+
+.odd\:bg-dark-3:nth-child(odd) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 42 55 / var(--tw-bg-opacity));
+}
+
+.even\:bg-dark-3:nth-child(even) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(31 42 55 / var(--tw-bg-opacity));
 }
 
 .checked\:text-white:checked {
