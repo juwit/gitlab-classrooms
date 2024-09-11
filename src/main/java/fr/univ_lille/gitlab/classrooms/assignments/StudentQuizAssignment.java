@@ -23,6 +23,10 @@ public class StudentQuizAssignment extends StudentAssignment {
     }
 
     public boolean canRetake(){
+        var quizAssignment = (QuizAssignment)this.getAssignment();
+        if(quizAssignment.allowsInfiniteRetakes()){
+            return true;
+        }
         return this.retakes < ((QuizAssignment)this.getAssignment()).getMaxRetakes();
     }
 

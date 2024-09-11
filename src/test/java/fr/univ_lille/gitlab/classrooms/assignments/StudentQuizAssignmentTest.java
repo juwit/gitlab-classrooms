@@ -33,6 +33,23 @@ class StudentQuizAssignmentTest {
     }
 
     @Test
+    void quizCanBeRetaken_ifAssignmentAllowsInfiniteRetakes(){
+        // defaults is infinite retakes
+        var assignment = new QuizAssignment();
+
+        // assignment already taken, with no retakes
+        var studentQuizAssignment = new StudentQuizAssignment();
+        studentQuizAssignment.setAssignment(assignment);
+        studentQuizAssignment.setSubmissionDate(ZonedDateTime.now());
+        studentQuizAssignment.setRetakes(0);
+
+        assertThat(studentQuizAssignment.canRetake()).isTrue();
+
+        studentQuizAssignment.setRetakes(42);
+        assertThat(studentQuizAssignment.canRetake()).isTrue();
+    }
+
+    @Test
     void quizCanBeRetaken_ifAssignmentAllows(){
         var assignment = new QuizAssignment();
         assignment.setMaxRetakes(1);
