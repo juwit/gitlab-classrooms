@@ -7,10 +7,12 @@ import jakarta.persistence.ManyToOne;
 @Entity
 public class QuizAssignment extends Assignment {
 
+    private static final int INFINITE_RETAKES = -1;
+
     @ManyToOne
     private QuizEntity quiz;
 
-    private int maxRetakes = 0;
+    private int maxRetakes = INFINITE_RETAKES;
 
     public QuizAssignment() {
         this.setType(AssignmentType.QUIZ);
@@ -32,7 +34,7 @@ public class QuizAssignment extends Assignment {
         this.maxRetakes = maxRetakes;
     }
 
-    public boolean allowRetakes(){
-        return this.maxRetakes > 0;
+    public boolean allowsInfiniteRetakes() {
+        return this.maxRetakes == INFINITE_RETAKES;
     }
 }
