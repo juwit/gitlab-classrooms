@@ -1,5 +1,13 @@
 # Changelog
 
+<a name="0.4.2"></a>
+## 0.4.2 (2024-09-11)
+
+### Fixed
+
+- 🐛 : allow infinite retakes by default [c67c24d]
+
+
 <a name="0.4.1"></a>
 ## 0.4.1 (2024-04-05)
 
