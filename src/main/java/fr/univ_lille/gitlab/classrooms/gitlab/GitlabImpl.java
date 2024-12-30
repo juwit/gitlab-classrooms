@@ -120,8 +120,17 @@ class GitlabImpl implements Gitlab {
     public void archiveProject(StudentExerciseAssignment studentExerciseAssignment) throws GitLabException {
         var projectId = studentExerciseAssignment.getGitlabProjectId();
 
+        var classroom = studentExerciseAssignment.getAssignment().getClassroom();
+        var teacher = classroom.getTeachers().stream().findFirst();
+
+        if(teacher.isEmpty()){
+            throw new GitLabException("Could not archive student %s project for assignment %s. Classroom has no teacher.".formatted(studentExerciseAssignment.getStudent().getName(), studentExerciseAssignment.getAssignment().getName()));
+        }
+        // get a gitlab api client with the teacher's rights
+        var teacherGitlabApi = this.gitlabApiFactory.userGitlabApi(teacher.get());
+
         try {
-            this.gitLabApi.getProjectApi().archiveProject(projectId);
+            teacherGitlabApi.getProjectApi().archiveProject(projectId);
         } catch (GitLabApiException e) {
             throw new GitLabException("Unable to archive GitLab project with id '%s'".formatted(projectId), e);
         }
