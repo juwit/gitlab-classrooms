@@ -21,4 +21,12 @@ public class GitlabIDTokenSecurityConfiguration {
                 .build();
     }
 
+    @Bean
+    SecurityFilterChain apiKeyFilterChain(HttpSecurity http) throws Exception {
+        return http
+                .securityMatcher("/api/**")
+                .authorizeHttpRequests(authorize -> authorize.requestMatchers("/api/**").authenticated())
+                .build();
+    }
+
 }

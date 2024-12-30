@@ -13,6 +13,8 @@ import java.util.UUID;
 public interface AssignmentService {
     Optional<Assignment> getAssignment(UUID id);
 
+    void archive(Assignment assignment);
+
     @Transactional
     void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException, GitLabException;
 

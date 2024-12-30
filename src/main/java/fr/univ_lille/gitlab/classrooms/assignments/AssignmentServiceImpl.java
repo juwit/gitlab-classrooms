@@ -46,6 +46,20 @@ class AssignmentServiceImpl implements AssignmentService {
     }
 
     @Override
+    public void archive(Assignment assignment){
+        var studentAssignments = this.studentAssignmentRepository.findAllByAssignment(assignment);
+        studentAssignments.stream()
+                .map(it -> (StudentExerciseAssignment)it)
+                .forEach(studentExerciseAssignment -> {
+                    try {
+                        this.gitlab.archiveProject(studentExerciseAssignment);
+                    } catch (GitLabException e) {
+                        System.out.println(e.getMessage());
+                    }
+                });
+    }
+
+    @Override
     @Transactional
     public void acceptAssigment(Assignment assignment, ClassroomUser student) throws GitLabApiException, GitLabException {
         assignment.accept(student);
