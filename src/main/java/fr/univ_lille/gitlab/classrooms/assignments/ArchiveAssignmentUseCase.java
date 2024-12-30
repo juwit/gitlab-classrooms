@@ -2,6 +2,8 @@ package fr.univ_lille.gitlab.classrooms.assignments;
 
 import fr.univ_lille.gitlab.classrooms.gitlab.GitLabException;
 import fr.univ_lille.gitlab.classrooms.gitlab.Gitlab;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -11,12 +13,15 @@ public class ArchiveAssignmentUseCase {
 
     private final Gitlab gitlab;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArchiveAssignmentUseCase.class.getName());
+
     ArchiveAssignmentUseCase(StudentAssignmentRepository studentAssignmentRepository, Gitlab gitlab) {
         this.studentAssignmentRepository = studentAssignmentRepository;
         this.gitlab = gitlab;
     }
 
-    public void archive(Assignment assignment){
+    void archive(Assignment assignment){
+        LOGGER.info("Archiving assignment {}", assignment.getId());
         var studentAssignments = this.studentAssignmentRepository.findAllByAssignment(assignment);
         studentAssignments.stream()
                 .map(it -> (StudentExerciseAssignment)it)
