@@ -27,6 +27,7 @@ public class AutoArchiveJob {
         LOGGER.info("Auto archiving assignments");
         this.assignmentRepository.findAll()
                 .stream()
+                .filter(it -> it.getStatus()==AssignmentStatus.OPENED)
                 .filter(Assignment::isAutoArchive)
                 .filter(it -> it.getDueDate().isBefore(ZonedDateTime.now()))
                 .forEach(this.archiveAssignmentUseCase::archive);

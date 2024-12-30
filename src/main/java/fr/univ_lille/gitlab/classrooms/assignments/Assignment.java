@@ -31,6 +31,9 @@ public abstract class Assignment {
 
     private boolean autoArchive = false;
 
+    @Enumerated(EnumType.STRING)
+    private AssignmentStatus status = AssignmentStatus.OPENED;
+
     public UUID getId() {
         return id;
     }
@@ -89,5 +92,13 @@ public abstract class Assignment {
 
     public void setAutoArchive(boolean autoArchive) {
         this.autoArchive = autoArchive;
+    }
+
+    public AssignmentStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(AssignmentStatus status) {
+        this.status = status;
     }
 }

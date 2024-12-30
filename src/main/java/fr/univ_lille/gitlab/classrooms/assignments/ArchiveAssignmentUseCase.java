@@ -9,13 +9,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class ArchiveAssignmentUseCase {
 
+    private final AssignmentRepository assignmentRepository;
+
     private final StudentAssignmentRepository studentAssignmentRepository;
 
     private final Gitlab gitlab;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ArchiveAssignmentUseCase.class.getName());
 
-    ArchiveAssignmentUseCase(StudentAssignmentRepository studentAssignmentRepository, Gitlab gitlab) {
+    ArchiveAssignmentUseCase(AssignmentRepository assignmentRepository, StudentAssignmentRepository studentAssignmentRepository, Gitlab gitlab) {
+        this.assignmentRepository = assignmentRepository;
         this.studentAssignmentRepository = studentAssignmentRepository;
         this.gitlab = gitlab;
     }
@@ -32,6 +35,9 @@ public class ArchiveAssignmentUseCase {
                         System.out.println(e.getMessage());
                     }
                 });
+
+        assignment.setStatus(AssignmentStatus.ARCHIVED);
+        assignmentRepository.save(assignment);
     }
 
 }
