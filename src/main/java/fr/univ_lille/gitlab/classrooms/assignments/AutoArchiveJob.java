@@ -11,24 +11,24 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class AutoArchiveJob {
 
-    private AssignmentRepository assignmentRepository;
+    private final AssignmentRepository assignmentRepository;
 
-    private ArchiveAssignmentUseCase archiveAssignmentUseCase;
+    private final ArchiveAssignmentUseCase archiveAssignmentUseCase;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AutoArchiveJob.class.getName());
 
-    public AutoArchiveJob(AssignmentRepository assignmentRepository, ArchiveAssignmentUseCase archiveAssignmentUseCase) {
+    AutoArchiveJob(AssignmentRepository assignmentRepository, ArchiveAssignmentUseCase archiveAssignmentUseCase) {
         this.assignmentRepository = assignmentRepository;
         this.archiveAssignmentUseCase = archiveAssignmentUseCase;
     }
 
-    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES)
+    @Scheduled(fixedRate = 5, timeUnit = TimeUnit.MINUTES, initialDelay = 0)
     void autoArchiveAssignments(){
         LOGGER.info("Auto archiving assignments");
         this.assignmentRepository.findAll()
                 .stream()
                 .filter(Assignment::isAutoArchive)
                 .filter(it -> it.getDueDate().isBefore(ZonedDateTime.now()))
-                .forEach(it -> this.archiveAssignmentUseCase.archive(it));
+                .forEach(this.archiveAssignmentUseCase::archive);
     }
 }
