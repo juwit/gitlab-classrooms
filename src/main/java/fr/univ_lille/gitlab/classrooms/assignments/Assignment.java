@@ -4,6 +4,7 @@ import fr.univ_lille.gitlab.classrooms.classrooms.Classroom;
 import fr.univ_lille.gitlab.classrooms.users.ClassroomUser;
 import jakarta.persistence.*;
 
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -25,6 +26,10 @@ public abstract class Assignment {
 
     @ManyToOne
     private Classroom classroom;
+
+    private ZonedDateTime dueDate;
+
+    private boolean autoArchive = false;
 
     public UUID getId() {
         return id;
@@ -68,5 +73,21 @@ public abstract class Assignment {
 
     public void setClassroom(Classroom classroom) {
         this.classroom = classroom;
+    }
+
+    public ZonedDateTime getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(ZonedDateTime dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public boolean isAutoArchive() {
+        return autoArchive;
+    }
+
+    public void setAutoArchive(boolean autoArchive) {
+        this.autoArchive = autoArchive;
     }
 }

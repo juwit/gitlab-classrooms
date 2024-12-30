@@ -4,13 +4,10 @@ import jakarta.annotation.security.RolesAllowed;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Project;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -49,14 +46,6 @@ public class ExerciseAssignmentRestController {
                 .map(it -> "git clone " + it);
 
         return urls.collect(Collectors.joining("\n"));
-    }
-
-    @GetMapping("/assignments/{assignmentId}/archive")
-    String archiveAssignment(@PathVariable UUID assignmentId, Model model) {
-        var assignment = this.assignmentService.getAssignment(assignmentId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        this.assignmentService.archive(assignment);
-
-        return "redirect:/classrooms/" + assignment.getClassroom().getId();
     }
 
 }
